@@ -1,3 +1,1 @@
 - [ ] Цвет фона слишком темный. Может добавить какого-то свечения, либо чуть менее глубокий черный
-- [ ] Контент на главной странице не влезает при загрузе, нужно проктурить чтобы увидеть все.
-- [ ] Шрифты -> ``<link rel="preconnect" href="https://fonts.googleapis.com"> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>``

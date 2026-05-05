@@ -152,17 +152,25 @@
       const size = box.getSize(new THREE.Vector3());
       const center = box.getCenter(new THREE.Vector3());
 
-      object.position.sub(center);
-
       const maxDim = Math.max(size.x, size.y, size.z);
-      const scale = maxDim > 0 ? 3.9 / maxDim : 1;
+      const scale = maxDim > 0 ? 3.7 / maxDim : 1;
+
+      // Важно: позицию нужно умножать на scale.
+      // Иначе модель с большими исходными координатами загружается,
+      // но оказывается далеко за пределами камеры.
       object.scale.setScalar(scale);
+      object.position.set(
+        -center.x * scale,
+        -center.y * scale,
+        -center.z * scale
+      );
 
       const normalizedBox = new THREE.Box3().setFromObject(object);
-      const normalizedSize = normalizedBox.getSize(new THREE.Vector3());
-      object.position.y -= normalizedBox.min.y + normalizedSize.y * 0.48;
+      object.position.y += -1.5 - normalizedBox.min.y;
 
-      controls.target.set(0, 0.15, 0);
+      controls.target.set(0, 0.05, 0);
+      controls.minDistance = 1.4;
+      controls.maxDistance = 10;
       controls.update();
     }
 

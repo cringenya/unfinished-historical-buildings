@@ -1,5 +1,6 @@
 const lamp = document.getElementById('lamp');
 const cursorHiddenZones = '.model-host, .local-model-frame, iframe';
+const cursorHiddenZoneBuffer = 42;
 
 let mouseX = window.innerWidth / 2;
 let mouseY = window.innerHeight / 2;
@@ -25,25 +26,35 @@ function isInsideCursorHiddenZone(target) {
   return target instanceof Element && Boolean(target.closest(cursorHiddenZones));
 }
 
-document.addEventListener('mousemove', (e) => {
-  if (isInsideCursorHiddenZone(e.target)) {
-    hideCustomCursor();
-    return;
-  }
+function isPointNearCursorHiddenZone(x, y, buffer = 0) {
+  return Array.from(document.querySelectorAll(cursorHiddenZones)).some((el) => {
+    const rect = el.getBoundingClientRect();
 
-  showCustomCursor();
+    if (rect.width === 0 || rect.height === 0) return false;
 
-  mouseX = e.clientX;
-  mouseY = e.clientY;
+    return (
+      x >= rect.left - buffer &&
+      x <= rect.right + buffer &&
+      y >= rect.top - buffer &&
+      y <= rect.bottom + buffer
+    );
+  });
+}
+
+function setCursorPosition(x, y) {
+  mouseX = x;
+  mouseY = y;
 
   if (lamp) {
-    lamp.style.left = mouseX + 'px';
-    lamp.style.top = mouseY + 'px';
+    lamp.style.left = `${mouseX}px`;
+    lamp.style.top = `${mouseY}px`;
   }
 
-  document.documentElement.style.setProperty('--cursor-x', mouseX + 'px');
-  document.documentElement.style.setProperty('--cursor-y', mouseY + 'px');
+  document.documentElement.style.setProperty('--cursor-x', `${mouseX}px`);
+  document.documentElement.style.setProperty('--cursor-y', `${mouseY}px`);
+}
 
+function updateCursorDynamics() {
   const now = performance.now();
   const dx = mouseX - lastX;
   const dy = mouseY - lastY;
@@ -52,33 +63,65 @@ document.addEventListener('mousemove', (e) => {
   const size = 22 + speed * 18;
 
   if (!document.body.classList.contains('cursor-card') && !document.body.classList.contains('cursor-button')) {
-    document.documentElement.style.setProperty('--lamp-size', size + 'px');
+    document.documentElement.style.setProperty('--lamp-size', `${size}px`);
   }
 
   lastX = mouseX;
   lastY = mouseY;
   lastTime = now;
+}
 
-  if (window.innerWidth > 760 && Math.random() > 0.62) {
-    const spark = document.createElement('span');
-    spark.className = 'spark';
-    spark.style.left = (mouseX + (Math.random() * 18 - 9)) + 'px';
-    spark.style.top = (mouseY + (Math.random() * 18 - 9)) + 'px';
-    const sparkSize = Math.random() * 4 + 3;
-    spark.style.width = sparkSize + 'px';
-    spark.style.height = sparkSize + 'px';
-    document.body.appendChild(spark);
-    setTimeout(() => spark.remove(), 950);
+function spawnSpark() {
+  if (isCursorHidden || window.innerWidth <= 760 || Math.random() <= 0.62) return;
+
+  const spark = document.createElement('span');
+  spark.className = 'spark';
+  spark.style.left = `${mouseX + (Math.random() * 18 - 9)}px`;
+  spark.style.top = `${mouseY + (Math.random() * 18 - 9)}px`;
+
+  const sparkSize = Math.random() * 4 + 3;
+  spark.style.width = `${sparkSize}px`;
+  spark.style.height = `${sparkSize}px`;
+
+  document.body.appendChild(spark);
+  setTimeout(() => spark.remove(), 950);
+}
+
+function handleCursorMove(e) {
+  const shouldHideCursor =
+    isInsideCursorHiddenZone(e.target) ||
+    isPointNearCursorHiddenZone(e.clientX, e.clientY, cursorHiddenZoneBuffer);
+
+  if (shouldHideCursor) {
+    hideCustomCursor();
+    return;
   }
-});
+
+  showCustomCursor();
+  setCursorPosition(e.clientX, e.clientY);
+  updateCursorDynamics();
+  spawnSpark();
+}
+
+document.addEventListener('mousemove', handleCursorMove, true);
+document.addEventListener('pointermove', handleCursorMove, true);
+
+document.addEventListener('mouseover', (e) => {
+  if (isInsideCursorHiddenZone(e.target)) hideCustomCursor();
+}, true);
+
+document.addEventListener('pointerover', (e) => {
+  if (isInsideCursorHiddenZone(e.target)) hideCustomCursor();
+}, true);
 
 document.addEventListener('mouseout', (e) => {
   if (!e.relatedTarget && !e.toElement) {
     hideCustomCursor();
   }
-});
+}, true);
 
-document.addEventListener('mouseenter', showCustomCursor);
+document.documentElement.addEventListener('mouseleave', hideCustomCursor);
+document.addEventListener('mouseleave', hideCustomCursor, true);
 window.addEventListener('blur', hideCustomCursor);
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) hideCustomCursor();
@@ -86,7 +129,9 @@ document.addEventListener('visibilitychange', () => {
 
 document.querySelectorAll(cursorHiddenZones).forEach((el) => {
   el.addEventListener('mouseenter', hideCustomCursor);
+  el.addEventListener('pointerenter', hideCustomCursor);
   el.addEventListener('mouseleave', showCustomCursor);
+  el.addEventListener('pointerleave', showCustomCursor);
 });
 
 const revealItems = document.querySelectorAll('[data-reveal]');

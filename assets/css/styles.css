@@ -81,6 +81,16 @@
       display: none;
     }
 
+    body:has(.model-host:hover)::before,
+    body:has(.model-host:hover) .lamp,
+    body:has(.local-model-frame:hover)::before,
+    body:has(.local-model-frame:hover) .lamp,
+    body:has(iframe:hover)::before,
+    body:has(iframe:hover) .lamp {
+      opacity: 0;
+      visibility: hidden;
+    }
+
     body::after {
       content: "";
       position: fixed;
@@ -1055,7 +1065,6 @@
       display: block;
     }
 
-    /* Стили для атрибуции Sketchfab в тёмной теме */
     .sketchfab-embed-wrapper {
       width: 100%;
       height: 100%;

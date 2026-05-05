@@ -27,151 +27,250 @@
   <script type="module">
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-    import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
-    import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    const MODEL_URL = '../assets/models/tatlin/tatlin.glb?v=3';
 
     const container = document.getElementById('viewer');
     const status = document.getElementById('modelStatus');
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x050607);
-    scene.fog = new THREE.Fog(0x050607, 7, 24);
+    scene.fog = new THREE.Fog(0x050607, 12, 42);
 
-    const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 2000);
-    camera.position.set(3.2, 2.4, 6.2);
+    const camera = new THREE.PerspectiveCamera(36, 1, 0.01, 1000);
+    camera.position.set(4.3, 2.8, 6.4);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.35;
     container.appendChild(renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.06;
     controls.enablePan = false;
-    controls.minDistance = 2.2;
-    controls.maxDistance = 14;
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.45;
-    controls.target.set(0, 0.6, 0);
+    controls.target.set(0, 0.3, 0);
 
-    scene.add(new THREE.HemisphereLight(0xfff2d0, 0x111216, 2.2));
+    scene.add(new THREE.HemisphereLight(0xfff3d4, 0x20232a, 3.2));
 
-    const keyLight = new THREE.DirectionalLight(0xffe0a8, 3.2);
-    keyLight.position.set(4, 7, 5);
+    const keyLight = new THREE.DirectionalLight(0xffdf9d, 4.5);
+    keyLight.position.set(5, 8, 6);
     scene.add(keyLight);
 
-    const fillLight = new THREE.DirectionalLight(0x8eb8ff, 1.1);
-    fillLight.position.set(-5, 3, -4);
+    const fillLight = new THREE.DirectionalLight(0x9abfff, 2.1);
+    fillLight.position.set(-5, 4, -5);
     scene.add(fillLight);
 
-    const rimLight = new THREE.DirectionalLight(0xffffff, 1.8);
-    rimLight.position.set(0, 6, -7);
+    const frontLight = new THREE.DirectionalLight(0xffffff, 2.4);
+    frontLight.position.set(0, 3, 8);
+    scene.add(frontLight);
+
+    const rimLight = new THREE.DirectionalLight(0xffffff, 2.0);
+    rimLight.position.set(-2, 7, -8);
     scene.add(rimLight);
-
-    const floor = new THREE.Mesh(
-      new THREE.CircleGeometry(4.8, 96),
-      new THREE.MeshBasicMaterial({ color: 0xc9a45b, transparent: true, opacity: 0.045 })
-    );
-    floor.rotation.x = -Math.PI / 2;
-    floor.position.y = -1.25;
-    scene.add(floor);
-
-    const modelPath = '../assets/models/tatlin/';
-    const objFile = 'tatlin.obj';
-    const mtlFile = 'tatlin.mtl';
 
     const manager = new THREE.LoadingManager();
     manager.onProgress = (_, loaded, total) => {
-      if (total > 0) status.textContent = `загрузка модели… ${Math.round((loaded / total) * 100)}%`;
-    };
-    manager.onLoad = () => {
-      status.textContent = 'перетащите, чтобы вращать';
+      if (total > 0) {
+        status.textContent = `загрузка модели… ${Math.round((loaded / total) * 100)}%`;
+      }
     };
 
-    const objLoader = new OBJLoader(manager);
-    const mtlLoader = new MTLLoader(manager);
-    mtlLoader.setPath(modelPath);
-    mtlLoader.setResourcePath(modelPath);
+    const loader = new GLTFLoader(manager);
+    loader.load(
+      MODEL_URL,
+      (gltf) => {
+        const model = gltf.scene || gltf.scenes[0];
+        if (!model) {
+          status.textContent = 'файл загружен, но сцена не найдена';
+          return;
+        }
 
-    mtlLoader.load(
-      mtlFile,
-      (materials) => {
-        materials.preload();
-        objLoader.setMaterials(materials);
-        loadObj();
+        const info = prepareModel(model);
+        if (info.meshCount === 0 || info.vertexCount === 0) {
+          status.textContent = 'файл загружен, но геометрия не найдена';
+          console.warn('Tatlin model loaded without visible meshes', info);
+          return;
+        }
+
+        scene.add(model);
+        model.updateWorldMatrix(true, true);
+        const fittedBox = fitCameraToObject(model);
+        addGround(fittedBox);
+
+        window.tatlinViewerDebug = {
+          source: MODEL_URL,
+          meshCount: info.meshCount,
+          vertexCount: info.vertexCount,
+          bboxBeforeNormalize: info.originalBox,
+          bboxAfterNormalize: fittedBox
+        };
+
+        status.textContent = 'модель загружена — перетащите, чтобы вращать';
       },
-      undefined,
-      () => {
-        status.textContent = 'материалы не найдены, загружаю геометрию…';
-        loadObj();
+      (event) => {
+        if (event.lengthComputable && event.total > 0) {
+          status.textContent = `загрузка модели… ${Math.round((event.loaded / event.total) * 100)}%`;
+        }
+      },
+      (error) => {
+        console.error('Tatlin GLB loading error:', error);
+        status.textContent = 'не удалось загрузить модель';
       }
     );
 
-    function loadObj() {
-      objLoader.setPath(modelPath);
-      objLoader.load(
-        objFile,
-        (object) => {
-          prepareObject(object);
-          scene.add(object);
-          status.textContent = 'перетащите, чтобы вращать';
-        },
-        (event) => {
-          if (event.lengthComputable) {
-            status.textContent = `загрузка модели… ${Math.round((event.loaded / event.total) * 100)}%`;
-          }
-        },
-        (error) => {
-          console.error(error);
-          status.textContent = 'не удалось загрузить модель';
-        }
-      );
-    }
+    function prepareModel(model) {
+      let meshCount = 0;
+      let vertexCount = 0;
 
-    function prepareObject(object) {
-      object.traverse((child) => {
+      model.updateWorldMatrix(true, true);
+      const originalBox = new THREE.Box3().setFromObject(model);
+      const originalSize = originalBox.getSize(new THREE.Vector3());
+      const originalCenter = originalBox.getCenter(new THREE.Vector3());
+      const maxOriginalDim = Math.max(originalSize.x, originalSize.y, originalSize.z);
+      const scale = maxOriginalDim > 0 ? 3.9 / maxOriginalDim : 1;
+
+      model.scale.setScalar(scale);
+      model.position.set(
+        -originalCenter.x * scale,
+        -originalCenter.y * scale,
+        -originalCenter.z * scale
+      );
+      model.updateWorldMatrix(true, true);
+
+      const centeredBox = new THREE.Box3().setFromObject(model);
+      model.position.y += -1.42 - centeredBox.min.y;
+      model.updateWorldMatrix(true, true);
+
+      const edgeMaterial = new THREE.LineBasicMaterial({
+        color: 0xe5c26f,
+        transparent: true,
+        opacity: 0.16,
+        depthWrite: false
+      });
+
+      model.traverse((child) => {
         if (!child.isMesh) return;
 
+        meshCount += 1;
+        vertexCount += child.geometry?.attributes?.position?.count || 0;
+        child.frustumCulled = false;
         child.castShadow = false;
         child.receiveShadow = false;
 
         const materials = Array.isArray(child.material) ? child.material : [child.material];
         materials.forEach((material) => {
           if (!material) return;
+
           material.side = THREE.DoubleSide;
-          material.needsUpdate = true;
+          material.depthWrite = true;
+          material.depthTest = true;
 
           if (material.map) {
             material.map.colorSpace = THREE.SRGBColorSpace;
+            material.map.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
           }
+
+          if (material.name && /glass|window/i.test(material.name)) {
+            material.transparent = true;
+            material.opacity = 0.82;
+            material.depthWrite = false;
+          } else {
+            material.transparent = false;
+            material.opacity = 1;
+          }
+
+          if (material.color) {
+            material.color.offsetHSL(0, 0.04, 0.08);
+          }
+
+          if ('roughness' in material) material.roughness = Math.min(0.78, Math.max(0.38, material.roughness ?? 0.55));
+          if ('metalness' in material && /steel|metal|aluminum/i.test(material.name || child.name || '')) {
+            material.metalness = Math.max(0.35, material.metalness ?? 0.45);
+          }
+
+          if ('emissive' in material) {
+            material.emissive = new THREE.Color(0x140f08);
+            material.emissiveIntensity = 0.08;
+          }
+
+          material.needsUpdate = true;
         });
+
+        if (child.geometry && child.geometry.attributes?.position && child.geometry.index) {
+          const edges = new THREE.EdgesGeometry(child.geometry, 34);
+          const outline = new THREE.LineSegments(edges, edgeMaterial);
+          outline.name = `${child.name || 'mesh'}_visible_edges`;
+          outline.frustumCulled = false;
+          child.add(outline);
+        }
       });
 
+      return {
+        meshCount,
+        vertexCount,
+        originalBox: {
+          min: originalBox.min.toArray(),
+          max: originalBox.max.toArray(),
+          size: originalSize.toArray(),
+          center: originalCenter.toArray()
+        }
+      };
+    }
+
+    function fitCameraToObject(object) {
+      object.updateWorldMatrix(true, true);
       const box = new THREE.Box3().setFromObject(object);
       const size = box.getSize(new THREE.Vector3());
       const center = box.getCenter(new THREE.Vector3());
+      const maxSize = Math.max(size.x, size.y, size.z);
 
-      const maxDim = Math.max(size.x, size.y, size.z);
-      const scale = maxDim > 0 ? 3.7 / maxDim : 1;
+      const fitHeightDistance = maxSize / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov * 0.5)));
+      const fitWidthDistance = fitHeightDistance / camera.aspect;
+      const distance = Math.max(fitHeightDistance, fitWidthDistance) * 1.35;
 
-      // Важно: позицию нужно умножать на scale.
-      // Иначе модель с большими исходными координатами загружается,
-      // но оказывается далеко за пределами камеры.
-      object.scale.setScalar(scale);
-      object.position.set(
-        -center.x * scale,
-        -center.y * scale,
-        -center.z * scale
-      );
+      const direction = new THREE.Vector3(0.62, 0.33, 1).normalize();
+      camera.position.copy(center).add(direction.multiplyScalar(distance));
+      camera.near = Math.max(0.01, distance / 120);
+      camera.far = distance * 120;
+      camera.updateProjectionMatrix();
 
-      const normalizedBox = new THREE.Box3().setFromObject(object);
-      object.position.y += -1.5 - normalizedBox.min.y;
-
-      controls.target.set(0, 0.05, 0);
-      controls.minDistance = 1.4;
-      controls.maxDistance = 10;
+      controls.target.copy(center);
+      controls.minDistance = maxSize * 0.45;
+      controls.maxDistance = maxSize * 7.5;
       controls.update();
+
+      return {
+        min: box.min.toArray(),
+        max: box.max.toArray(),
+        size: size.toArray(),
+        center: center.toArray()
+      };
+    }
+
+    function addGround(boxInfo) {
+      const min = new THREE.Vector3().fromArray(boxInfo.min);
+      const size = new THREE.Vector3().fromArray(boxInfo.size);
+      const radius = Math.max(size.x, size.z) * 0.9;
+
+      const ground = new THREE.Mesh(
+        new THREE.CircleGeometry(radius, 128),
+        new THREE.MeshBasicMaterial({
+          color: 0xc9a45b,
+          transparent: true,
+          opacity: 0.035,
+          depthWrite: false
+        })
+      );
+      ground.rotation.x = -Math.PI / 2;
+      ground.position.y = min.y - 0.015;
+      ground.renderOrder = -1;
+      scene.add(ground);
     }
 
     function resize() {

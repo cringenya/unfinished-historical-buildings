@@ -7,27 +7,183 @@
   <link rel="stylesheet" href="../assets/css/model-frame.css" />
 </head>
 <body>
-  <main class="model-frame-page" aria-label="Объект 01 / Башня Татлина">
-    <div class="sketchfab-embed-wrapper">
-      <iframe
-        title="Башня Татлина — 3D-реконструкция"
-        src="https://sketchfab.com/models/4cee0970fe60444ead77d41fbb052a33/embed"
-        loading="lazy"
-        allow="autoplay; fullscreen; xr-spatial-tracking"
-        allowfullscreen
-        mozallowfullscreen="true"
-        webkitallowfullscreen="true"
-        xr-spatial-tracking
-        execution-while-out-of-viewport
-        execution-while-not-rendered
-        web-share>
-      </iframe>
-      <p>
-        <a href="https://sketchfab.com/3d-models/htc-vive-4cee0970fe60444ead77d41fbb052a33?utm_medium=embed&utm_campaign=share-popup&utm_content=4cee0970fe60444ead77d41fbb052a33" target="_blank" rel="nofollow noopener">3D-модель</a>
-        от <a href="https://sketchfab.com/EternalRealm?utm_medium=embed&utm_campaign=share-popup&utm_content=4cee0970fe60444ead77d41fbb052a33" target="_blank" rel="nofollow noopener">Eternal Realm</a>
-        на <a href="https://sketchfab.com" target="_blank" rel="nofollow noopener">Sketchfab</a>
-      </p>
+  <main class="model-frame-page local-viewer-page" aria-label="Объект 01 / Башня Татлина">
+    <div id="viewer" class="model-viewer" aria-label="Интерактивная 3D-модель Башни Татлина"></div>
+    <div class="model-ui" aria-hidden="true">
+      <span class="model-ui__label">3D-модель / Башня Татлина</span>
+      <span id="modelStatus" class="model-ui__status">загрузка модели…</span>
     </div>
   </main>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+      }
+    }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+    import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
+
+    const container = document.getElementById('viewer');
+    const status = document.getElementById('modelStatus');
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x050607);
+    scene.fog = new THREE.Fog(0x050607, 7, 24);
+
+    const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 2000);
+    camera.position.set(3.2, 2.4, 6.2);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.06;
+    controls.enablePan = false;
+    controls.minDistance = 2.2;
+    controls.maxDistance = 14;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 0.45;
+    controls.target.set(0, 0.6, 0);
+
+    scene.add(new THREE.HemisphereLight(0xfff2d0, 0x111216, 2.2));
+
+    const keyLight = new THREE.DirectionalLight(0xffe0a8, 3.2);
+    keyLight.position.set(4, 7, 5);
+    scene.add(keyLight);
+
+    const fillLight = new THREE.DirectionalLight(0x8eb8ff, 1.1);
+    fillLight.position.set(-5, 3, -4);
+    scene.add(fillLight);
+
+    const rimLight = new THREE.DirectionalLight(0xffffff, 1.8);
+    rimLight.position.set(0, 6, -7);
+    scene.add(rimLight);
+
+    const floor = new THREE.Mesh(
+      new THREE.CircleGeometry(4.8, 96),
+      new THREE.MeshBasicMaterial({ color: 0xc9a45b, transparent: true, opacity: 0.045 })
+    );
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.y = -1.25;
+    scene.add(floor);
+
+    const modelPath = '../assets/models/tatlin/';
+    const objFile = 'tatlin.obj';
+    const mtlFile = 'tatlin.mtl';
+
+    const manager = new THREE.LoadingManager();
+    manager.onProgress = (_, loaded, total) => {
+      if (total > 0) status.textContent = `загрузка модели… ${Math.round((loaded / total) * 100)}%`;
+    };
+    manager.onLoad = () => {
+      status.textContent = 'перетащите, чтобы вращать';
+    };
+
+    const objLoader = new OBJLoader(manager);
+    const mtlLoader = new MTLLoader(manager);
+    mtlLoader.setPath(modelPath);
+    mtlLoader.setResourcePath(modelPath);
+
+    mtlLoader.load(
+      mtlFile,
+      (materials) => {
+        materials.preload();
+        objLoader.setMaterials(materials);
+        loadObj();
+      },
+      undefined,
+      () => {
+        status.textContent = 'материалы не найдены, загружаю геометрию…';
+        loadObj();
+      }
+    );
+
+    function loadObj() {
+      objLoader.setPath(modelPath);
+      objLoader.load(
+        objFile,
+        (object) => {
+          prepareObject(object);
+          scene.add(object);
+          status.textContent = 'перетащите, чтобы вращать';
+        },
+        (event) => {
+          if (event.lengthComputable) {
+            status.textContent = `загрузка модели… ${Math.round((event.loaded / event.total) * 100)}%`;
+          }
+        },
+        (error) => {
+          console.error(error);
+          status.textContent = 'не удалось загрузить модель';
+        }
+      );
+    }
+
+    function prepareObject(object) {
+      object.traverse((child) => {
+        if (!child.isMesh) return;
+
+        child.castShadow = false;
+        child.receiveShadow = false;
+
+        const materials = Array.isArray(child.material) ? child.material : [child.material];
+        materials.forEach((material) => {
+          if (!material) return;
+          material.side = THREE.DoubleSide;
+          material.needsUpdate = true;
+
+          if (material.map) {
+            material.map.colorSpace = THREE.SRGBColorSpace;
+          }
+        });
+      });
+
+      const box = new THREE.Box3().setFromObject(object);
+      const size = box.getSize(new THREE.Vector3());
+      const center = box.getCenter(new THREE.Vector3());
+
+      object.position.sub(center);
+
+      const maxDim = Math.max(size.x, size.y, size.z);
+      const scale = maxDim > 0 ? 3.9 / maxDim : 1;
+      object.scale.setScalar(scale);
+
+      const normalizedBox = new THREE.Box3().setFromObject(object);
+      const normalizedSize = normalizedBox.getSize(new THREE.Vector3());
+      object.position.y -= normalizedBox.min.y + normalizedSize.y * 0.48;
+
+      controls.target.set(0, 0.15, 0);
+      controls.update();
+    }
+
+    function resize() {
+      const width = container.clientWidth || window.innerWidth;
+      const height = container.clientHeight || window.innerHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height, false);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    animate();
+  </script>
 </body>
 </html>

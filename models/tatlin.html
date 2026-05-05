@@ -7,8 +7,20 @@
   <link rel="stylesheet" href="../assets/css/model-frame.css" />
 </head>
 <body>
-  <main class="model-frame-page local-viewer-page" aria-label="Объект 01 / Башня Татлина">
+  <main id="viewerPage" class="model-frame-page local-viewer-page" aria-label="Объект 01 / Башня Татлина">
     <div id="viewer" class="model-viewer" aria-label="Интерактивная 3D-модель Башни Татлина"></div>
+
+    <button
+      id="fullscreenToggle"
+      class="fullscreen-toggle"
+      type="button"
+      aria-label="Открыть 3D-модель на весь экран"
+      aria-pressed="false"
+    >
+      <span class="fullscreen-toggle__icon" aria-hidden="true">⛶</span>
+      <span id="fullscreenLabel">Во весь экран</span>
+    </button>
+
     <div class="model-ui" aria-hidden="true">
       <span class="model-ui__label">3D-модель / Башня Татлина</span>
       <span id="modelStatus" class="model-ui__status">загрузка модели…</span>
@@ -29,10 +41,13 @@
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-    const MODEL_URL = '../assets/models/tatlin/tatlin.glb?v=3';
+    const MODEL_URL = '../assets/models/tatlin/tatlin.glb?v=4';
 
+    const page = document.getElementById('viewerPage');
     const container = document.getElementById('viewer');
     const status = document.getElementById('modelStatus');
+    const fullscreenToggle = document.getElementById('fullscreenToggle');
+    const fullscreenLabel = document.getElementById('fullscreenLabel');
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x050607);
@@ -73,6 +88,87 @@
     const rimLight = new THREE.DirectionalLight(0xffffff, 2.0);
     rimLight.position.set(-2, 7, -8);
     scene.add(rimLight);
+
+    fullscreenToggle.addEventListener('pointerdown', (event) => {
+      event.stopPropagation();
+    });
+
+    fullscreenToggle.addEventListener('click', async (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      try {
+        if (isFullscreen()) {
+          await exitFullscreen();
+        } else {
+          await enterFullscreen();
+        }
+      } catch (error) {
+        console.warn('Fullscreen toggle failed:', error);
+        status.textContent = 'браузер не разрешил полноэкранный режим';
+      }
+    });
+
+    ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach((eventName) => {
+      document.addEventListener(eventName, handleFullscreenChange);
+    });
+
+    function getFullscreenElement() {
+      return document.fullscreenElement
+        || document.webkitFullscreenElement
+        || document.mozFullScreenElement
+        || document.msFullscreenElement
+        || null;
+    }
+
+    function isFullscreen() {
+      return Boolean(getFullscreenElement());
+    }
+
+    function callFullscreenMethod(target, methodNames) {
+      for (const methodName of methodNames) {
+        if (target && typeof target[methodName] === 'function') {
+          const result = target[methodName]();
+          return result && typeof result.then === 'function' ? result : Promise.resolve(result);
+        }
+      }
+      return Promise.reject(new Error('Fullscreen API is not available'));
+    }
+
+    function enterFullscreen() {
+      return callFullscreenMethod(page, [
+        'requestFullscreen',
+        'webkitRequestFullscreen',
+        'webkitRequestFullScreen',
+        'mozRequestFullScreen',
+        'msRequestFullscreen'
+      ]);
+    }
+
+    function exitFullscreen() {
+      return callFullscreenMethod(document, [
+        'exitFullscreen',
+        'webkitExitFullscreen',
+        'webkitCancelFullScreen',
+        'mozCancelFullScreen',
+        'msExitFullscreen'
+      ]);
+    }
+
+    function handleFullscreenChange() {
+      const active = isFullscreen();
+      page.classList.toggle('is-fullscreen', active);
+      fullscreenToggle.setAttribute('aria-pressed', active ? 'true' : 'false');
+      fullscreenToggle.setAttribute(
+        'aria-label',
+        active ? 'Выйти из полноэкранного режима' : 'Открыть 3D-модель на весь экран'
+      );
+      fullscreenLabel.textContent = active ? 'Выйти из полного экрана' : 'Во весь экран';
+
+      // После смены режима браузеру нужен короткий момент, чтобы пересчитать размеры iframe.
+      requestAnimationFrame(resize);
+      window.setTimeout(resize, 120);
+    }
 
     const manager = new THREE.LoadingManager();
     manager.onProgress = (_, loaded, total) => {

@@ -209,3 +209,73 @@ body {
     flex-direction: column;
   }
 }
+
+/* Fullscreen control for local 3D model viewer */
+.fullscreen-toggle {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 9px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(5, 6, 7, 0.58);
+  color: rgba(243, 239, 230, 0.86);
+  font: 700 11px/1 Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+  cursor: pointer;
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, color 180ms ease;
+}
+
+.fullscreen-toggle:hover,
+.fullscreen-toggle:focus-visible {
+  color: var(--text);
+  background: rgba(18, 19, 20, 0.74);
+  border-color: rgba(201, 164, 91, 0.46);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.fullscreen-toggle__icon {
+  font-size: 15px;
+  line-height: 1;
+  color: var(--gold);
+}
+
+.local-viewer-page:fullscreen,
+.local-viewer-page:-webkit-full-screen {
+  width: 100vw;
+  height: 100vh;
+  background: var(--bg);
+}
+
+.local-viewer-page.is-fullscreen .fullscreen-toggle {
+  top: 18px;
+  right: 18px;
+}
+
+.local-viewer-page.is-fullscreen .model-ui {
+  bottom: 18px;
+}
+
+@media (max-width: 640px) {
+  .fullscreen-toggle {
+    top: 10px;
+    right: 10px;
+    min-height: 34px;
+    padding: 8px 10px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+  }
+}

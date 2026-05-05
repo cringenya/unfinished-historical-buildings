@@ -1,8 +1,16 @@
-# unfinished-historical-buildings
-A history project by ITMO SE students Egor Beloglazoff, Makar Sinitsyn, Evgeniia Shabas.
-This site will contain 3D models of unfinished 20th century buildings: Volkshalle, Дворец Советов, Башня Татлина
+# Архив нереализованной архитектуры
 
+## Структура
 
-[страница сайта](https://cringenya.github.io/unfinished-historical-buildings/)
-
-[To-Do](documentation/TO-DO.md)
+```text
+index.html                 # Главная страница: hero, концепция, карточки объектов
+tatlin.html                # Страница объекта 01
+hall.html                  # Страница объекта 02
+soviets.html               # Страница объекта 03
+assets/css/styles.css      # Общие стили сайта
+assets/js/main.js          # Общая интерактивность: фонарь, reveal, hover
+models/tatlin.html         # Изолированное подключение 3D-модели Татлина
+models/hall.html           # Изолированное подключение 3D-модели Зала Народов
+models/soviets.html        # Изолированное подключение 3D-модели Дворца Советов
+assets/models/             # Место для будущих локальных .glb/.gltf и текстур
+```

@@ -1,0 +1,62 @@
+:root {
+  --bg: #050607;
+  --text: #f3efe6;
+  --muted-2: rgba(243, 239, 230, 0.5);
+  --gold: #c9a45b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  overflow: hidden;
+}
+
+.model-frame-page,
+.sketchfab-embed-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.sketchfab-embed-wrapper {
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(201,164,91,0.08), transparent 34%),
+    linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015));
+}
+
+.sketchfab-embed-wrapper iframe {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  border: 0;
+  display: block;
+}
+
+.sketchfab-embed-wrapper p {
+  margin: 8px 4px 10px;
+  padding: 0 8px;
+  text-align: center;
+  color: var(--muted-2);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.sketchfab-embed-wrapper a {
+  color: var(--gold);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.sketchfab-embed-wrapper a:hover {
+  color: var(--text);
+}

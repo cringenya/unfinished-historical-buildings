@@ -1,0 +1,123 @@
+const lamp = document.getElementById('lamp');
+
+let mouseX = window.innerWidth / 2;
+let mouseY = window.innerHeight / 2;
+let lastX = mouseX;
+let lastY = mouseY;
+let lastTime = performance.now();
+
+document.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+
+  if (lamp) {
+    lamp.style.left = mouseX + 'px';
+    lamp.style.top = mouseY + 'px';
+  }
+
+  document.documentElement.style.setProperty('--cursor-x', mouseX + 'px');
+  document.documentElement.style.setProperty('--cursor-y', mouseY + 'px');
+
+  const now = performance.now();
+  const dx = mouseX - lastX;
+  const dy = mouseY - lastY;
+  const dt = Math.max(now - lastTime, 16);
+  const speed = Math.min(Math.sqrt(dx * dx + dy * dy) / dt, 2.4);
+  const size = 22 + speed * 18;
+
+  if (!document.body.classList.contains('cursor-card') && !document.body.classList.contains('cursor-button')) {
+    document.documentElement.style.setProperty('--lamp-size', size + 'px');
+  }
+
+  lastX = mouseX;
+  lastY = mouseY;
+  lastTime = now;
+
+  if (window.innerWidth > 760 && Math.random() > 0.62) {
+    const spark = document.createElement('span');
+    spark.className = 'spark';
+    spark.style.left = (mouseX + (Math.random() * 18 - 9)) + 'px';
+    spark.style.top = (mouseY + (Math.random() * 18 - 9)) + 'px';
+    const sparkSize = Math.random() * 4 + 3;
+    spark.style.width = sparkSize + 'px';
+    spark.style.height = sparkSize + 'px';
+    document.body.appendChild(spark);
+    setTimeout(() => spark.remove(), 950);
+  }
+});
+
+const revealItems = document.querySelectorAll('[data-reveal]');
+
+if ('IntersectionObserver' in window) {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('is-visible');
+    });
+  }, { threshold: 0.12 });
+
+  revealItems.forEach(item => io.observe(item));
+} else {
+  revealItems.forEach(item => item.classList.add('is-visible'));
+}
+
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener('click', () => {
+    setTimeout(() => {
+      const hash = window.location.hash;
+      const section = document.querySelector(hash);
+      if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 20);
+  });
+});
+
+const hoverTargets = document.querySelectorAll('.object-card, .btn, .hero-card, .brand-pill');
+
+hoverTargets.forEach((el) => {
+  el.addEventListener('mouseenter', () => {
+    if (window.innerWidth <= 760) return;
+
+    if (el.classList.contains('object-card') || el.classList.contains('hero-card')) {
+      document.body.classList.add('cursor-card');
+    } else {
+      document.body.classList.add('cursor-button');
+    }
+    el.classList.add('is-hovered');
+  });
+
+  el.addEventListener('mouseleave', () => {
+    document.body.classList.remove('cursor-card', 'cursor-button');
+    el.classList.remove('is-hovered');
+
+    if (el.classList.contains('object-card')) el.style.transform = '';
+    if (el.classList.contains('btn')) el.style.transform = '';
+    if (el.classList.contains('brand-pill')) el.style.transform = '';
+    if (el.classList.contains('hero-card')) el.style.transform = 'rotateX(5deg) rotateY(-8deg)';
+  });
+
+  el.addEventListener('mousemove', (e) => {
+    if (window.innerWidth <= 760) return;
+
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const moveX = (x - rect.width / 2) / rect.width * 10;
+    const moveY = (y - rect.height / 2) / rect.height * 10;
+
+    if (el.classList.contains('object-card')) {
+      el.style.transform = `translateY(-10px) scale(1.035) rotateX(${-moveY * 0.35}deg) rotateY(${moveX * 0.45}deg)`;
+    }
+
+    if (el.classList.contains('btn')) {
+      el.style.transform = `translate(${moveX * 0.18}px, ${moveY * 0.18}px)`;
+    }
+
+    if (el.classList.contains('brand-pill')) {
+      el.style.transform = `translate(${moveX * 0.12}px, ${moveY * 0.12}px)`;
+    }
+
+    if (el.classList.contains('hero-card')) {
+      el.style.transform = `rotateX(${Math.max(-10, Math.min(10, -moveY * 0.9 + 5))}deg) rotateY(${Math.max(-12, Math.min(12, moveX * 1.2 - 8))}deg) scale(1.015)`;
+    }
+  });
+});

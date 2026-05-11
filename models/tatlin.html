@@ -7,53 +7,60 @@
   <link rel="stylesheet" href="../assets/css/model-frame.css" />
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
-<body class="tatlin-model-page">
-  <main class="model-frame-page" aria-label="Объект 01 / Башня Татлина">
+<body>
+  <main class="model-frame-page model-shell" id="viewerShell" aria-label="Объект 01 / Башня Татлина">
+    <div class="model-loader" id="modelLoader">загрузка модели…</div>
+    <div class="model-error model-error-overlay" id="modelError" hidden>
+      Не удалось загрузить 3D-модель. Откройте файл модели напрямую или обновите страницу.
+    </div>
+
     <model-viewer
-      id="viewer"
-      class="model-viewer model-viewer--tatlin"
-      src="../assets/models/tatlin/tatlin.glb?v=20260511-fitcontrols"
+      id="modelViewer"
+      class="model-viewer "
+      src="../assets/models/tatlin/tatlin.glb?v=20260511-unified"
       alt="Интерактивная 3D-модель Башни Татлина"
+      data-default-orbit="35deg 70deg auto"
+      data-default-fov="32deg"
+      data-target-x="0"
+      data-target-y="0"
+      data-target-z="0"
+      data-top-y=""
       camera-controls
+      touch-action="pan-y"
       auto-rotate
       auto-rotate-delay="1200"
       rotation-per-second="18deg"
-      interaction-prompt="auto"
-      interaction-prompt-style="basic"
-      touch-action="pan-y"
       shadow-intensity="0.85"
+      shadow-softness="0.85"
       exposure="0.92"
       environment-image="neutral"
-      camera-orbit="25deg 68deg auto"
-      min-camera-orbit="auto auto 20%"
+      camera-orbit="35deg 70deg auto"
+      camera-target="0m 0m 0m"
+      min-camera-orbit="auto auto 35%"
       max-camera-orbit="auto auto 650%"
-      field-of-view="30deg"
+      field-of-view="32deg"
       min-field-of-view="12deg"
       max-field-of-view="55deg"
+      interaction-prompt="auto"
+      interaction-prompt-style="basic"
       bounds="tight"
-      camera-target="auto auto auto"
       loading="eager"
-      reveal="auto"
-    >
-      <div class="model-loader" slot="poster">3D-модель / Башня Татлина<br />загрузка модели…</div>
-      <div class="model-error" slot="error">
-        Не удалось загрузить 3D-модель. Откройте файл модели напрямую или обновите страницу.
-      </div>
+      reveal="auto">
     </model-viewer>
 
     <div class="model-ui" aria-hidden="true">
-      <span class="model-ui__label">3D-модель / Башня Татлина</span>
-      <span id="modelStatus" class="model-ui__status">загрузка модели…</span>
+      <div class="model-ui__label">3D-модель / Башня Татлина</div>
+      <div class="model-ui__status" id="modelStatus">загрузка модели…</div>
     </div>
 
-    <section class="model-toolbar" aria-label="Управление 3D-моделью">
+    <nav class="model-toolbar" aria-label="Управление 3D-моделью">
       <div class="model-actions">
-        <a class="model-action model-action--standalone" href="tatlin.html" target="_top" rel="noopener">Открыть 3D отдельно</a>
-        <a class="model-action model-action--back" href="../tatlin.html" target="_top" rel="noopener">К странице объекта</a>
-        <button id="fullscreenToggle" class="model-action" type="button">Во весь экран</button>
-        <button id="panModeToggle" class="model-action" type="button" aria-pressed="false">Сдвиг камеры</button>
+        <a class="model-action model-action--standalone" href="tatlin.html?standalone=1" target="_blank" rel="noopener">Открыть 3D отдельно</a>
+        <a class="model-action model-action--back" href="../tatlin.html" target="_top">К странице объекта</a>
+        <button class="model-action" type="button" id="fullscreenButton">Во весь экран</button>
+        <button class="model-action" type="button" id="panButton" aria-expanded="false" aria-controls="cameraPanPanel">Сдвиг камеры</button>
       </div>
-      <div class="camera-pan-panel" id="panPanel" hidden>
+      <div class="camera-pan-panel" id="cameraPanPanel" hidden>
         <button class="model-action" type="button" data-pan="left">←</button>
         <button class="model-action" type="button" data-pan="right">→</button>
         <button class="model-action" type="button" data-pan="up">↑</button>
@@ -61,174 +68,204 @@
         <button class="model-action" type="button" data-pan="center">Центр</button>
         <button class="model-action" type="button" data-pan="top">К верхушке</button>
       </div>
-    </section>
+    </nav>
   </main>
 
   <script>
-    const page = document.querySelector('.model-frame-page');
-    const viewer = document.getElementById('viewer');
-    const status = document.getElementById('modelStatus');
-    const fullscreenToggle = document.getElementById('fullscreenToggle');
-    const panModeToggle = document.getElementById('panModeToggle');
-    const panPanel = document.getElementById('panPanel');
+    (() => {
+      const shell = document.getElementById('viewerShell');
+      const viewer = document.getElementById('modelViewer');
+      const loader = document.getElementById('modelLoader');
+      const error = document.getElementById('modelError');
+      const status = document.getElementById('modelStatus');
+      const fullscreenButton = document.getElementById('fullscreenButton');
+      const panButton = document.getElementById('panButton');
+      const panPanel = document.getElementById('cameraPanPanel');
+      const params = new URLSearchParams(window.location.search);
 
-    document.body.classList.toggle('is-standalone', window.self === window.top);
+      const numericDataset = (name, fallback) => {
+        const raw = viewer.dataset[name];
+        if (raw === undefined || String(raw).trim() === '') return fallback;
+        const value = Number(raw);
+        return Number.isFinite(value) ? value : fallback;
+      };
 
-    const cameraState = {
-      baseTarget: { x: 0, y: 0, z: 0 },
-      target: { x: 0, y: 0, z: 0 },
-      dimensions: { x: 1, y: 1, z: 1 },
-      panMode: false,
-      pointer: null
-    };
+      const state = {
+        center: {
+          x: numericDataset('targetX', 0),
+          y: numericDataset('targetY', 0),
+          z: numericDataset('targetZ', 0)
+        },
+        dimensions: { x: 1, y: 1, z: 1 },
+        target: {
+          x: numericDataset('targetX', 0),
+          y: numericDataset('targetY', 0),
+          z: numericDataset('targetZ', 0)
+        },
+        topY: numericDataset('topY', NaN),
+        ready: false
+      };
 
-    function expandParentModelWindow() {
-      try {
-        const frame = window.frameElement;
-        if (!frame) return;
-        const isMobile = window.matchMedia('(pointer: coarse), (max-width: 760px)').matches;
-        const height = isMobile ? '78svh' : 'min(76vh, 760px)';
-        const minHeight = isMobile ? '560px' : '540px';
-        frame.style.width = '100%';
-        frame.style.height = height;
-        frame.style.minHeight = minHeight;
-        frame.style.display = 'block';
-        frame.style.border = '0';
-        const host = frame.closest('.model-host, .sketchfab-wrap, .page-shell');
-        if (host) {
-          host.style.minHeight = minHeight;
-          host.style.height = height;
-          host.style.overflow = 'hidden';
+      if (params.has('standalone')) {
+        document.body.classList.add('is-standalone');
+      }
+
+      const setStatus = (text) => {
+        if (status) status.textContent = text;
+      };
+
+      const getVector = (value, fallback) => {
+        if (!value) return { ...fallback };
+        return {
+          x: Number(value.x ?? fallback.x),
+          y: Number(value.y ?? fallback.y),
+          z: Number(value.z ?? fallback.z)
+        };
+      };
+
+      const syncParentFrame = () => {
+        try {
+          const frame = window.frameElement;
+          if (!frame) return;
+          frame.style.display = 'block';
+          frame.style.width = '100%';
+          frame.style.height = '100%';
+          frame.style.minWidth = '0';
+          frame.style.minHeight = '0';
+          frame.style.border = '0';
+          frame.style.overflow = 'hidden';
+
+          const host = frame.closest('.model-host, .sketchfab-wrap, .page-shell');
+          if (host) {
+            host.style.overflow = 'hidden';
+            host.style.minWidth = '0';
+          }
+        } catch (_error) {}
+      };
+
+      const applyTarget = () => {
+        viewer.cameraTarget = `${state.target.x}m ${state.target.y}m ${state.target.z}m`;
+      };
+
+      const resetCamera = () => {
+        state.target = { ...state.center };
+        applyTarget();
+        viewer.cameraOrbit = viewer.dataset.defaultOrbit || viewer.getAttribute('camera-orbit') || '0deg 65deg auto';
+        viewer.fieldOfView = viewer.dataset.defaultFov || viewer.getAttribute('field-of-view') || '30deg';
+        setStatus('камера по центру');
+      };
+
+      const focusTop = () => {
+        const height = Math.max(state.dimensions.y, 1);
+        state.target = {
+          x: state.center.x,
+          y: Number.isFinite(state.topY) ? state.topY : state.center.y + height * 0.32,
+          z: state.center.z
+        };
+        applyTarget();
+        setStatus('камера к верхушке');
+      };
+
+      const panCamera = (direction) => {
+        if (!state.ready) return;
+        const stepX = Math.max(state.dimensions.x, state.dimensions.z, 1) * 0.08;
+        const stepY = Math.max(state.dimensions.y, 1) * 0.08;
+
+        if (direction === 'left') state.target.x -= stepX;
+        if (direction === 'right') state.target.x += stepX;
+        if (direction === 'up') state.target.y += stepY;
+        if (direction === 'down') state.target.y -= stepY;
+        if (direction === 'center') return resetCamera();
+        if (direction === 'top') return focusTop();
+
+        applyTarget();
+        setStatus('сдвиг камеры');
+      };
+
+      const enterPseudoFullscreen = () => {
+        shell.classList.add('pseudo-fullscreen', 'is-pseudo-fullscreen');
+        fullscreenButton.textContent = 'Выйти из экрана';
+      };
+
+      const exitPseudoFullscreen = () => {
+        shell.classList.remove('pseudo-fullscreen', 'is-pseudo-fullscreen');
+        fullscreenButton.textContent = 'Во весь экран';
+      };
+
+      fullscreenButton.addEventListener('click', async () => {
+        try {
+          if (document.fullscreenElement) {
+            await document.exitFullscreen();
+          } else if (shell.requestFullscreen) {
+            await shell.requestFullscreen();
+          } else if (shell.webkitRequestFullscreen) {
+            shell.webkitRequestFullscreen();
+          } else if (shell.classList.contains('is-pseudo-fullscreen')) {
+            exitPseudoFullscreen();
+          } else {
+            enterPseudoFullscreen();
+          }
+        } catch (_error) {
+          if (shell.classList.contains('is-pseudo-fullscreen')) exitPseudoFullscreen();
+          else enterPseudoFullscreen();
         }
-      } catch (_error) {}
-    }
-
-    function normalizeVector(value) {
-      if (!value) return null;
-      const x = Number(value.x);
-      const y = Number(value.y);
-      const z = Number(value.z);
-      if (![x, y, z].every(Number.isFinite)) return null;
-      return { x, y, z };
-    }
-
-    function setCameraTarget(x, y, z) {
-      cameraState.target = { x, y, z };
-      const value = `${x}m ${y}m ${z}m`;
-      viewer.cameraTarget = value;
-      viewer.setAttribute('camera-target', value);
-    }
-
-    function resetCameraTargetToModelCenter() {
-      let center = null;
-      try { center = normalizeVector(viewer.getBoundingBoxCenter?.()); } catch (_error) {}
-      center = center || { x: 0, y: 0, z: 0 };
-      cameraState.baseTarget = center;
-      setCameraTarget(center.x, center.y, center.z);
-      requestAnimationFrame(() => {
-        viewer.updateFraming?.();
-        viewer.jumpCameraToGoal?.();
       });
-    }
 
-    function getStep() {
-      const d = cameraState.dimensions;
-      return Math.max(d.x || 1, d.y || 1, d.z || 1) * 0.075;
-    }
+      document.addEventListener('fullscreenchange', () => {
+        const active = document.fullscreenElement === shell;
+        shell.classList.toggle('is-pseudo-fullscreen', active);
+        fullscreenButton.textContent = active ? 'Выйти из экрана' : 'Во весь экран';
+      });
 
-    function applyPan(action) {
-      const t = cameraState.target;
-      const step = getStep();
-      const d = cameraState.dimensions;
-      if (action === 'left') setCameraTarget(t.x - step, t.y, t.z);
-      if (action === 'right') setCameraTarget(t.x + step, t.y, t.z);
-      if (action === 'up') setCameraTarget(t.x, t.y + step, t.z);
-      if (action === 'down') setCameraTarget(t.x, t.y - step, t.z);
-      if (action === 'center') resetCameraTargetToModelCenter();
-      if (action === 'top') {
-        const base = cameraState.baseTarget;
-        setCameraTarget(base.x, base.y + Math.max(d.y * 0.38, step), base.z);
-      }
-    }
+      panButton.addEventListener('click', () => {
+        const isHidden = panPanel.hasAttribute('hidden');
+        panPanel.toggleAttribute('hidden', !isHidden);
+        panButton.classList.toggle('is-active', isHidden);
+        panButton.setAttribute('aria-expanded', String(isHidden));
+        shell.classList.toggle('is-pan-mode', isHidden);
+        setStatus(isHidden ? 'режим сдвига камеры' : 'вращение · масштаб · обзор');
+      });
 
-    function setPanMode(enabled) {
-      cameraState.panMode = enabled;
-      page.classList.toggle('is-pan-mode', enabled);
-      panPanel.hidden = !enabled;
-      panModeToggle.setAttribute('aria-pressed', String(enabled));
-      panModeToggle.textContent = enabled ? 'Вращение' : 'Сдвиг камеры';
-      if (enabled) {
-        viewer.removeAttribute('camera-controls');
-        viewer.removeAttribute('auto-rotate');
-        status.textContent = 'режим сдвига камеры';
-      } else {
-        viewer.setAttribute('camera-controls', '');
-        viewer.setAttribute('auto-rotate', '');
-        cameraState.pointer = null;
-        status.textContent = 'режим вращения и масштаба';
-      }
-    }
+      panPanel.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-pan]');
+        if (!button) return;
+        panCamera(button.dataset.pan);
+      });
 
-    expandParentModelWindow();
-    window.addEventListener('resize', expandParentModelWindow);
+      syncParentFrame();
+      window.addEventListener('resize', syncParentFrame);
 
-    viewer.addEventListener('load', () => {
-      const dimensions = normalizeVector(viewer.getDimensions?.());
-      if (dimensions) cameraState.dimensions = dimensions;
-      resetCameraTargetToModelCenter();
-      status.textContent = 'модель загружена';
-    });
+      viewer.addEventListener('load', () => {
+        loader.hidden = true;
+        error.hidden = true;
+        setStatus('вращение · масштаб · обзор');
 
-    viewer.addEventListener('progress', (event) => {
-      const progress = event.detail && Number.isFinite(event.detail.totalProgress)
-        ? Math.round(event.detail.totalProgress * 100)
-        : null;
-      status.textContent = progress === null || progress >= 100 ? 'подготовка модели…' : `загрузка модели… ${progress}%`;
-    });
-
-    viewer.addEventListener('error', () => {
-      status.textContent = 'ошибка загрузки модели';
-    });
-
-    panModeToggle.addEventListener('click', () => setPanMode(!cameraState.panMode));
-    panPanel.addEventListener('click', (event) => {
-      const button = event.target.closest('[data-pan]');
-      if (button) applyPan(button.dataset.pan);
-    });
-
-    viewer.addEventListener('pointerdown', (event) => {
-      if (!cameraState.panMode) return;
-      cameraState.pointer = { x: event.clientX, y: event.clientY };
-      viewer.setPointerCapture?.(event.pointerId);
-      event.preventDefault();
-    });
-
-    viewer.addEventListener('pointermove', (event) => {
-      if (!cameraState.panMode || !cameraState.pointer) return;
-      const dx = event.clientX - cameraState.pointer.x;
-      const dy = event.clientY - cameraState.pointer.y;
-      cameraState.pointer = { x: event.clientX, y: event.clientY };
-      const rect = viewer.getBoundingClientRect();
-      const scale = Math.max(cameraState.dimensions.x, cameraState.dimensions.y, cameraState.dimensions.z, 1) / Math.max(rect.width, rect.height, 1);
-      const t = cameraState.target;
-      setCameraTarget(t.x - dx * scale, t.y + dy * scale, t.z);
-      event.preventDefault();
-    });
-
-    viewer.addEventListener('pointerup', () => { cameraState.pointer = null; });
-    viewer.addEventListener('pointercancel', () => { cameraState.pointer = null; });
-
-    fullscreenToggle.addEventListener('click', async () => {
-      try {
-        if (document.fullscreenElement) {
-          await document.exitFullscreen();
-        } else {
-          await page.requestFullscreen();
+        const detectedCenter = getVector(viewer.getBoundingBoxCenter?.(), state.center);
+        const hasExplicitTarget = ['targetX', 'targetY', 'targetZ'].some((name) => viewer.dataset[name] !== undefined && viewer.dataset[name] !== '');
+        if (!hasExplicitTarget) {
+          state.center = detectedCenter;
+          state.target = { ...detectedCenter };
         }
-      } catch (_error) {
-        page.classList.toggle('is-pseudo-fullscreen');
-      }
-    });
+
+        state.dimensions = getVector(viewer.getDimensions?.(), state.dimensions);
+        state.ready = true;
+        applyTarget();
+        syncParentFrame();
+      });
+
+      viewer.addEventListener('progress', (event) => {
+        const progress = event.detail && Number.isFinite(event.detail.totalProgress)
+          ? Math.round(event.detail.totalProgress * 100)
+          : null;
+        if (progress !== null && progress < 100) setStatus(`загрузка модели… ${progress}%`);
+      });
+
+      viewer.addEventListener('error', () => {
+        loader.hidden = true;
+        error.hidden = false;
+        setStatus('ошибка загрузки');
+      });
+    })();
   </script>
 </body>
 </html>

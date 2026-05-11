@@ -16,9 +16,15 @@
 
     <model-viewer
       id="modelViewer"
-      class="model-viewer"
-      src="../assets/models/soviets/palace-of-soviets.glb"
-      alt="Локальная 3D-модель Дворца Советов"
+      class="model-viewer "
+      src="../assets/models/soviets/palace-of-soviets.glb?v=20260511-statues"
+      alt="Интерактивная 3D-модель Дворца Советов"
+      data-default-orbit="0deg 65deg 165%"
+      data-default-fov="28deg"
+      data-target-x="0"
+      data-target-y="0"
+      data-target-z="0"
+      data-top-y=""
       camera-controls
       touch-action="pan-y"
       auto-rotate
@@ -29,9 +35,15 @@
       exposure="0.95"
       environment-image="neutral"
       camera-orbit="0deg 65deg 165%"
+      camera-target="0m 0m 0m"
       min-camera-orbit="auto auto 65%"
       max-camera-orbit="auto auto 430%"
       field-of-view="28deg"
+      min-field-of-view="12deg"
+      max-field-of-view="55deg"
+      interaction-prompt="auto"
+      interaction-prompt-style="basic"
+      bounds="tight"
       loading="eager"
       reveal="auto">
     </model-viewer>
@@ -70,10 +82,27 @@
       const panButton = document.getElementById('panButton');
       const panPanel = document.getElementById('cameraPanPanel');
       const params = new URLSearchParams(window.location.search);
+
+      const numericDataset = (name, fallback) => {
+        const raw = viewer.dataset[name];
+        if (raw === undefined || String(raw).trim() === '') return fallback;
+        const value = Number(raw);
+        return Number.isFinite(value) ? value : fallback;
+      };
+
       const state = {
-        center: { x: 0, y: 0, z: 0 },
+        center: {
+          x: numericDataset('targetX', 0),
+          y: numericDataset('targetY', 0),
+          z: numericDataset('targetZ', 0)
+        },
         dimensions: { x: 1, y: 1, z: 1 },
-        target: { x: 0, y: 0, z: 0 },
+        target: {
+          x: numericDataset('targetX', 0),
+          y: numericDataset('targetY', 0),
+          z: numericDataset('targetZ', 0)
+        },
+        topY: numericDataset('topY', NaN),
         ready: false
       };
 
@@ -94,6 +123,26 @@
         };
       };
 
+      const syncParentFrame = () => {
+        try {
+          const frame = window.frameElement;
+          if (!frame) return;
+          frame.style.display = 'block';
+          frame.style.width = '100%';
+          frame.style.height = '100%';
+          frame.style.minWidth = '0';
+          frame.style.minHeight = '0';
+          frame.style.border = '0';
+          frame.style.overflow = 'hidden';
+
+          const host = frame.closest('.model-host, .sketchfab-wrap, .page-shell');
+          if (host) {
+            host.style.overflow = 'hidden';
+            host.style.minWidth = '0';
+          }
+        } catch (_error) {}
+      };
+
       const applyTarget = () => {
         viewer.cameraTarget = `${state.target.x}m ${state.target.y}m ${state.target.z}m`;
       };
@@ -101,8 +150,8 @@
       const resetCamera = () => {
         state.target = { ...state.center };
         applyTarget();
-        viewer.cameraOrbit = '0deg 65deg 165%';
-        viewer.fieldOfView = '28deg';
+        viewer.cameraOrbit = viewer.dataset.defaultOrbit || viewer.getAttribute('camera-orbit') || '0deg 65deg auto';
+        viewer.fieldOfView = viewer.dataset.defaultFov || viewer.getAttribute('field-of-view') || '30deg';
         setStatus('камера по центру');
       };
 
@@ -110,11 +159,10 @@
         const height = Math.max(state.dimensions.y, 1);
         state.target = {
           x: state.center.x,
-          y: state.center.y + height * 0.32,
+          y: Number.isFinite(state.topY) ? state.topY : state.center.y + height * 0.32,
           z: state.center.z
         };
         applyTarget();
-        viewer.cameraOrbit = '0deg 58deg 145%';
         setStatus('камера к верхушке');
       };
 
@@ -157,7 +205,7 @@
           } else {
             enterPseudoFullscreen();
           }
-        } catch (e) {
+        } catch (_error) {
           if (shell.classList.contains('is-pseudo-fullscreen')) exitPseudoFullscreen();
           else enterPseudoFullscreen();
         }
@@ -184,15 +232,32 @@
         panCamera(button.dataset.pan);
       });
 
+      syncParentFrame();
+      window.addEventListener('resize', syncParentFrame);
+
       viewer.addEventListener('load', () => {
         loader.hidden = true;
         error.hidden = true;
         setStatus('вращение · масштаб · обзор');
-        state.center = getVector(viewer.getBoundingBoxCenter?.(), state.center);
+
+        const detectedCenter = getVector(viewer.getBoundingBoxCenter?.(), state.center);
+        const hasExplicitTarget = ['targetX', 'targetY', 'targetZ'].some((name) => viewer.dataset[name] !== undefined && viewer.dataset[name] !== '');
+        if (!hasExplicitTarget) {
+          state.center = detectedCenter;
+          state.target = { ...detectedCenter };
+        }
+
         state.dimensions = getVector(viewer.getDimensions?.(), state.dimensions);
-        state.target = { ...state.center };
         state.ready = true;
         applyTarget();
+        syncParentFrame();
+      });
+
+      viewer.addEventListener('progress', (event) => {
+        const progress = event.detail && Number.isFinite(event.detail.totalProgress)
+          ? Math.round(event.detail.totalProgress * 100)
+          : null;
+        if (progress !== null && progress < 100) setStatus(`загрузка модели… ${progress}%`);
       });
 
       viewer.addEventListener('error', () => {

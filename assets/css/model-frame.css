@@ -146,12 +146,14 @@ model-viewer {
   right: max(8px, env(safe-area-inset-right));
   bottom: max(8px, env(safe-area-inset-bottom));
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 6px;
   width: auto;
-  max-width: none;
+  max-width: calc(100% - 16px);
   min-width: 0;
   pointer-events: none;
-  overflow: visible;
+  overflow: hidden;
+  contain: inline-size;
 }
 
 .model-actions,
@@ -193,7 +195,7 @@ model-viewer {
   color: var(--text);
   background: var(--glass);
   font: inherit;
-  font-size: clamp(9px, 1.2vw, 11px);
+  font-size: clamp(8.5px, 1.05vw, 11px);
   font-weight: 700;
   line-height: 1.08;
   text-align: center;
@@ -314,11 +316,53 @@ body.is-standalone .model-action--back {
   min-height: 100svh;
 }
 
+/* Backward-safe styles for older local viewer markup. They prevent legacy controls
+   from spilling outside the iframe if a cached old model page is still loaded. */
+.camera-pan-controls,
+.model-controls {
+  position: absolute;
+  z-index: 5;
+  left: max(8px, env(safe-area-inset-left));
+  right: max(8px, env(safe-area-inset-right));
+  bottom: max(8px, env(safe-area-inset-bottom));
+  width: auto;
+  max-width: calc(100% - 16px);
+  min-width: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.camera-pan-controls {
+  bottom: max(48px, calc(env(safe-area-inset-bottom) + 48px));
+}
+
+.control-row,
+.main-actions,
+.pan-actions,
+.camera-pan-controls .camera-pan-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+  gap: 5px;
+  width: 100%;
+  min-width: 0;
+}
+
+.control-row button,
+.main-actions button,
+.pan-actions button,
+.camera-pan-controls .model-action {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  pointer-events: auto;
+}
+
 @media (max-width: 860px), (pointer: coarse) {
   .model-toolbar {
     left: max(7px, env(safe-area-inset-left));
     right: max(7px, env(safe-area-inset-right));
     bottom: max(7px, env(safe-area-inset-bottom));
+    max-width: calc(100% - 14px);
     gap: 5px;
   }
 
@@ -334,8 +378,8 @@ body.is-standalone .model-action--back {
 
   .model-action {
     min-height: 28px;
-    padding: 5px 6px;
-    font-size: clamp(8px, 1.85vw, 10px);
+    padding: 5px 5px;
+    font-size: clamp(8px, 1.65vw, 10px);
     letter-spacing: 0;
     background: rgba(5, 6, 7, 0.68);
   }

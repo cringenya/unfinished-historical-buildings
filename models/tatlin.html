@@ -12,7 +12,7 @@
     <model-viewer
       id="tatlinViewer"
       class="model-viewer model-viewer--tatlin"
-      src="../assets/models/tatlin/tatlin.glb?v=20260511-pan"
+      src="../assets/models/tatlin/tatlin.glb?v=20260511-centerfix"
       alt="Интерактивная 3D-модель Башни Татлина"
       camera-controls
       auto-rotate
@@ -24,11 +24,12 @@
       shadow-intensity="0.85"
       exposure="0.92"
       environment-image="neutral"
-      camera-orbit="35deg 70deg auto"
+      camera-orbit="25deg 68deg auto"
       min-camera-orbit="auto auto 35%"
       max-camera-orbit="auto auto 650%"
-      field-of-view="32deg"
+      field-of-view="30deg"
       bounds="tight"
+      camera-target="auto auto auto"
       loading="eager"
       reveal="auto"
     >
@@ -53,7 +54,7 @@
     <div class="model-actions" aria-label="Управление 3D-моделью">
       <a class="model-action model-action--standalone" href="tatlin.html" target="_top" rel="noopener">Открыть 3D отдельно</a>
       <a class="model-action" href="../tatlin.html" target="_top" rel="noopener">К странице объекта</a>
-      <a class="model-action" href="../assets/models/tatlin/tatlin.glb?v=20260511-pan" target="_blank" rel="noopener">Файл модели</a>
+      <a class="model-action" href="../assets/models/tatlin/tatlin.glb?v=20260511-centerfix" target="_blank" rel="noopener">Файл модели</a>
       <button id="fullscreenToggle" class="model-action fullscreen-toggle" type="button">Во весь экран</button>
     </div>
 
@@ -74,6 +75,7 @@
     document.body.classList.toggle('is-standalone', window.self === window.top);
 
     const cameraState = {
+      baseTarget: { x: 0, y: 0, z: 0 },
       target: { x: 0, y: 0, z: 0 },
       dimensions: { x: 1, y: 1, z: 1 },
       panMode: false,
@@ -107,9 +109,37 @@
       } catch (_error) {}
     }
 
+    function normalizeVector(value) {
+      if (!value) return null;
+      const x = Number(value.x);
+      const y = Number(value.y);
+      const z = Number(value.z);
+      if (![x, y, z].every(Number.isFinite)) return null;
+      return { x, y, z };
+    }
+
+    function getModelCenter() {
+      try {
+        return normalizeVector(viewer.getBoundingBoxCenter?.());
+      } catch (_error) {
+        return null;
+      }
+    }
+
     function setCameraTarget(x, y, z) {
       cameraState.target = { x, y, z };
       viewer.cameraTarget = `${x}m ${y}m ${z}m`;
+      viewer.setAttribute('camera-target', `${x}m ${y}m ${z}m`);
+    }
+
+    function resetCameraTargetToModelCenter() {
+      const center = getModelCenter() || { x: 0, y: 0, z: 0 };
+      cameraState.baseTarget = center;
+      setCameraTarget(center.x, center.y, center.z);
+      requestAnimationFrame(() => {
+        viewer.updateFraming?.();
+        viewer.jumpCameraToGoal?.();
+      });
     }
 
     function getStep() {
@@ -126,8 +156,11 @@
       if (action === 'right') setCameraTarget(t.x + step, t.y, t.z);
       if (action === 'up') setCameraTarget(t.x, t.y + step, t.z);
       if (action === 'down') setCameraTarget(t.x, t.y - step, t.z);
-      if (action === 'center') setCameraTarget(0, 0, 0);
-      if (action === 'top') setCameraTarget(0, Math.max(d.y * 0.38, step), 0);
+      if (action === 'center') resetCameraTargetToModelCenter();
+      if (action === 'top') {
+        const base = cameraState.baseTarget;
+        setCameraTarget(base.x, base.y + Math.max(d.y * 0.38, step), base.z);
+      }
     }
 
     function setPanMode(enabled) {
@@ -152,9 +185,9 @@
     window.addEventListener('resize', expandParentModelWindow);
 
     viewer.addEventListener('load', () => {
-      const dimensions = viewer.getDimensions ? viewer.getDimensions() : null;
+      const dimensions = normalizeVector(viewer.getDimensions?.());
       if (dimensions) cameraState.dimensions = dimensions;
-      setCameraTarget(0, 0, 0);
+      resetCameraTargetToModelCenter();
       status.textContent = 'модель загружена — вращайте или включите сдвиг камеры';
     });
 

@@ -106,7 +106,6 @@ model-viewer {
   min-height: auto;
   border: 1px solid rgba(165, 65, 65, 0.72);
   border-radius: 22px;
-<<<<<<< HEAD
   pointer-events: none;
 }
 
@@ -127,34 +126,10 @@ model-viewer {
 .model-actions,
 .camera-pan-panel {
   width: 100%;
-=======
-  pointer-events: none;
-}
-
-.model-toolbar {
-  position: absolute;
-  z-index: 5;
-  left: max(10px, env(safe-area-inset-left));
-  right: max(10px, env(safe-area-inset-right));
-  bottom: max(10px, env(safe-area-inset-bottom));
-  display: grid;
-  gap: 8px;
-  pointer-events: none;
-}
-
-.model-actions,
-.camera-pan-panel {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 7px;
->>>>>>> 1c13a47ed998c4069460d41f0328e6d868f761ed
   min-width: 0;
   pointer-events: none;
 }
 
-<<<<<<< HEAD
 .model-actions {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 138px), 1fr));
@@ -167,31 +142,22 @@ model-viewer {
   gap: 6px;
 }
 
-=======
->>>>>>> 1c13a47ed998c4069460d41f0328e6d868f761ed
 .camera-pan-panel[hidden] { display: none !important; }
 
 .model-action {
   appearance: none;
-<<<<<<< HEAD
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-width: 0;
   width: 100%;
   min-height: 34px;
-=======
-  min-width: 0;
-  min-height: 34px;
-  max-width: 100%;
->>>>>>> 1c13a47ed998c4069460d41f0328e6d868f761ed
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 8px 10px;
   color: var(--text);
   background: var(--glass);
   font: inherit;
-<<<<<<< HEAD
   font-size: clamp(10px, 1.55vw, 12px);
   font-weight: 700;
   line-height: 1.12;
@@ -199,13 +165,6 @@ model-viewer {
   text-decoration: none;
   white-space: normal;
   overflow-wrap: anywhere;
-=======
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1;
-  text-decoration: none;
-  white-space: nowrap;
->>>>>>> 1c13a47ed998c4069460d41f0328e6d868f761ed
   cursor: pointer;
   pointer-events: auto;
   backdrop-filter: blur(12px);
@@ -219,19 +178,9 @@ model-viewer {
   outline: none;
 }
 
-<<<<<<< HEAD
 .camera-pan-panel .model-action {
   min-height: 34px;
   padding-inline: 8px;
-=======
-.camera-pan-panel {
-  justify-content: flex-end;
-}
-
-.camera-pan-panel .model-action {
-  min-width: 36px;
-  padding-inline: 10px;
->>>>>>> 1c13a47ed998c4069460d41f0328e6d868f761ed
 }
 
 .model-ui,
@@ -303,7 +252,6 @@ body.is-standalone .model-action--back {
     left: max(8px, env(safe-area-inset-left));
     right: max(8px, env(safe-area-inset-right));
     bottom: max(8px, env(safe-area-inset-bottom));
-<<<<<<< HEAD
     max-width: calc(100% - max(8px, env(safe-area-inset-left)) - max(8px, env(safe-area-inset-right)));
     gap: 6px;
   }
@@ -315,33 +263,17 @@ body.is-standalone .model-action--back {
 
   .camera-pan-panel {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-=======
-    gap: 6px;
-  }
-
-  .model-actions,
-  .camera-pan-panel {
-    justify-content: center;
->>>>>>> 1c13a47ed998c4069460d41f0328e6d868f761ed
     gap: 6px;
   }
 
   .model-action {
     min-height: 32px;
-<<<<<<< HEAD
     padding: 7px 8px;
-=======
-    padding: 7px 9px;
->>>>>>> 1c13a47ed998c4069460d41f0328e6d868f761ed
     font-size: 11px;
     background: rgba(5, 6, 7, 0.64);
   }
 
   .model-action--back,
-<<<<<<< HEAD
-=======
-  .model-action--file,
->>>>>>> 1c13a47ed998c4069460d41f0328e6d868f761ed
   .model-ui__status {
     display: none !important;
   }
@@ -350,7 +282,6 @@ body.is-standalone .model-action--back {
     top: max(8px, env(safe-area-inset-top));
     justify-content: flex-start;
     font-size: 10px;
-<<<<<<< HEAD
   }
 }
 
@@ -373,30 +304,5 @@ body.is-standalone .model-action--back {
 
   .camera-pan-panel {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-=======
-  }
-
-  .camera-pan-panel .model-action {
-    min-width: 33px;
-    padding-inline: 9px;
-  }
-}
-
-@media (max-width: 480px) {
-  .model-action {
-    min-height: 30px;
-    padding: 6px 8px;
-    font-size: 10px;
-  }
-
-  .model-action--standalone {
-    max-width: 44vw;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .camera-pan-panel .model-action {
-    min-width: 30px;
->>>>>>> 1c13a47ed998c4069460d41f0328e6d868f761ed
   }
 }

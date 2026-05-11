@@ -2,51 +2,119 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Дворец Советов — 3D-реконструкция</title>
   <link rel="stylesheet" href="../assets/css/model-frame.css" />
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <style>
-    html, body, .model-frame-page, .sketchfab-embed-wrapper, iframe { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #050607; }
-    .sketchfab-embed-wrapper, iframe { position: absolute; inset: 0; border: 0; }
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 24%, rgba(201, 164, 91, 0.14), transparent 42%), #070809;
+    }
+
+    .model-frame-page,
+    .local-model-shell,
+    model-viewer {
+      width: 100%;
+      height: 100%;
+      min-height: 100vh;
+    }
+
+    .model-frame-page {
+      position: fixed;
+      inset: 0;
+      display: block;
+    }
+
+    .local-model-shell {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 18%, rgba(255, 230, 170, 0.13), transparent 34%),
+        radial-gradient(circle at 48% 78%, rgba(120, 92, 52, 0.24), transparent 42%),
+        linear-gradient(180deg, #10100f 0%, #070809 100%);
+    }
+
+    .local-model-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(circle at 50% 48%, rgba(0,0,0,0.9), transparent 74%);
+      opacity: 0.36;
+      z-index: 2;
+    }
+
+    model-viewer {
+      position: relative;
+      z-index: 1;
+      display: block;
+      --poster-color: transparent;
+      --progress-bar-color: rgba(201, 164, 91, 0.9);
+      --progress-bar-height: 2px;
+    }
+
+    .model-hint {
+      position: absolute;
+      left: 14px;
+      bottom: 12px;
+      z-index: 3;
+      margin: 0;
+      padding: 7px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      background: rgba(7, 8, 9, 0.48);
+      color: rgba(255, 242, 216, 0.78);
+      font: 500 clamp(10px, 1.8vw, 12px)/1.2 Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      pointer-events: none;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    @media (max-width: 560px) {
+      .model-hint {
+        left: 10px;
+        bottom: 10px;
+        padding: 6px 8px;
+        letter-spacing: 0.05em;
+      }
+    }
   </style>
 </head>
 <body>
   <main class="model-frame-page" aria-label="Объект 03 / Дворец Советов">
-    <div class="sketchfab-embed-wrapper">
-      <iframe
-        title="Дворец Советов — 3D-реконструкция"
-        src="https://sketchfab.com/models/4cee0970fe60444ead77d41fbb052a33/embed"
+    <div class="local-model-shell">
+      <model-viewer
+        src="../assets/models/palace-of-soviets.glb"
+        alt="Локальная 3D-модель Дворца Советов"
+        camera-controls
+        touch-action="pan-y"
+        auto-rotate
+        auto-rotate-delay="1200"
+        rotation-per-second="18deg"
+        shadow-intensity="0.85"
+        shadow-softness="0.9"
+        exposure="0.95"
+        environment-image="neutral"
+        camera-orbit="0deg 68deg 170%"
+        min-camera-orbit="auto auto 75%"
+        max-camera-orbit="auto auto 420%"
+        field-of-view="28deg"
         loading="eager"
-        allow="autoplay; fullscreen; xr-spatial-tracking"
-        allowfullscreen
-        mozallowfullscreen="true"
-        webkitallowfullscreen="true"
-        xr-spatial-tracking
-        execution-while-out-of-viewport
-        execution-while-not-rendered
-        web-share>
-      </iframe>
+        reveal="auto">
+      </model-viewer>
+      <p class="model-hint">вращение · масштаб · обзор</p>
     </div>
-
-    <div class="model-actions" aria-label="Управление 3D-моделью">
-      <a class="model-action model-action--standalone" href="soviets.html" target="_top" rel="noopener">Открыть 3D отдельно</a>
-      <a class="model-action" href="../soviets.html" target="_top" rel="noopener">К странице</a>
-      <a class="model-action" href="https://sketchfab.com/3d-models/htc-vive-4cee0970fe60444ead77d41fbb052a33" target="_blank" rel="nofollow noopener">Sketchfab</a>
-    </div>
-
-    <p class="mobile-help">Если на телефоне не получается вращать модель, нажмите «Открыть 3D отдельно».</p>
-
-    <p class="sketchfab-credit">
-      <a href="https://sketchfab.com/3d-models/htc-vive-4cee0970fe60444ead77d41fbb052a33" target="_blank" rel="nofollow noopener">3D-модель</a>
-      на <a href="https://sketchfab.com" target="_blank" rel="nofollow noopener">Sketchfab</a>
-    </p>
   </main>
-
-  <script>
-    (function () {
-      const standalone = window.self === window.top;
-      document.body.classList.toggle('is-standalone', standalone);
-    }());
-  </script>
 </body>
 </html>

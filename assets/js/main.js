@@ -2,6 +2,20 @@ const lamp = document.getElementById('lamp');
 const cursorHiddenZones = '.model-host, .local-model-frame, iframe';
 const cursorHiddenZoneBuffer = 42;
 
+
+function syncTopbarHeight() {
+  const topbar = document.querySelector('.topbar');
+  if (!topbar) return;
+
+  const height = Math.ceil(topbar.getBoundingClientRect().height);
+  document.documentElement.style.setProperty('--topbar-height', `${height}px`);
+}
+
+syncTopbarHeight();
+window.addEventListener('load', syncTopbarHeight);
+window.addEventListener('resize', syncTopbarHeight);
+window.addEventListener('orientationchange', () => setTimeout(syncTopbarHeight, 120));
+
 let mouseX = window.innerWidth / 2;
 let mouseY = window.innerHeight / 2;
 let lastX = mouseX;
@@ -149,12 +163,22 @@ if ('IntersectionObserver' in window) {
 }
 
 document.querySelectorAll('a[href^="#"]').forEach(link => {
-  link.addEventListener('click', () => {
-    setTimeout(() => {
-      const hash = window.location.hash;
-      const section = document.querySelector(hash);
-      if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 20);
+  link.addEventListener('click', (e) => {
+    const hash = link.getAttribute('href');
+    if (!hash || hash === '#') return;
+
+    const section = document.querySelector(hash);
+    if (!section) return;
+
+    e.preventDefault();
+    syncTopbarHeight();
+
+    const topbarHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--topbar-height')) || 0;
+    const extraGap = window.innerWidth <= 760 ? 18 : 24;
+    const targetY = section.getBoundingClientRect().top + window.pageYOffset - topbarHeight - extraGap;
+
+    window.history.pushState(null, '', hash);
+    window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
   });
 });
 

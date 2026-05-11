@@ -2,119 +2,205 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Дворец Советов — 3D-реконструкция</title>
   <link rel="stylesheet" href="../assets/css/model-frame.css" />
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-  <style>
-    html,
-    body {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      overflow: hidden;
-      background: radial-gradient(circle at 50% 24%, rgba(201, 164, 91, 0.14), transparent 42%), #070809;
-    }
-
-    .model-frame-page,
-    .local-model-shell,
-    model-viewer {
-      width: 100%;
-      height: 100%;
-      min-height: 100vh;
-    }
-
-    .model-frame-page {
-      position: fixed;
-      inset: 0;
-      display: block;
-    }
-
-    .local-model-shell {
-      position: relative;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at 50% 18%, rgba(255, 230, 170, 0.13), transparent 34%),
-        radial-gradient(circle at 48% 78%, rgba(120, 92, 52, 0.24), transparent 42%),
-        linear-gradient(180deg, #10100f 0%, #070809 100%);
-    }
-
-    .local-model-shell::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background:
-        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px),
-        linear-gradient(180deg, rgba(255,255,255,0.028) 1px, transparent 1px);
-      background-size: 64px 64px;
-      mask-image: radial-gradient(circle at 50% 48%, rgba(0,0,0,0.9), transparent 74%);
-      opacity: 0.36;
-      z-index: 2;
-    }
-
-    model-viewer {
-      position: relative;
-      z-index: 1;
-      display: block;
-      --poster-color: transparent;
-      --progress-bar-color: rgba(201, 164, 91, 0.9);
-      --progress-bar-height: 2px;
-    }
-
-    .model-hint {
-      position: absolute;
-      left: 14px;
-      bottom: 12px;
-      z-index: 3;
-      margin: 0;
-      padding: 7px 10px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 999px;
-      background: rgba(7, 8, 9, 0.48);
-      color: rgba(255, 242, 216, 0.78);
-      font: 500 clamp(10px, 1.8vw, 12px)/1.2 Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      pointer-events: none;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-
-    @media (max-width: 560px) {
-      .model-hint {
-        left: 10px;
-        bottom: 10px;
-        padding: 6px 8px;
-        letter-spacing: 0.05em;
-      }
-    }
-  </style>
 </head>
 <body>
-  <main class="model-frame-page" aria-label="Объект 03 / Дворец Советов">
-    <div class="local-model-shell">
-      <model-viewer
-        src="../assets/models/palace-of-soviets.glb"
-        alt="Локальная 3D-модель Дворца Советов"
-        camera-controls
-        touch-action="pan-y"
-        auto-rotate
-        auto-rotate-delay="1200"
-        rotation-per-second="18deg"
-        shadow-intensity="0.85"
-        shadow-softness="0.9"
-        exposure="0.95"
-        environment-image="neutral"
-        camera-orbit="0deg 68deg 170%"
-        min-camera-orbit="auto auto 75%"
-        max-camera-orbit="auto auto 420%"
-        field-of-view="28deg"
-        loading="eager"
-        reveal="auto">
-      </model-viewer>
-      <p class="model-hint">вращение · масштаб · обзор</p>
+  <main class="model-frame-page model-shell" id="viewerShell" aria-label="Объект 03 / Дворец Советов">
+    <div class="model-loader" id="modelLoader">загрузка модели…</div>
+    <div class="model-error model-error-overlay" id="modelError" hidden>
+      Не удалось загрузить 3D-модель. Откройте файл модели напрямую или обновите страницу.
     </div>
+
+    <model-viewer
+      id="modelViewer"
+      class="model-viewer"
+      src="../assets/models/soviets/palace-of-soviets.glb"
+      alt="Локальная 3D-модель Дворца Советов"
+      camera-controls
+      touch-action="pan-y"
+      auto-rotate
+      auto-rotate-delay="1200"
+      rotation-per-second="18deg"
+      shadow-intensity="0.9"
+      shadow-softness="0.85"
+      exposure="0.95"
+      environment-image="neutral"
+      camera-orbit="0deg 65deg 165%"
+      min-camera-orbit="auto auto 65%"
+      max-camera-orbit="auto auto 430%"
+      field-of-view="28deg"
+      loading="eager"
+      reveal="auto">
+    </model-viewer>
+
+    <div class="model-ui" aria-hidden="true">
+      <div class="model-ui__label">3D-модель / Дворец Советов</div>
+      <div class="model-ui__status" id="modelStatus">загрузка модели…</div>
+    </div>
+
+    <nav class="model-toolbar" aria-label="Управление 3D-моделью">
+      <div class="model-actions">
+        <a class="model-action model-action--standalone" href="soviets.html?standalone=1" target="_blank" rel="noopener">Открыть 3D отдельно</a>
+        <a class="model-action model-action--back" href="../soviets.html" target="_top">К странице объекта</a>
+        <button class="model-action" type="button" id="fullscreenButton">Во весь экран</button>
+        <button class="model-action" type="button" id="panButton" aria-expanded="false" aria-controls="cameraPanPanel">Сдвиг камеры</button>
+      </div>
+      <div class="camera-pan-panel" id="cameraPanPanel" hidden>
+        <button class="model-action" type="button" data-pan="left">←</button>
+        <button class="model-action" type="button" data-pan="right">→</button>
+        <button class="model-action" type="button" data-pan="up">↑</button>
+        <button class="model-action" type="button" data-pan="down">↓</button>
+        <button class="model-action" type="button" data-pan="center">Центр</button>
+        <button class="model-action" type="button" data-pan="top">К верхушке</button>
+      </div>
+    </nav>
   </main>
+
+  <script>
+    (() => {
+      const shell = document.getElementById('viewerShell');
+      const viewer = document.getElementById('modelViewer');
+      const loader = document.getElementById('modelLoader');
+      const error = document.getElementById('modelError');
+      const status = document.getElementById('modelStatus');
+      const fullscreenButton = document.getElementById('fullscreenButton');
+      const panButton = document.getElementById('panButton');
+      const panPanel = document.getElementById('cameraPanPanel');
+      const params = new URLSearchParams(window.location.search);
+      const state = {
+        center: { x: 0, y: 0, z: 0 },
+        dimensions: { x: 1, y: 1, z: 1 },
+        target: { x: 0, y: 0, z: 0 },
+        ready: false
+      };
+
+      if (params.has('standalone')) {
+        document.body.classList.add('is-standalone');
+      }
+
+      const setStatus = (text) => {
+        if (status) status.textContent = text;
+      };
+
+      const getVector = (value, fallback) => {
+        if (!value) return { ...fallback };
+        return {
+          x: Number(value.x ?? fallback.x),
+          y: Number(value.y ?? fallback.y),
+          z: Number(value.z ?? fallback.z)
+        };
+      };
+
+      const applyTarget = () => {
+        viewer.cameraTarget = `${state.target.x}m ${state.target.y}m ${state.target.z}m`;
+      };
+
+      const resetCamera = () => {
+        state.target = { ...state.center };
+        applyTarget();
+        viewer.cameraOrbit = '0deg 65deg 165%';
+        viewer.fieldOfView = '28deg';
+        setStatus('камера по центру');
+      };
+
+      const focusTop = () => {
+        const height = Math.max(state.dimensions.y, 1);
+        state.target = {
+          x: state.center.x,
+          y: state.center.y + height * 0.32,
+          z: state.center.z
+        };
+        applyTarget();
+        viewer.cameraOrbit = '0deg 58deg 145%';
+        setStatus('камера к верхушке');
+      };
+
+      const panCamera = (direction) => {
+        if (!state.ready) return;
+        const stepX = Math.max(state.dimensions.x, state.dimensions.z, 1) * 0.08;
+        const stepY = Math.max(state.dimensions.y, 1) * 0.08;
+
+        if (direction === 'left') state.target.x -= stepX;
+        if (direction === 'right') state.target.x += stepX;
+        if (direction === 'up') state.target.y += stepY;
+        if (direction === 'down') state.target.y -= stepY;
+        if (direction === 'center') return resetCamera();
+        if (direction === 'top') return focusTop();
+
+        applyTarget();
+        setStatus('сдвиг камеры');
+      };
+
+      const enterPseudoFullscreen = () => {
+        shell.classList.add('pseudo-fullscreen', 'is-pseudo-fullscreen');
+        fullscreenButton.textContent = 'Выйти из экрана';
+      };
+
+      const exitPseudoFullscreen = () => {
+        shell.classList.remove('pseudo-fullscreen', 'is-pseudo-fullscreen');
+        fullscreenButton.textContent = 'Во весь экран';
+      };
+
+      fullscreenButton.addEventListener('click', async () => {
+        try {
+          if (document.fullscreenElement) {
+            await document.exitFullscreen();
+          } else if (shell.requestFullscreen) {
+            await shell.requestFullscreen();
+          } else if (shell.webkitRequestFullscreen) {
+            shell.webkitRequestFullscreen();
+          } else if (shell.classList.contains('is-pseudo-fullscreen')) {
+            exitPseudoFullscreen();
+          } else {
+            enterPseudoFullscreen();
+          }
+        } catch (e) {
+          if (shell.classList.contains('is-pseudo-fullscreen')) exitPseudoFullscreen();
+          else enterPseudoFullscreen();
+        }
+      });
+
+      document.addEventListener('fullscreenchange', () => {
+        const active = document.fullscreenElement === shell;
+        shell.classList.toggle('is-pseudo-fullscreen', active);
+        fullscreenButton.textContent = active ? 'Выйти из экрана' : 'Во весь экран';
+      });
+
+      panButton.addEventListener('click', () => {
+        const isHidden = panPanel.hasAttribute('hidden');
+        panPanel.toggleAttribute('hidden', !isHidden);
+        panButton.classList.toggle('is-active', isHidden);
+        panButton.setAttribute('aria-expanded', String(isHidden));
+        shell.classList.toggle('is-pan-mode', isHidden);
+        setStatus(isHidden ? 'режим сдвига камеры' : 'вращение · масштаб · обзор');
+      });
+
+      panPanel.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-pan]');
+        if (!button) return;
+        panCamera(button.dataset.pan);
+      });
+
+      viewer.addEventListener('load', () => {
+        loader.hidden = true;
+        error.hidden = true;
+        setStatus('вращение · масштаб · обзор');
+        state.center = getVector(viewer.getBoundingBoxCenter?.(), state.center);
+        state.dimensions = getVector(viewer.getDimensions?.(), state.dimensions);
+        state.target = { ...state.center };
+        state.ready = true;
+        applyTarget();
+      });
+
+      viewer.addEventListener('error', () => {
+        loader.hidden = true;
+        error.hidden = false;
+        setStatus('ошибка загрузки');
+      });
+    })();
+  </script>
 </body>
 </html>

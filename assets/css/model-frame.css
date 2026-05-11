@@ -196,6 +196,57 @@ body.is-standalone .model-action--standalone {
   height: 100svh !important;
 }
 
+
+
+.camera-pan-controls {
+  position: absolute;
+  z-index: 5;
+  top: max(10px, env(safe-area-inset-top));
+  right: max(10px, env(safe-area-inset-right));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.camera-pan-toggle,
+.camera-pan-panel .model-action {
+  pointer-events: auto;
+}
+
+.camera-pan-panel {
+  pointer-events: auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(38px, auto));
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(5, 6, 7, 0.58);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.camera-pan-panel .model-action {
+  min-width: 38px;
+  min-height: 34px;
+  padding: 7px 9px;
+}
+
+.camera-pan-panel .model-action--wide {
+  grid-column: 1 / -1;
+}
+
+.is-pan-mode model-viewer.model-viewer {
+  cursor: grab;
+  touch-action: none;
+}
+
+.is-pan-mode model-viewer.model-viewer:active {
+  cursor: grabbing;
+}
+
 @media (pointer: coarse), (max-width: 760px) {
   .model-actions {
     top: auto;
@@ -220,6 +271,29 @@ body.is-standalone .model-action--standalone {
   .sketchfab-credit,
   .model-ui {
     display: none !important;
+  }
+
+
+  .camera-pan-controls {
+    top: max(8px, env(safe-area-inset-top));
+    right: max(8px, env(safe-area-inset-right));
+    left: auto;
+    bottom: auto;
+    max-width: calc(100% - 16px);
+  }
+
+  .camera-pan-panel {
+    grid-template-columns: repeat(3, minmax(34px, auto));
+    gap: 5px;
+    padding: 6px;
+    border-radius: 16px;
+  }
+
+  .camera-pan-panel .model-action {
+    min-width: 34px;
+    min-height: 31px;
+    padding: 6px 8px;
+    font-size: 10.5px;
   }
 
   body.is-standalone .model-actions {

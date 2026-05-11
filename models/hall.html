@@ -129,6 +129,50 @@
 
     .btn:hover { border-color: rgba(214, 177, 93, 0.65); }
 
+    .camera-pan-controls {
+      position: absolute;
+      z-index: 6;
+      top: max(14px, env(safe-area-inset-top));
+      right: max(14px, env(safe-area-inset-right));
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .camera-pan-toggle,
+    .camera-pan-panel .btn {
+      pointer-events: auto;
+    }
+
+    .camera-pan-panel {
+      pointer-events: auto;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(38px, auto));
+      gap: 6px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(0, 0, 0, 0.56);
+      backdrop-filter: blur(14px);
+    }
+
+    .camera-pan-panel .btn {
+      min-width: 38px;
+      min-height: 34px;
+      padding: 7px 9px;
+    }
+
+    .camera-pan-panel .wide { grid-column: 1 / -1; }
+
+    .viewer-shell.is-pan-mode model-viewer {
+      cursor: grab;
+      touch-action: none;
+    }
+
+    .viewer-shell.is-pan-mode model-viewer:active { cursor: grabbing; }
+
     .error {
       position: absolute;
       z-index: 7;
@@ -179,6 +223,26 @@
       }
 
       .btn.secondary { display: none; }
+
+      .camera-pan-controls {
+        top: max(8px, env(safe-area-inset-top));
+        right: max(8px, env(safe-area-inset-right));
+        max-width: calc(100% - 16px);
+      }
+
+      .camera-pan-panel {
+        grid-template-columns: repeat(3, minmax(34px, auto));
+        gap: 5px;
+        padding: 6px;
+        border-radius: 16px;
+      }
+
+      .camera-pan-panel .btn {
+        min-width: 34px;
+        min-height: 31px;
+        padding: 6px 8px;
+        font-size: 10.5px;
+      }
     }
   </style>
 </head>
@@ -186,7 +250,7 @@
   <main class="viewer-shell" id="viewerShell">
     <model-viewer
       id="viewer"
-      src="../assets/models/hall/hall.glb?v=20260511-draco-safe"
+      src="../assets/models/hall/hall.glb?v=20260511-pan"
       alt="3D-модель Зала Народов"
       camera-controls
       auto-rotate
@@ -201,6 +265,18 @@
       field-of-view="35deg"
       ar>
     </model-viewer>
+
+    <div class="camera-pan-controls" aria-label="Сдвиг камеры">
+      <button class="btn camera-pan-toggle" id="panModeToggle" type="button" aria-pressed="false">Сдвиг камеры</button>
+      <div class="camera-pan-panel" id="panPanel" hidden>
+        <button class="btn" type="button" data-pan="up">↑</button>
+        <button class="btn" type="button" data-pan="left">←</button>
+        <button class="btn" type="button" data-pan="center">Центр</button>
+        <button class="btn" type="button" data-pan="right">→</button>
+        <button class="btn" type="button" data-pan="down">↓</button>
+        <button class="btn wide" type="button" data-pan="top">К верхушке</button>
+      </div>
+    </div>
 
     <div class="viewer-top">
       <div class="status-stack">
@@ -227,6 +303,59 @@
     const errorBox = document.getElementById('errorBox');
     const errorText = document.getElementById('errorText');
     const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const panModeToggle = document.getElementById('panModeToggle');
+    const panPanel = document.getElementById('panPanel');
+
+    const cameraState = {
+      target: { x: 0, y: 0, z: 0 },
+      dimensions: { x: 1, y: 1, z: 1 },
+      panMode: false,
+      pointer: null
+    };
+
+    function setCameraTarget(x, y, z) {
+      cameraState.target = { x, y, z };
+      viewer.cameraTarget = `${x}m ${y}m ${z}m`;
+    }
+
+    function getStep() {
+      const d = cameraState.dimensions;
+      return Math.max(d.x || 1, d.y || 1, d.z || 1) * 0.08;
+    }
+
+    function applyPan(action) {
+      const t = cameraState.target;
+      const step = getStep();
+      const d = cameraState.dimensions;
+
+      if (action === 'left') setCameraTarget(t.x - step, t.y, t.z);
+      if (action === 'right') setCameraTarget(t.x + step, t.y, t.z);
+      if (action === 'up') setCameraTarget(t.x, t.y + step, t.z);
+      if (action === 'down') setCameraTarget(t.x, t.y - step, t.z);
+      if (action === 'center') setCameraTarget(0, 0, 0);
+      if (action === 'top') setCameraTarget(0, Math.max(d.y * 0.38, step), 0);
+    }
+
+    function setPanMode(enabled) {
+      cameraState.panMode = enabled;
+      shell.classList.toggle('is-pan-mode', enabled);
+      panPanel.hidden = !enabled;
+      panModeToggle.setAttribute('aria-pressed', String(enabled));
+      panModeToggle.textContent = enabled ? 'Вращение' : 'Сдвиг камеры';
+      if (enabled) {
+        viewer.removeAttribute('camera-controls');
+        viewer.removeAttribute('auto-rotate');
+        progress.textContent = 'Сдвиг: перетащите модель, затем приблизьте';
+        progress.classList.add('is-visible');
+      } else {
+        viewer.setAttribute('camera-controls', '');
+        viewer.setAttribute('auto-rotate', '');
+        cameraState.pointer = null;
+        progress.textContent = 'Вращение и масштаб';
+        progress.classList.add('is-visible');
+        window.setTimeout(() => progress.classList.remove('is-visible'), 1200);
+      }
+    }
 
     viewer.addEventListener('progress', (event) => {
       const value = Math.round((event.detail.totalProgress || 0) * 100);
@@ -235,6 +364,9 @@
     });
 
     viewer.addEventListener('load', () => {
+      const dimensions = viewer.getDimensions ? viewer.getDimensions() : null;
+      if (dimensions) cameraState.dimensions = dimensions;
+      setCameraTarget(0, 0, 0);
       progress.textContent = 'Модель готова';
       window.setTimeout(() => progress.classList.remove('is-visible'), 1200);
     });
@@ -242,11 +374,39 @@
     viewer.addEventListener('error', (event) => {
       progress.classList.remove('is-visible');
       const message = event?.detail?.sourceError?.message || event?.detail?.message || '';
-      if (message) {
-        errorText.textContent = `Ошибка загрузки: ${message}`;
-      }
+      if (message) errorText.textContent = `Ошибка загрузки: ${message}`;
       errorBox.classList.add('is-visible');
     });
+
+    panModeToggle.addEventListener('click', () => setPanMode(!cameraState.panMode));
+
+    panPanel.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-pan]');
+      if (!button) return;
+      applyPan(button.dataset.pan);
+    });
+
+    viewer.addEventListener('pointerdown', (event) => {
+      if (!cameraState.panMode) return;
+      cameraState.pointer = { x: event.clientX, y: event.clientY };
+      viewer.setPointerCapture?.(event.pointerId);
+      event.preventDefault();
+    });
+
+    viewer.addEventListener('pointermove', (event) => {
+      if (!cameraState.panMode || !cameraState.pointer) return;
+      const dx = event.clientX - cameraState.pointer.x;
+      const dy = event.clientY - cameraState.pointer.y;
+      cameraState.pointer = { x: event.clientX, y: event.clientY };
+      const rect = viewer.getBoundingClientRect();
+      const scale = Math.max(cameraState.dimensions.x, cameraState.dimensions.y, cameraState.dimensions.z, 1) / Math.max(rect.width, rect.height, 1);
+      const t = cameraState.target;
+      setCameraTarget(t.x - dx * scale, t.y + dy * scale, t.z);
+      event.preventDefault();
+    });
+
+    viewer.addEventListener('pointerup', () => { cameraState.pointer = null; });
+    viewer.addEventListener('pointercancel', () => { cameraState.pointer = null; });
 
     fullscreenBtn.addEventListener('click', async () => {
       try {

@@ -12,7 +12,7 @@
     <model-viewer
       id="tatlinViewer"
       class="model-viewer model-viewer--tatlin"
-      src="../assets/models/tatlin/tatlin.glb?v=20260511-mobilefix"
+      src="../assets/models/tatlin/tatlin.glb?v=20260511-pan"
       alt="Интерактивная 3D-модель Башни Татлина"
       camera-controls
       auto-rotate
@@ -38,10 +38,22 @@
       </div>
     </model-viewer>
 
+    <div class="camera-pan-controls" id="panControls" aria-label="Сдвиг камеры">
+      <button class="model-action camera-pan-toggle" id="panModeToggle" type="button" aria-pressed="false">Сдвиг камеры</button>
+      <div class="camera-pan-panel" id="panPanel" hidden>
+        <button class="model-action" type="button" data-pan="up">↑</button>
+        <button class="model-action" type="button" data-pan="left">←</button>
+        <button class="model-action" type="button" data-pan="center">Центр</button>
+        <button class="model-action" type="button" data-pan="right">→</button>
+        <button class="model-action" type="button" data-pan="down">↓</button>
+        <button class="model-action model-action--wide" type="button" data-pan="top">К верхушке</button>
+      </div>
+    </div>
+
     <div class="model-actions" aria-label="Управление 3D-моделью">
       <a class="model-action model-action--standalone" href="tatlin.html" target="_top" rel="noopener">Открыть 3D отдельно</a>
       <a class="model-action" href="../tatlin.html" target="_top" rel="noopener">К странице объекта</a>
-      <a class="model-action" href="../assets/models/tatlin/tatlin.glb?v=20260511-mobilefix" target="_blank" rel="noopener">Файл модели</a>
+      <a class="model-action" href="../assets/models/tatlin/tatlin.glb?v=20260511-pan" target="_blank" rel="noopener">Файл модели</a>
       <button id="fullscreenToggle" class="model-action fullscreen-toggle" type="button">Во весь экран</button>
     </div>
 
@@ -56,8 +68,17 @@
     const viewer = document.getElementById('tatlinViewer');
     const status = document.getElementById('modelStatus');
     const fullscreenToggle = document.getElementById('fullscreenToggle');
+    const panModeToggle = document.getElementById('panModeToggle');
+    const panPanel = document.getElementById('panPanel');
 
     document.body.classList.toggle('is-standalone', window.self === window.top);
+
+    const cameraState = {
+      target: { x: 0, y: 0, z: 0 },
+      dimensions: { x: 1, y: 1, z: 1 },
+      panMode: false,
+      pointer: null
+    };
 
     function expandParentModelWindow() {
       try {
@@ -65,8 +86,8 @@
         if (!frame) return;
 
         const isMobile = window.matchMedia('(pointer: coarse), (max-width: 760px)').matches;
-        const height = isMobile ? '72svh' : 'min(72vh, 720px)';
-        const minHeight = isMobile ? '520px' : '520px';
+        const height = isMobile ? '78svh' : 'min(76vh, 760px)';
+        const minHeight = isMobile ? '560px' : '540px';
 
         frame.style.width = '100%';
         frame.style.height = height;
@@ -82,11 +103,48 @@
         }
 
         const shell = frame.closest('.page-shell');
-        if (shell) {
-          shell.style.width = '100%';
-        }
-      } catch (_error) {
-        // Если браузер запретил доступ к родительскому окну, обычная загрузка модели продолжится.
+        if (shell) shell.style.width = '100%';
+      } catch (_error) {}
+    }
+
+    function setCameraTarget(x, y, z) {
+      cameraState.target = { x, y, z };
+      viewer.cameraTarget = `${x}m ${y}m ${z}m`;
+    }
+
+    function getStep() {
+      const d = cameraState.dimensions;
+      return Math.max(d.x || 1, d.y || 1, d.z || 1) * 0.08;
+    }
+
+    function applyPan(action) {
+      const t = cameraState.target;
+      const step = getStep();
+      const d = cameraState.dimensions;
+
+      if (action === 'left') setCameraTarget(t.x - step, t.y, t.z);
+      if (action === 'right') setCameraTarget(t.x + step, t.y, t.z);
+      if (action === 'up') setCameraTarget(t.x, t.y + step, t.z);
+      if (action === 'down') setCameraTarget(t.x, t.y - step, t.z);
+      if (action === 'center') setCameraTarget(0, 0, 0);
+      if (action === 'top') setCameraTarget(0, Math.max(d.y * 0.38, step), 0);
+    }
+
+    function setPanMode(enabled) {
+      cameraState.panMode = enabled;
+      page.classList.toggle('is-pan-mode', enabled);
+      panPanel.hidden = !enabled;
+      panModeToggle.setAttribute('aria-pressed', String(enabled));
+      panModeToggle.textContent = enabled ? 'Вращение' : 'Сдвиг камеры';
+      if (enabled) {
+        viewer.removeAttribute('camera-controls');
+        viewer.removeAttribute('auto-rotate');
+        status.textContent = 'режим сдвига: перетащите модель, затем приблизьте';
+      } else {
+        viewer.setAttribute('camera-controls', '');
+        viewer.setAttribute('auto-rotate', '');
+        cameraState.pointer = null;
+        status.textContent = 'режим вращения и масштаба';
       }
     }
 
@@ -94,7 +152,10 @@
     window.addEventListener('resize', expandParentModelWindow);
 
     viewer.addEventListener('load', () => {
-      status.textContent = 'модель загружена — перетащите, чтобы вращать';
+      const dimensions = viewer.getDimensions ? viewer.getDimensions() : null;
+      if (dimensions) cameraState.dimensions = dimensions;
+      setCameraTarget(0, 0, 0);
+      status.textContent = 'модель загружена — вращайте или включите сдвиг камеры';
     });
 
     viewer.addEventListener('progress', (event) => {
@@ -109,6 +170,36 @@
     viewer.addEventListener('error', () => {
       status.textContent = 'ошибка загрузки модели';
     });
+
+    panModeToggle.addEventListener('click', () => setPanMode(!cameraState.panMode));
+
+    panPanel.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-pan]');
+      if (!button) return;
+      applyPan(button.dataset.pan);
+    });
+
+    viewer.addEventListener('pointerdown', (event) => {
+      if (!cameraState.panMode) return;
+      cameraState.pointer = { x: event.clientX, y: event.clientY };
+      viewer.setPointerCapture?.(event.pointerId);
+      event.preventDefault();
+    });
+
+    viewer.addEventListener('pointermove', (event) => {
+      if (!cameraState.panMode || !cameraState.pointer) return;
+      const dx = event.clientX - cameraState.pointer.x;
+      const dy = event.clientY - cameraState.pointer.y;
+      cameraState.pointer = { x: event.clientX, y: event.clientY };
+      const rect = viewer.getBoundingClientRect();
+      const scale = Math.max(cameraState.dimensions.x, cameraState.dimensions.y, cameraState.dimensions.z, 1) / Math.max(rect.width, rect.height, 1);
+      const t = cameraState.target;
+      setCameraTarget(t.x - dx * scale, t.y + dy * scale, t.z);
+      event.preventDefault();
+    });
+
+    viewer.addEventListener('pointerup', () => { cameraState.pointer = null; });
+    viewer.addEventListener('pointercancel', () => { cameraState.pointer = null; });
 
     fullscreenToggle.addEventListener('click', async () => {
       try {

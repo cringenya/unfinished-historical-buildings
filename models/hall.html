@@ -22,21 +22,19 @@
       width: 100%;
       height: 100%;
       margin: 0;
-      background: radial-gradient(circle at 50% 25%, rgba(214, 177, 93, 0.16), transparent 34%), var(--bg);
+      background: radial-gradient(circle at 50% 24%, rgba(214, 177, 93, 0.16), transparent 36%), var(--bg);
       color: var(--text);
       font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       overflow: hidden;
     }
 
-    body {
-      min-height: 100svh;
-    }
+    body { min-height: 100svh; }
 
     .viewer-shell {
       position: relative;
       width: 100%;
       height: 100svh;
-      min-height: 420px;
+      min-height: 520px;
       overflow: hidden;
       background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.01));
       touch-action: none;
@@ -47,7 +45,7 @@
       display: block;
       width: 100%;
       height: 100%;
-      min-height: 420px;
+      min-height: 520px;
       --poster-color: transparent;
       background: transparent;
       touch-action: none;
@@ -56,19 +54,20 @@
     .viewer-top {
       position: absolute;
       z-index: 5;
-      top: 16px;
       left: 16px;
       right: 16px;
+      bottom: 16px;
       display: flex;
-      align-items: flex-start;
+      align-items: flex-end;
       justify-content: space-between;
       gap: 12px;
       pointer-events: none;
     }
 
-    .label {
+    .label,
+    .progress {
       pointer-events: none;
-      max-width: min(560px, 70vw);
+      max-width: min(520px, 46vw);
       padding: 10px 14px;
       border: 1px solid var(--line);
       border-radius: 999px;
@@ -82,6 +81,24 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    .status-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .progress {
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity .2s ease, transform .2s ease;
+    }
+
+    .progress.is-visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .actions {
@@ -112,41 +129,16 @@
 
     .btn:hover { border-color: rgba(214, 177, 93, 0.65); }
 
-    .progress {
-      position: absolute;
-      z-index: 6;
-      left: 16px;
-      bottom: 16px;
-      max-width: calc(100% - 32px);
-      padding: 10px 14px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: var(--panel);
-      color: var(--muted);
-      font-size: 13px;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      backdrop-filter: blur(12px);
-      opacity: 0;
-      transform: translateY(8px);
-      transition: opacity .2s ease, transform .2s ease;
-    }
-
-    .progress.is-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
     .error {
       position: absolute;
       z-index: 7;
       inset: 50% auto auto 50%;
-      width: min(520px, calc(100% - 32px));
+      width: min(580px, calc(100% - 32px));
       transform: translate(-50%, -50%);
       padding: 18px;
       border: 1px solid rgba(255, 120, 120, 0.38);
       border-radius: 22px;
-      background: rgba(0, 0, 0, 0.74);
+      background: rgba(0, 0, 0, 0.78);
       color: var(--text);
       text-align: center;
       display: none;
@@ -164,23 +156,21 @@
       }
 
       .viewer-top {
-        top: auto;
-        bottom: 14px;
-        left: 12px;
-        right: 12px;
-        align-items: flex-end;
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        gap: 8px;
       }
 
-      .label {
-        max-width: 48vw;
+      .label,
+      .progress {
+        max-width: 42vw;
         padding: 8px 10px;
         font-size: 10px;
         letter-spacing: .12em;
       }
 
-      .actions {
-        gap: 6px;
-      }
+      .actions { gap: 6px; }
 
       .btn {
         min-height: 34px;
@@ -188,16 +178,7 @@
         font-size: 12px;
       }
 
-      .btn.secondary {
-        display: none;
-      }
-
-      .progress {
-        left: 12px;
-        bottom: 62px;
-        font-size: 11px;
-        padding: 8px 10px;
-      }
+      .btn.secondary { display: none; }
     }
   </style>
 </head>
@@ -205,13 +186,13 @@
   <main class="viewer-shell" id="viewerShell">
     <model-viewer
       id="viewer"
-      src="../assets/models/hall/hall.glb?v=20260511-full-compressed"
+      src="../assets/models/hall/hall.glb?v=20260511-draco-safe"
       alt="3D-модель Зала Народов"
       camera-controls
       auto-rotate
-      rotation-per-second="12deg"
+      rotation-per-second="10deg"
       interaction-prompt="none"
-      shadow-intensity="0.65"
+      shadow-intensity="0.6"
       exposure="1"
       environment-image="neutral"
       camera-orbit="35deg 68deg auto"
@@ -222,7 +203,10 @@
     </model-viewer>
 
     <div class="viewer-top">
-      <div class="label">3D-модель / Зал Народов</div>
+      <div class="status-stack">
+        <div class="label">3D-модель / Зал Народов</div>
+        <div class="progress is-visible" id="progress">Подготовка модели…</div>
+      </div>
       <nav class="actions" aria-label="Действия с моделью">
         <a class="btn secondary" href="../hall.html" target="_top">К странице объекта</a>
         <a class="btn" href="./hall.html" target="_blank" rel="noopener">Открыть отдельно</a>
@@ -230,10 +214,9 @@
       </nav>
     </div>
 
-    <div class="progress is-visible" id="progress">Подготовка модели…</div>
     <div class="error" id="errorBox">
       <strong>Модель не загрузилась</strong>
-      <span>Проверьте, что файл assets/models/hall/hall.glb загружен в репозиторий и не блокируется браузером.</span>
+      <span id="errorText">Проверьте, что файл assets/models/hall/hall.glb загружен в репозиторий и открывается напрямую.</span>
     </div>
   </main>
 
@@ -242,6 +225,7 @@
     const shell = document.getElementById('viewerShell');
     const progress = document.getElementById('progress');
     const errorBox = document.getElementById('errorBox');
+    const errorText = document.getElementById('errorText');
     const fullscreenBtn = document.getElementById('fullscreenBtn');
 
     viewer.addEventListener('progress', (event) => {
@@ -252,11 +236,15 @@
 
     viewer.addEventListener('load', () => {
       progress.textContent = 'Модель готова';
-      window.setTimeout(() => progress.classList.remove('is-visible'), 1000);
+      window.setTimeout(() => progress.classList.remove('is-visible'), 1200);
     });
 
-    viewer.addEventListener('error', () => {
+    viewer.addEventListener('error', (event) => {
       progress.classList.remove('is-visible');
+      const message = event?.detail?.sourceError?.message || event?.detail?.message || '';
+      if (message) {
+        errorText.textContent = `Ошибка загрузки: ${message}`;
+      }
       errorBox.classList.add('is-visible');
     });
 

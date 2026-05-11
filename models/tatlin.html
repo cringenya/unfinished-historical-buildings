@@ -5,27 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Башня Татлина — 3D-реконструкция</title>
   <link rel="stylesheet" href="../assets/css/model-frame.css" />
+  <style>
+    html, body, .model-frame-page, #viewer { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #050607; }
+    .model-frame-page, #viewer { position: absolute; inset: 0; }
+    canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+  </style>
 </head>
 <body>
   <main id="viewerPage" class="model-frame-page local-viewer-page" aria-label="Объект 01 / Башня Татлина">
     <div id="viewer" class="model-viewer" aria-label="Интерактивная 3D-модель Башни Татлина"></div>
 
     <div class="model-actions" aria-label="Управление 3D-моделью">
-      <a class="model-action model-action--standalone" href="tatlin.html?standalone=1" target="_top" rel="noopener" aria-label="Открыть 3D-модель отдельной страницей">
-        <span class="model-action__icon" aria-hidden="true">↗</span>
-        <span>Открыть 3D</span>
-      </a>
-      <a class="model-action" href="../tatlin.html" target="_top" rel="noopener" aria-label="Вернуться к странице объекта">
-        <span class="model-action__icon" aria-hidden="true">←</span>
-        <span>К странице</span>
-      </a>
-      <button id="fullscreenToggle" class="model-action fullscreen-toggle" type="button" aria-label="Открыть 3D-модель на весь экран" aria-pressed="false">
-        <span class="model-action__icon" aria-hidden="true">⛶</span>
-        <span id="fullscreenLabel">Во весь экран</span>
-      </button>
+      <a class="model-action model-action--standalone" href="tatlin.html" target="_top" rel="noopener">Открыть 3D отдельно</a>
+      <a class="model-action" href="../tatlin.html" target="_top" rel="noopener">К странице</a>
+      <button id="fullscreenToggle" class="model-action fullscreen-toggle" type="button" aria-label="Открыть 3D-модель на весь экран">Во весь экран</button>
     </div>
 
-    <p class="mobile-help">На телефоне лучше открыть модель отдельной страницей: так жесты вращения и масштабирования не конфликтуют с прокруткой сайта.</p>
+    <p class="mobile-help">Если на телефоне не получается вращать модель, нажмите «Открыть 3D отдельно».</p>
 
     <div class="model-ui" aria-hidden="true">
       <span class="model-ui__label">3D-модель / Башня Татлина</span>
@@ -33,56 +29,37 @@
     </div>
   </main>
 
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
-      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
-    }
-  }
-  </script>
-
   <script type="module">
-    import * as THREE from 'three';
-    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import * as THREE from 'https://esm.sh/three@0.164.1';
+    import { OrbitControls } from 'https://esm.sh/three@0.164.1/examples/jsm/controls/OrbitControls.js';
+    import { GLTFLoader } from 'https://esm.sh/three@0.164.1/examples/jsm/loaders/GLTFLoader.js';
 
-    const MODEL_URL = '../assets/models/tatlin/tatlin.glb?v=5';
-
+    const MODEL_URL = '../assets/models/tatlin/tatlin.glb?v=4';
     const page = document.getElementById('viewerPage');
     const container = document.getElementById('viewer');
     const status = document.getElementById('modelStatus');
     const fullscreenToggle = document.getElementById('fullscreenToggle');
-    const fullscreenLabel = document.getElementById('fullscreenLabel');
 
-    const isMobile = matchMedia('(pointer: coarse)').matches || window.innerWidth <= 760;
-    const isEmbedded = (() => {
-      try {
-        return window.self !== window.top;
-      } catch (_error) {
-        return true;
-      }
-    })();
-
-    document.body.classList.toggle('is-mobile', isMobile);
-    document.body.classList.toggle('is-embedded', isEmbedded);
+    const standalone = window.self === window.top;
+    const coarsePointer = matchMedia('(pointer: coarse)').matches || innerWidth <= 760;
+    document.body.classList.toggle('is-standalone', standalone);
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x050607);
-    scene.fog = new THREE.Fog(0x050607, 12, 42);
+    scene.fog = new THREE.Fog(0x050607, 12, 44);
 
     const camera = new THREE.PerspectiveCamera(36, 1, 0.01, 1000);
     camera.position.set(4.3, 2.8, 6.4);
 
     const renderer = new THREE.WebGLRenderer({
-      antialias: !isMobile,
+      antialias: !coarsePointer,
       alpha: false,
       powerPreference: 'high-performance'
     });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.35 : 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, coarsePointer ? 1.35 : 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.35;
+    renderer.toneMappingExposure = 1.25;
     container.appendChild(renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -102,196 +79,167 @@
 
     scene.add(new THREE.HemisphereLight(0xfff3d4, 0x20232a, 3.2));
 
-    const keyLight = new THREE.DirectionalLight(0xffdf9d, 4.5);
-    keyLight.position.set(5, 8, 6);
-    scene.add(keyLight);
-
-    const fillLight = new THREE.DirectionalLight(0x9abfff, 2.1);
-    fillLight.position.set(-5, 4, -5);
-    scene.add(fillLight);
-
-    const frontLight = new THREE.DirectionalLight(0xffffff, 2.4);
-    frontLight.position.set(0, 3, 8);
-    scene.add(frontLight);
-
-    const rimLight = new THREE.DirectionalLight(0xffffff, 2.0);
-    rimLight.position.set(-2, 7, -8);
-    scene.add(rimLight);
-
-    fullscreenToggle.addEventListener('pointerdown', (event) => {
-      event.stopPropagation();
-    });
-
-    fullscreenToggle.addEventListener('click', async (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-
-      if (isFullscreen() || document.body.classList.contains('pseudo-fullscreen')) {
-        await exitViewerMode();
-      } else {
-        await enterViewerMode();
-      }
-    });
-
-    document.addEventListener('fullscreenchange', updateFullscreenState);
-    document.addEventListener('webkitfullscreenchange', updateFullscreenState);
+    const lights = [
+      [0xffdf9d, 4.5, 5, 8, 6],
+      [0x9abfff, 2.1, -5, 4, -5],
+      [0xffffff, 2.4, 0, 3, 8],
+      [0xffffff, 2.0, -2, 7, -8]
+    ];
+    for (const [color, intensity, x, y, z] of lights) {
+      const light = new THREE.DirectionalLight(color, intensity);
+      light.position.set(x, y, z);
+      scene.add(light);
+    }
 
     const loader = new GLTFLoader();
     loader.load(
       MODEL_URL,
       (gltf) => {
-        const model = gltf.scene;
+        const model = gltf.scene || gltf.scenes[0];
+        if (!model) {
+          status.textContent = 'файл загружен, но сцена не найдена';
+          return;
+        }
 
-        model.traverse((child) => {
-          if (!child.isMesh) return;
-          child.castShadow = false;
-          child.receiveShadow = false;
-
-          if (child.material) {
-            child.material.side = THREE.DoubleSide;
-            child.material.needsUpdate = true;
-          }
-        });
+        const info = prepareModel(model);
+        if (info.meshCount === 0 || info.vertexCount === 0) {
+          status.textContent = 'файл загружен, но геометрия не найдена';
+          return;
+        }
 
         scene.add(model);
-        const boxInfo = frameModel(model);
-        addGround(boxInfo);
-        status.textContent = isMobile ? 'вращайте одним пальцем · масштабируйте двумя' : 'вращение · масштаб · свет';
-        resize();
+        fitCameraToObject(model);
+        status.textContent = 'модель загружена — перетащите, чтобы вращать';
       },
       (event) => {
-        if (!event.total) return;
-        const progress = Math.round((event.loaded / event.total) * 100);
-        status.textContent = `загрузка ${progress}%`;
+        if (event.lengthComputable && event.total > 0) {
+          status.textContent = `загрузка модели… ${Math.round((event.loaded / event.total) * 100)}%`;
+        }
       },
       (error) => {
-        console.error(error);
-        status.textContent = 'модель не загрузилась';
+        console.error('Tatlin GLB loading error:', error);
+        status.textContent = 'не удалось загрузить модель';
       }
     );
 
-    function frameModel(model) {
-      const box = new THREE.Box3().setFromObject(model);
-      const size = new THREE.Vector3();
-      const center = new THREE.Vector3();
-      box.getSize(size);
-      box.getCenter(center);
+    function prepareModel(model) {
+      let meshCount = 0;
+      let vertexCount = 0;
+      model.updateWorldMatrix(true, true);
 
-      model.position.sub(center);
+      const originalBox = new THREE.Box3().setFromObject(model);
+      const originalSize = originalBox.getSize(new THREE.Vector3());
+      const originalCenter = originalBox.getCenter(new THREE.Vector3());
+      const maxOriginalDim = Math.max(originalSize.x, originalSize.y, originalSize.z);
+      const scale = maxOriginalDim > 0 ? 3.9 / maxOriginalDim : 1;
 
-      const cleanBox = new THREE.Box3().setFromObject(model);
-      cleanBox.getSize(size);
-      cleanBox.getCenter(center);
+      model.scale.setScalar(scale);
+      model.position.set(
+        -originalCenter.x * scale,
+        -originalCenter.y * scale,
+        -originalCenter.z * scale
+      );
+      model.updateWorldMatrix(true, true);
 
-      const maxSize = Math.max(size.x, size.y, size.z) || 1;
-      const distance = maxSize * (isMobile ? 2.55 : 2.25);
-      const direction = new THREE.Vector3(0.58, 0.38, 0.82).normalize();
+      const centeredBox = new THREE.Box3().setFromObject(model);
+      model.position.y += -1.42 - centeredBox.min.y;
+      model.updateWorldMatrix(true, true);
 
-      camera.position.copy(center).add(direction.multiplyScalar(distance));
-      camera.near = Math.max(maxSize / 100, 0.01);
-      camera.far = maxSize * 100;
-      camera.updateProjectionMatrix();
+      const edgeMaterial = new THREE.LineBasicMaterial({
+        color: 0xe5c26f,
+        transparent: true,
+        opacity: 0.14,
+        depthWrite: false
+      });
 
-      controls.target.copy(center);
-      controls.minDistance = maxSize * 0.45;
-      controls.maxDistance = maxSize * 7.5;
-      controls.update();
+      model.traverse((child) => {
+        if (!child.isMesh) return;
+        meshCount += 1;
+        vertexCount += child.geometry?.attributes?.position?.count || 0;
+        child.frustumCulled = false;
 
-      return {
-        min: cleanBox.min.toArray(),
-        max: cleanBox.max.toArray(),
-        size: size.toArray(),
-        center: center.toArray()
-      };
+        const materials = Array.isArray(child.material) ? child.material : [child.material];
+        for (const material of materials) {
+          if (!material) continue;
+          material.side = THREE.DoubleSide;
+          material.depthTest = true;
+          material.depthWrite = true;
+          if (material.map) {
+            material.map.colorSpace = THREE.SRGBColorSpace;
+            material.map.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+          }
+          if (material.name && /glass|window/i.test(material.name)) {
+            material.transparent = true;
+            material.opacity = 0.82;
+            material.depthWrite = false;
+          }
+        }
+
+        if (child.geometry) {
+          const edges = new THREE.EdgesGeometry(child.geometry, 32);
+          const line = new THREE.LineSegments(edges, edgeMaterial);
+          line.renderOrder = 2;
+          child.add(line);
+        }
+      });
+
+      return { meshCount, vertexCount };
     }
 
-    function addGround(boxInfo) {
-      const min = new THREE.Vector3().fromArray(boxInfo.min);
-      const size = new THREE.Vector3().fromArray(boxInfo.size);
-      const radius = Math.max(size.x, size.z) * 0.9;
-      const ground = new THREE.Mesh(
-        new THREE.CircleGeometry(radius, 128),
-        new THREE.MeshBasicMaterial({
-          color: 0xc9a45b,
-          transparent: true,
-          opacity: 0.035,
-          depthWrite: false
-        })
-      );
+    function fitCameraToObject(object) {
+      object.updateWorldMatrix(true, true);
+      const box = new THREE.Box3().setFromObject(object);
+      const size = box.getSize(new THREE.Vector3());
+      const center = box.getCenter(new THREE.Vector3());
+      const maxDim = Math.max(size.x, size.y, size.z);
+      const distance = maxDim / (2 * Math.tan((camera.fov * Math.PI) / 360));
 
-      ground.rotation.x = -Math.PI / 2;
-      ground.position.y = min.y - 0.015;
-      ground.renderOrder = -1;
-      scene.add(ground);
+      const direction = new THREE.Vector3(0.64, 0.42, 0.76).normalize();
+      camera.position.copy(center).add(direction.multiplyScalar(distance * 1.34));
+      camera.near = Math.max(0.01, distance / 100);
+      camera.far = Math.max(100, distance * 100);
+      camera.updateProjectionMatrix();
+      controls.target.copy(center);
+      controls.maxDistance = distance * 4;
+      controls.minDistance = distance * 0.18;
+      controls.update();
     }
 
     function resize() {
       const rect = container.getBoundingClientRect();
-      const width = Math.max(1, rect.width || window.innerWidth);
-      const height = Math.max(1, rect.height || window.innerHeight);
-
+      const width = Math.max(1, rect.width);
+      const height = Math.max(1, rect.height);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height, false);
     }
 
-    function isFullscreen() {
-      return Boolean(document.fullscreenElement || document.webkitFullscreenElement);
-    }
-
-    async function enterViewerMode() {
-      const request = page.requestFullscreen || page.webkitRequestFullscreen;
-
-      if (request) {
-        try {
-          await request.call(page);
-          updateFullscreenState();
-          setTimeout(resize, 100);
-          return;
-        } catch (_error) {
-          // На части мобильных браузеров Fullscreen API недоступен или запрещён внутри iframe.
-        }
-      }
-
-      document.body.classList.add('pseudo-fullscreen');
-      page.classList.add('is-fullscreen');
-      fullscreenToggle.setAttribute('aria-pressed', 'true');
-      fullscreenLabel.textContent = 'Свернуть';
-      setTimeout(resize, 100);
-    }
-
-    async function exitViewerMode() {
-      if (isFullscreen()) {
-        const exit = document.exitFullscreen || document.webkitExitFullscreen;
-        if (exit) {
-          await exit.call(document);
-        }
-      }
-
-      document.body.classList.remove('pseudo-fullscreen');
-      page.classList.remove('is-fullscreen');
-      updateFullscreenState();
-      setTimeout(resize, 100);
-    }
-
-    function updateFullscreenState() {
-      const active = isFullscreen() || document.body.classList.contains('pseudo-fullscreen');
-      page.classList.toggle('is-fullscreen', active);
-      fullscreenToggle.setAttribute('aria-pressed', active ? 'true' : 'false');
-      fullscreenLabel.textContent = active ? 'Свернуть' : 'Во весь экран';
+    function animate() {
+      controls.update();
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
     }
 
     window.addEventListener('resize', resize, { passive: true });
     window.addEventListener('orientationchange', () => setTimeout(resize, 250), { passive: true });
-
-    function animate() {
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
-    }
-
     resize();
     animate();
+
+    fullscreenToggle.addEventListener('click', async () => {
+      try {
+        if (document.fullscreenElement) {
+          await document.exitFullscreen();
+        } else if (page.requestFullscreen) {
+          await page.requestFullscreen();
+        } else {
+          throw new Error('Fullscreen API is not available');
+        }
+      } catch (_error) {
+        page.classList.toggle('is-pseudo-fullscreen');
+      } finally {
+        setTimeout(resize, 120);
+      }
+    });
   </script>
 </body>
 </html>

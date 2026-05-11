@@ -1,12 +1,11 @@
 :root {
   --bg: #050607;
-  --bg-soft: #0b0d10;
   --text: #f3efe6;
   --muted: rgba(243, 239, 230, 0.68);
   --muted-2: rgba(243, 239, 230, 0.48);
   --gold: #c9a45b;
-  --line: rgba(255, 255, 255, 0.12);
-  --glass: rgba(5, 6, 7, 0.62);
+  --line: rgba(255, 255, 255, 0.14);
+  --glass: rgba(5, 6, 7, 0.72);
 }
 
 * {
@@ -17,28 +16,28 @@ html,
 body {
   width: 100%;
   height: 100%;
-  min-height: 100dvh;
+  min-height: 100vh;
+  min-height: 100svh;
   margin: 0;
   background: var(--bg);
   color: var(--text);
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   overflow: hidden;
-  overscroll-behavior: none;
-}
-
-body {
   -webkit-tap-highlight-color: transparent;
 }
 
-.model-frame-page,
-.sketchfab-embed-wrapper {
-  width: 100%;
-  height: 100%;
-  min-height: 100dvh;
+body {
+  position: fixed;
+  inset: 0;
 }
 
 .model-frame-page {
-  position: relative;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
   overflow: hidden;
   background:
     radial-gradient(circle at 50% 18%, rgba(201, 164, 91, 0.12), transparent 34%),
@@ -56,9 +55,7 @@ body {
     linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
   background-size: 34px 34px;
-  mask-image: radial-gradient(circle at center, black 42%, transparent 82%);
-  -webkit-mask-image: radial-gradient(circle at center, black 42%, transparent 82%);
-  opacity: 0.55;
+  opacity: 0.42;
 }
 
 .model-viewer,
@@ -69,22 +66,19 @@ body {
   z-index: 1;
   width: 100%;
   height: 100%;
-  min-height: 100dvh;
   border: 0;
 }
 
 .model-viewer,
-.model-viewer canvas,
-.sketchfab-embed-wrapper,
-.sketchfab-embed-wrapper iframe {
+.model-viewer canvas {
   touch-action: none;
-  overscroll-behavior: contain;
+  overscroll-behavior: none;
 }
 
 .model-viewer canvas {
+  display: block;
   width: 100%;
   height: 100%;
-  display: block;
   cursor: grab;
 }
 
@@ -92,214 +86,131 @@ body {
   cursor: grabbing;
 }
 
-.model-ui {
+.model-actions {
   position: absolute;
-  left: 16px;
-  right: 16px;
-  bottom: max(14px, env(safe-area-inset-bottom));
-  z-index: 3;
+  z-index: 4;
+  top: max(12px, env(safe-area-inset-top));
+  left: max(12px, env(safe-area-inset-left));
+  right: max(12px, env(safe-area-inset-right));
   display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  align-items: center;
-  color: var(--muted);
-  font-size: 11px;
-  line-height: 1.4;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  flex-wrap: wrap;
+  gap: 8px;
   pointer-events: none;
 }
 
-.model-ui__label,
-.model-ui__status {
-  padding: 7px 10px;
-  border-radius: 999px;
-  background: rgba(5, 6, 7, 0.44);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-.model-actions {
-  position: absolute;
-  top: max(10px, env(safe-area-inset-top));
-  right: max(10px, env(safe-area-inset-right));
-  z-index: 4;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 8px;
-  max-width: calc(100% - 20px);
-}
-
 .model-action {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  min-height: 36px;
-  padding: 9px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  appearance: none;
+  border: 1px solid var(--line);
   border-radius: 999px;
+  padding: 8px 11px;
+  color: var(--text);
   background: var(--glass);
-  color: rgba(243, 239, 230, 0.88);
-  font: 700 11px/1 Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1;
   text-decoration: none;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
   cursor: pointer;
   pointer-events: auto;
-  user-select: none;
-  -webkit-user-select: none;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .model-action:hover,
 .model-action:focus-visible {
-  color: var(--text);
-  background: rgba(18, 19, 20, 0.78);
-  border-color: rgba(201, 164, 91, 0.48);
+  border-color: rgba(201, 164, 91, 0.62);
+  color: var(--gold);
   outline: none;
 }
 
-.model-action__icon {
-  color: var(--gold);
-  font-size: 15px;
-  line-height: 1;
-}
-
-.model-action--standalone {
-  display: none;
-}
-
-body.is-embedded .model-action--standalone,
-body.is-mobile .model-action--standalone {
-  display: inline-flex;
-}
-
+.model-ui,
+.sketchfab-credit,
 .mobile-help {
   position: absolute;
-  left: 16px;
-  right: 16px;
-  top: max(58px, calc(env(safe-area-inset-top) + 48px));
   z-index: 3;
-  display: none;
-  max-width: 440px;
-  margin: 0 auto;
-  padding: 10px 12px;
-  border: 1px solid rgba(201, 164, 91, 0.22);
-  border-radius: 16px;
-  background: rgba(5, 6, 7, 0.58);
+  left: max(12px, env(safe-area-inset-left));
+  right: max(12px, env(safe-area-inset-right));
   color: var(--muted);
-  font-size: 12px;
-  line-height: 1.45;
-  text-align: center;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   pointer-events: none;
 }
 
-body.is-mobile .mobile-help {
-  display: block;
+.model-ui {
+  bottom: max(12px, env(safe-area-inset-bottom));
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: flex-end;
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
-.sketchfab-embed-wrapper {
-  display: block;
-  background:
-    radial-gradient(circle at 50% 18%, rgba(201, 164, 91, 0.08), transparent 34%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015));
+.model-ui__label,
+.model-ui__status,
+.mobile-help,
+.sketchfab-credit {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(5, 6, 7, 0.48);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
-.sketchfab-embed-wrapper iframe {
-  display: block;
-  background: var(--bg);
+.mobile-help {
+  display: none;
+  top: 58px;
+  max-width: 560px;
+  right: auto;
+  font-size: 12px;
+  line-height: 1.45;
+  border-radius: 14px;
 }
 
 .sketchfab-credit {
-  position: absolute;
-  left: 16px;
-  bottom: max(14px, env(safe-area-inset-bottom));
-  z-index: 3;
-  margin: 0;
-  padding: 7px 10px;
-  border-radius: 999px;
-  background: rgba(5, 6, 7, 0.44);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: var(--muted-2);
+  bottom: max(12px, env(safe-area-inset-bottom));
+  right: auto;
+  max-width: calc(100% - 24px);
   font-size: 11px;
-  line-height: 1.4;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  line-height: 1.35;
+  pointer-events: auto;
 }
 
 .sketchfab-credit a {
   color: var(--gold);
-  font-weight: 600;
   text-decoration: none;
 }
 
-.local-viewer-page:fullscreen,
-.local-viewer-page:-webkit-full-screen,
-.local-viewer-page.is-fullscreen,
-body.pseudo-fullscreen .local-viewer-page {
-  width: 100vw;
-  height: 100dvh;
-  min-height: 100dvh;
-  background: var(--bg);
+body.is-standalone .model-action--standalone {
+  display: none;
 }
 
-body.pseudo-fullscreen .local-viewer-page {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
+.is-pseudo-fullscreen {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2147483647 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100svh !important;
 }
 
 @media (pointer: coarse), (max-width: 760px) {
-  html,
-  body {
-    cursor: auto;
-  }
-
-  .model-frame-page,
-  .model-viewer,
-  .model-viewer canvas,
-  .sketchfab-embed-wrapper,
-  .sketchfab-embed-wrapper iframe {
-    min-height: 100dvh;
-  }
-
   .model-actions {
-    left: 10px;
-    right: 10px;
-    justify-content: center;
+    gap: 7px;
   }
 
   .model-action {
-    min-height: 38px;
     padding: 9px 11px;
-    font-size: 10px;
-    letter-spacing: 0.075em;
+    font-size: 12px;
+  }
+
+  .mobile-help {
+    display: block;
   }
 
   .model-ui {
-    left: 10px;
-    right: 10px;
-    bottom: max(10px, env(safe-area-inset-bottom));
-    align-items: flex-start;
     flex-direction: column;
-    gap: 7px;
+    align-items: flex-start;
     font-size: 10px;
-    letter-spacing: 0.08em;
-  }
-
-  .sketchfab-credit {
-    left: 10px;
-    right: 10px;
-    bottom: max(10px, env(safe-area-inset-bottom));
-    width: fit-content;
-    max-width: calc(100% - 20px);
-    margin: 0 auto;
   }
 }

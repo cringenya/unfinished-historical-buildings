@@ -1,162 +1,233 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>3D-модель / Зал Народов</title>
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Зал Народов — 3D-реконструкция</title>
   <link rel="stylesheet" href="../assets/css/model-frame.css" />
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
-<body class="model-page">
-  <main class="model-shell">
+<body class="hall-model-page">
+  <main class="model-frame-page" aria-label="Объект 02 / Зал Народов">
     <model-viewer
       id="viewer"
-      src="../assets/models/hall/hall.glb?v=20260511-q98"
-      alt="3D-модель Зала Народов"
+      class="model-viewer model-viewer--hall"
+      src="../assets/models/hall/hall.glb?v=20260511-fitcontrols"
+      alt="Интерактивная 3D-модель Зала Народов"
       camera-controls
+      auto-rotate
+      auto-rotate-delay="1200"
+      rotation-per-second="18deg"
+      interaction-prompt="auto"
+      interaction-prompt-style="basic"
       touch-action="pan-y"
-      camera-orbit="45deg 68deg 560m"
-      camera-target="0m 125m 0m"
-      min-camera-orbit="auto auto 45m"
-      max-camera-orbit="auto auto 900m"
+      shadow-intensity="0.85"
+      exposure="0.92"
+      environment-image="neutral"
+      camera-orbit="45deg 68deg auto"
+      min-camera-orbit="auto auto 20%"
+      max-camera-orbit="auto auto 650%"
       field-of-view="30deg"
       min-field-of-view="12deg"
       max-field-of-view="55deg"
-      exposure="1"
-      shadow-intensity="0.25"
-      environment-image="neutral"
-      interaction-prompt="none"
-      reveal="auto"
+      bounds="tight"
+      camera-target="auto auto auto"
       loading="eager"
+      reveal="auto"
     >
-      <div class="model-error" slot="poster">
-        <strong>Загрузка модели…</strong>
+      <div class="model-loader" slot="poster">3D-модель / Зал Народов<br />загрузка модели…</div>
+      <div class="model-error" slot="error">
+        Не удалось загрузить 3D-модель. Откройте файл модели напрямую или обновите страницу.
       </div>
     </model-viewer>
 
-    <div id="panLayer" class="pan-layer" aria-hidden="true"></div>
-
-    <div class="model-badges" aria-hidden="true">
-      <span>3D-модель / Зал Народов</span>
+    <div class="model-ui" aria-hidden="true">
+      <span class="model-ui__label">3D-модель / Зал Народов</span>
+      <span id="modelStatus" class="model-ui__status">загрузка модели…</span>
     </div>
 
-    <section class="model-controls" aria-label="Управление 3D-моделью">
-      <div class="control-row main-actions">
-        <button type="button" id="openSeparate">Открыть отдельно</button>
-        <button type="button" id="fullscreenBtn">Во весь экран</button>
-        <button type="button" id="panToggle">Сдвиг камеры</button>
+    <section class="model-toolbar" aria-label="Управление 3D-моделью">
+      <div class="model-actions">
+        <a class="model-action model-action--standalone" href="hall.html" target="_top" rel="noopener">Открыть 3D отдельно</a>
+        <a class="model-action model-action--back" href="../hall.html" target="_top" rel="noopener">К странице объекта</a>
+        <button id="fullscreenToggle" class="model-action" type="button">Во весь экран</button>
+        <button id="panModeToggle" class="model-action" type="button" aria-pressed="false">Сдвиг камеры</button>
       </div>
-
-      <div class="control-row pan-actions" id="panActions">
-        <button type="button" data-pan="left">←</button>
-        <button type="button" data-pan="right">→</button>
-        <button type="button" data-pan="up">↑</button>
-        <button type="button" data-pan="down">↓</button>
-        <button type="button" data-target="center">Центр</button>
-        <button type="button" data-target="top">К верхушке</button>
+      <div class="camera-pan-panel" id="panPanel" hidden>
+        <button class="model-action" type="button" data-pan="left">←</button>
+        <button class="model-action" type="button" data-pan="right">→</button>
+        <button class="model-action" type="button" data-pan="up">↑</button>
+        <button class="model-action" type="button" data-pan="down">↓</button>
+        <button class="model-action" type="button" data-pan="center">Центр</button>
+        <button class="model-action" type="button" data-pan="top">К верхушке</button>
       </div>
     </section>
   </main>
 
   <script>
+    const page = document.querySelector('.model-frame-page');
     const viewer = document.getElementById('viewer');
-    const shell = document.querySelector('.model-shell');
-    const panLayer = document.getElementById('panLayer');
-    const panToggle = document.getElementById('panToggle');
-    const panActions = document.getElementById('panActions');
-    const fullscreenBtn = document.getElementById('fullscreenBtn');
-    const openSeparate = document.getElementById('openSeparate');
+    const status = document.getElementById('modelStatus');
+    const fullscreenToggle = document.getElementById('fullscreenToggle');
+    const panModeToggle = document.getElementById('panModeToggle');
+    const panPanel = document.getElementById('panPanel');
 
-    const target = { x: 0, y: 125, z: 0 };
-    let panMode = false;
-    let dragging = false;
-    let lastX = 0;
-    let lastY = 0;
+    document.body.classList.toggle('is-standalone', window.self === window.top);
 
-    function setTarget(x, y, z) {
-      target.x = Math.max(-180, Math.min(180, x));
-      target.y = Math.max(0, Math.min(260, y));
-      target.z = Math.max(-220, Math.min(220, z));
-      viewer.cameraTarget = `${target.x}m ${target.y}m ${target.z}m`;
+    const cameraState = {
+      baseTarget: { x: 0, y: 0, z: 0 },
+      target: { x: 0, y: 0, z: 0 },
+      dimensions: { x: 1, y: 1, z: 1 },
+      panMode: false,
+      pointer: null
+    };
+
+    function expandParentModelWindow() {
+      try {
+        const frame = window.frameElement;
+        if (!frame) return;
+        const isMobile = window.matchMedia('(pointer: coarse), (max-width: 760px)').matches;
+        const height = isMobile ? '78svh' : 'min(76vh, 760px)';
+        const minHeight = isMobile ? '560px' : '540px';
+        frame.style.width = '100%';
+        frame.style.height = height;
+        frame.style.minHeight = minHeight;
+        frame.style.display = 'block';
+        frame.style.border = '0';
+        const host = frame.closest('.model-host, .sketchfab-wrap, .page-shell');
+        if (host) {
+          host.style.minHeight = minHeight;
+          host.style.height = height;
+          host.style.overflow = 'hidden';
+        }
+      } catch (_error) {}
     }
 
-    function shiftTarget(dx, dy, dz = 0) {
-      setTarget(target.x + dx, target.y + dy, target.z + dz);
+    function normalizeVector(value) {
+      if (!value) return null;
+      const x = Number(value.x);
+      const y = Number(value.y);
+      const z = Number(value.z);
+      if (![x, y, z].every(Number.isFinite)) return null;
+      return { x, y, z };
     }
 
-    function setPanMode(enabled) {
-      panMode = enabled;
-      shell.classList.toggle('is-pan-mode', panMode);
-      panToggle.textContent = panMode ? 'Вращение' : 'Сдвиг камеры';
-      panActions.classList.toggle('is-visible', panMode);
-      if (panMode) {
-        viewer.removeAttribute('camera-controls');
-      } else {
-        viewer.setAttribute('camera-controls', '');
+    function setCameraTarget(x, y, z) {
+      cameraState.target = { x, y, z };
+      const value = `${x}m ${y}m ${z}m`;
+      viewer.cameraTarget = value;
+      viewer.setAttribute('camera-target', value);
+    }
+
+    function resetCameraTargetToModelCenter() {
+      let center = null;
+      try { center = normalizeVector(viewer.getBoundingBoxCenter?.()); } catch (_error) {}
+      center = center || { x: 0, y: 0, z: 0 };
+      cameraState.baseTarget = center;
+      setCameraTarget(center.x, center.y, center.z);
+      requestAnimationFrame(() => {
+        viewer.updateFraming?.();
+        viewer.jumpCameraToGoal?.();
+      });
+    }
+
+    function getStep() {
+      const d = cameraState.dimensions;
+      return Math.max(d.x || 1, d.y || 1, d.z || 1) * 0.075;
+    }
+
+    function applyPan(action) {
+      const t = cameraState.target;
+      const step = getStep();
+      const d = cameraState.dimensions;
+      if (action === 'left') setCameraTarget(t.x - step, t.y, t.z);
+      if (action === 'right') setCameraTarget(t.x + step, t.y, t.z);
+      if (action === 'up') setCameraTarget(t.x, t.y + step, t.z);
+      if (action === 'down') setCameraTarget(t.x, t.y - step, t.z);
+      if (action === 'center') resetCameraTargetToModelCenter();
+      if (action === 'top') {
+        const base = cameraState.baseTarget;
+        setCameraTarget(base.x, base.y + Math.max(d.y * 0.38, step), base.z);
       }
     }
 
-    panToggle.addEventListener('click', () => setPanMode(!panMode));
+    function setPanMode(enabled) {
+      cameraState.panMode = enabled;
+      page.classList.toggle('is-pan-mode', enabled);
+      panPanel.hidden = !enabled;
+      panModeToggle.setAttribute('aria-pressed', String(enabled));
+      panModeToggle.textContent = enabled ? 'Вращение' : 'Сдвиг камеры';
+      if (enabled) {
+        viewer.removeAttribute('camera-controls');
+        viewer.removeAttribute('auto-rotate');
+        status.textContent = 'режим сдвига камеры';
+      } else {
+        viewer.setAttribute('camera-controls', '');
+        viewer.setAttribute('auto-rotate', '');
+        cameraState.pointer = null;
+        status.textContent = 'режим вращения и масштаба';
+      }
+    }
 
-    document.querySelectorAll('[data-pan]').forEach((button) => {
-      button.addEventListener('click', () => {
-        const direction = button.dataset.pan;
-        const step = 18;
-        if (direction === 'left') shiftTarget(-step, 0);
-        if (direction === 'right') shiftTarget(step, 0);
-        if (direction === 'up') shiftTarget(0, step);
-        if (direction === 'down') shiftTarget(0, -step);
-      });
+    expandParentModelWindow();
+    window.addEventListener('resize', expandParentModelWindow);
+
+    viewer.addEventListener('load', () => {
+      const dimensions = normalizeVector(viewer.getDimensions?.());
+      if (dimensions) cameraState.dimensions = dimensions;
+      resetCameraTargetToModelCenter();
+      status.textContent = 'модель загружена';
     });
 
-    document.querySelectorAll('[data-target]').forEach((button) => {
-      button.addEventListener('click', () => {
-        if (button.dataset.target === 'center') setTarget(0, 125, 0);
-        if (button.dataset.target === 'top') setTarget(0, 235, 0);
-      });
+    viewer.addEventListener('progress', (event) => {
+      const progress = event.detail && Number.isFinite(event.detail.totalProgress)
+        ? Math.round(event.detail.totalProgress * 100)
+        : null;
+      status.textContent = progress === null || progress >= 100 ? 'подготовка модели…' : `загрузка модели… ${progress}%`;
     });
 
-    panLayer.addEventListener('pointerdown', (event) => {
-      if (!panMode) return;
-      dragging = true;
-      lastX = event.clientX;
-      lastY = event.clientY;
-      panLayer.setPointerCapture(event.pointerId);
+    viewer.addEventListener('error', () => {
+      status.textContent = 'ошибка загрузки модели';
     });
 
-    panLayer.addEventListener('pointermove', (event) => {
-      if (!panMode || !dragging) return;
-      const dx = event.clientX - lastX;
-      const dy = event.clientY - lastY;
-      lastX = event.clientX;
-      lastY = event.clientY;
-      shiftTarget(-dx * 0.32, dy * 0.32);
+    panModeToggle.addEventListener('click', () => setPanMode(!cameraState.panMode));
+    panPanel.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-pan]');
+      if (button) applyPan(button.dataset.pan);
     });
 
-    panLayer.addEventListener('pointerup', () => { dragging = false; });
-    panLayer.addEventListener('pointercancel', () => { dragging = false; });
+    viewer.addEventListener('pointerdown', (event) => {
+      if (!cameraState.panMode) return;
+      cameraState.pointer = { x: event.clientX, y: event.clientY };
+      viewer.setPointerCapture?.(event.pointerId);
+      event.preventDefault();
+    });
 
-    fullscreenBtn.addEventListener('click', async () => {
+    viewer.addEventListener('pointermove', (event) => {
+      if (!cameraState.panMode || !cameraState.pointer) return;
+      const dx = event.clientX - cameraState.pointer.x;
+      const dy = event.clientY - cameraState.pointer.y;
+      cameraState.pointer = { x: event.clientX, y: event.clientY };
+      const rect = viewer.getBoundingClientRect();
+      const scale = Math.max(cameraState.dimensions.x, cameraState.dimensions.y, cameraState.dimensions.z, 1) / Math.max(rect.width, rect.height, 1);
+      const t = cameraState.target;
+      setCameraTarget(t.x - dx * scale, t.y + dy * scale, t.z);
+      event.preventDefault();
+    });
+
+    viewer.addEventListener('pointerup', () => { cameraState.pointer = null; });
+    viewer.addEventListener('pointercancel', () => { cameraState.pointer = null; });
+
+    fullscreenToggle.addEventListener('click', async () => {
       try {
         if (document.fullscreenElement) {
           await document.exitFullscreen();
         } else {
-          await shell.requestFullscreen();
+          await page.requestFullscreen();
         }
-      } catch (_) {
-        shell.classList.toggle('pseudo-fullscreen');
+      } catch (_error) {
+        page.classList.toggle('is-pseudo-fullscreen');
       }
-    });
-
-    openSeparate.addEventListener('click', () => {
-      window.open(window.location.href.split('#')[0], '_blank', 'noopener,noreferrer');
-    });
-
-    viewer.addEventListener('error', () => {
-      const error = document.createElement('div');
-      error.className = 'model-error model-error-overlay';
-      error.innerHTML = '<strong>Модель не загрузилась</strong><br>Проверьте, что файл assets/models/hall/hall.glb загружен в репозиторий и не блокируется браузером.';
-      shell.appendChild(error);
     });
   </script>
 </body>

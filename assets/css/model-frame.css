@@ -1,15 +1,13 @@
 :root {
   --bg: #050607;
   --text: #f3efe6;
-  --muted: rgba(243, 239, 230, 0.68);
+  --muted: rgba(243, 239, 230, 0.72);
   --gold: #c9a45b;
   --line: rgba(255, 255, 255, 0.14);
   --glass: rgba(5, 6, 7, 0.72);
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 html,
 body {
@@ -18,10 +16,10 @@ body {
   min-height: 100vh;
   min-height: 100svh;
   margin: 0;
+  overflow: hidden;
   background: var(--bg);
   color: var(--text);
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  overflow: hidden;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -30,7 +28,9 @@ body {
   inset: 0;
 }
 
-.model-frame-page {
+.model-frame-page,
+.model-page,
+.model-shell {
   position: fixed;
   inset: 0;
   width: 100%;
@@ -44,7 +44,8 @@ body {
     linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012));
 }
 
-.model-frame-page::before {
+.model-frame-page::before,
+.model-shell::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -58,17 +59,21 @@ body {
 }
 
 .model-viewer,
+model-viewer,
 .sketchfab-embed-wrapper,
 .sketchfab-embed-wrapper iframe {
   position: absolute;
   inset: 0;
   z-index: 1;
+  display: block;
   width: 100%;
   height: 100%;
+  min-height: 100%;
   border: 0;
 }
 
-model-viewer.model-viewer {
+model-viewer.model-viewer,
+model-viewer {
   --poster-color: transparent;
   --progress-bar-color: var(--gold);
   --progress-bar-height: 2px;
@@ -93,29 +98,73 @@ model-viewer.model-viewer {
   text-transform: uppercase;
 }
 
-.model-actions {
-  position: absolute;
-  z-index: 4;
-  top: max(10px, env(safe-area-inset-top));
-  left: max(10px, env(safe-area-inset-left));
-  right: max(10px, env(safe-area-inset-right));
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.model-error-overlay {
+  z-index: 20;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  width: min(620px, calc(100% - 40px));
+  min-height: auto;
+  border: 1px solid rgba(165, 65, 65, 0.72);
+  border-radius: 22px;
   pointer-events: none;
 }
 
+.model-toolbar {
+  position: absolute;
+  z-index: 5;
+  left: max(10px, env(safe-area-inset-left));
+  right: max(10px, env(safe-area-inset-right));
+  bottom: max(10px, env(safe-area-inset-bottom));
+  display: grid;
+  gap: 7px;
+  width: auto;
+  max-width: calc(100% - max(10px, env(safe-area-inset-left)) - max(10px, env(safe-area-inset-right)));
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.model-actions,
+.camera-pan-panel {
+  width: 100%;
+  min-width: 0;
+  pointer-events: none;
+}
+
+.model-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 138px), 1fr));
+  gap: 7px;
+}
+
+.camera-pan-panel {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.camera-pan-panel[hidden] { display: none !important; }
+
 .model-action {
   appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  width: 100%;
+  min-height: 34px;
   border: 1px solid var(--line);
   border-radius: 999px;
-  padding: 8px 11px;
+  padding: 8px 10px;
   color: var(--text);
   background: var(--glass);
   font: inherit;
-  font-size: 12px;
-  line-height: 1;
+  font-size: clamp(10px, 1.55vw, 12px);
+  font-weight: 700;
+  line-height: 1.12;
+  text-align: center;
   text-decoration: none;
+  white-space: normal;
+  overflow-wrap: anywhere;
   cursor: pointer;
   pointer-events: auto;
   backdrop-filter: blur(12px);
@@ -127,6 +176,11 @@ model-viewer.model-viewer {
   border-color: rgba(201, 164, 91, 0.62);
   color: var(--gold);
   outline: none;
+}
+
+.camera-pan-panel .model-action {
+  min-height: 34px;
+  padding-inline: 8px;
 }
 
 .model-ui,
@@ -141,11 +195,12 @@ model-viewer.model-viewer {
 }
 
 .model-ui {
-  bottom: max(12px, env(safe-area-inset-bottom));
+  top: max(10px, env(safe-area-inset-top));
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  gap: 10px;
-  align-items: flex-end;
+  gap: 8px;
+  align-items: flex-start;
   font-size: 11px;
   line-height: 1.4;
   letter-spacing: 0.12em;
@@ -164,152 +219,90 @@ model-viewer.model-viewer {
   -webkit-backdrop-filter: blur(12px);
 }
 
-/* Эта подсказка закрывала модель на телефоне, поэтому она отключена полностью. */
-.mobile-help {
-  display: none !important;
-}
+.mobile-help { display: none !important; }
 
-.sketchfab-credit {
-  bottom: max(12px, env(safe-area-inset-bottom));
-  right: auto;
-  max-width: calc(100% - 24px);
-  font-size: 11px;
-  line-height: 1.35;
-  pointer-events: auto;
-}
-
-.sketchfab-credit a {
-  color: var(--gold);
-  text-decoration: none;
-}
-
-body.is-standalone .model-action--standalone {
+body.is-standalone .model-action--standalone,
+body.is-standalone .model-action--back {
   display: none;
 }
 
-.is-pseudo-fullscreen {
+.is-pan-mode model-viewer.model-viewer,
+.is-pan-mode model-viewer {
+  cursor: grab;
+  touch-action: none;
+}
+
+.is-pan-mode model-viewer.model-viewer:active,
+.is-pan-mode model-viewer:active { cursor: grabbing; }
+
+.is-pseudo-fullscreen,
+.pseudo-fullscreen {
   position: fixed !important;
   inset: 0 !important;
   z-index: 2147483647 !important;
   width: 100vw !important;
   height: 100vh !important;
   height: 100svh !important;
+  min-height: 100svh !important;
+  border-radius: 0 !important;
 }
 
-
-
-.camera-pan-controls {
-  position: absolute;
-  z-index: 5;
-  top: max(10px, env(safe-area-inset-top));
-  right: max(10px, env(safe-area-inset-right));
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 8px;
-  pointer-events: none;
-}
-
-.camera-pan-toggle,
-.camera-pan-panel .model-action {
-  pointer-events: auto;
-}
-
-.camera-pan-panel {
-  pointer-events: auto;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(38px, auto));
-  gap: 6px;
-  padding: 8px;
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  background: rgba(5, 6, 7, 0.58);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
-
-.camera-pan-panel .model-action {
-  min-width: 38px;
-  min-height: 34px;
-  padding: 7px 9px;
-}
-
-.camera-pan-panel .model-action--wide {
-  grid-column: 1 / -1;
-}
-
-.is-pan-mode model-viewer.model-viewer {
-  cursor: grab;
-  touch-action: none;
-}
-
-.is-pan-mode model-viewer.model-viewer:active {
-  cursor: grabbing;
-}
-
-@media (pointer: coarse), (max-width: 760px) {
-  .model-actions {
-    top: auto;
+@media (max-width: 860px), (pointer: coarse) {
+  .model-toolbar {
     left: max(8px, env(safe-area-inset-left));
     right: max(8px, env(safe-area-inset-right));
     bottom: max(8px, env(safe-area-inset-bottom));
-    justify-content: center;
+    max-width: calc(100% - max(8px, env(safe-area-inset-left)) - max(8px, env(safe-area-inset-right)));
+    gap: 6px;
+  }
+
+  .model-actions {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 112px), 1fr));
+    gap: 6px;
+  }
+
+  .camera-pan-panel {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 6px;
   }
 
   .model-action {
-    padding: 7px 9px;
-    font-size: 10.5px;
-    letter-spacing: 0.01em;
-    background: rgba(5, 6, 7, 0.62);
+    min-height: 32px;
+    padding: 7px 8px;
+    font-size: 11px;
+    background: rgba(5, 6, 7, 0.64);
   }
 
-  /* На телефоне оставлены только две полезные кнопки, чтобы не закрывать модель. */
-  .model-action[href="../tatlin.html"],
-  .model-action[href*="tatlin.glb"],
-  .model-action[href*="Sketchfab"],
-  .sketchfab-credit,
-  .model-ui {
+  .model-action--back,
+  .model-ui__status {
     display: none !important;
   }
 
-
-  .camera-pan-controls {
+  .model-ui {
     top: max(8px, env(safe-area-inset-top));
-    right: max(8px, env(safe-area-inset-right));
-    left: auto;
-    bottom: auto;
-    max-width: calc(100% - 16px);
-  }
-
-  .camera-pan-panel {
-    grid-template-columns: repeat(3, minmax(34px, auto));
-    gap: 5px;
-    padding: 6px;
-    border-radius: 16px;
-  }
-
-  .camera-pan-panel .model-action {
-    min-width: 34px;
-    min-height: 31px;
-    padding: 6px 8px;
-    font-size: 10.5px;
-  }
-
-  body.is-standalone .model-actions {
-    justify-content: flex-end;
+    justify-content: flex-start;
+    font-size: 10px;
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 520px) {
   .model-actions {
-    justify-content: flex-end;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .model-action {
-    max-width: 48vw;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    min-height: 30px;
+    padding: 6px 7px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 340px) {
+  .model-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .camera-pan-panel {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

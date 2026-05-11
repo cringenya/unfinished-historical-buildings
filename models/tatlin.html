@@ -10,9 +10,9 @@
 <body class="tatlin-model-page">
   <main class="model-frame-page" aria-label="Объект 01 / Башня Татлина">
     <model-viewer
-      id="tatlinViewer"
+      id="viewer"
       class="model-viewer model-viewer--tatlin"
-      src="../assets/models/tatlin/tatlin.glb?v=20260511-centerfix"
+      src="../assets/models/tatlin/tatlin.glb?v=20260511-fitcontrols"
       alt="Интерактивная 3D-модель Башни Татлина"
       camera-controls
       auto-rotate
@@ -25,9 +25,11 @@
       exposure="0.92"
       environment-image="neutral"
       camera-orbit="25deg 68deg auto"
-      min-camera-orbit="auto auto 35%"
+      min-camera-orbit="auto auto 20%"
       max-camera-orbit="auto auto 650%"
       field-of-view="30deg"
+      min-field-of-view="12deg"
+      max-field-of-view="55deg"
       bounds="tight"
       camera-target="auto auto auto"
       loading="eager"
@@ -39,34 +41,32 @@
       </div>
     </model-viewer>
 
-    <div class="camera-pan-controls" id="panControls" aria-label="Сдвиг камеры">
-      <button class="model-action camera-pan-toggle" id="panModeToggle" type="button" aria-pressed="false">Сдвиг камеры</button>
-      <div class="camera-pan-panel" id="panPanel" hidden>
-        <button class="model-action" type="button" data-pan="up">↑</button>
-        <button class="model-action" type="button" data-pan="left">←</button>
-        <button class="model-action" type="button" data-pan="center">Центр</button>
-        <button class="model-action" type="button" data-pan="right">→</button>
-        <button class="model-action" type="button" data-pan="down">↓</button>
-        <button class="model-action model-action--wide" type="button" data-pan="top">К верхушке</button>
-      </div>
-    </div>
-
-    <div class="model-actions" aria-label="Управление 3D-моделью">
-      <a class="model-action model-action--standalone" href="tatlin.html" target="_top" rel="noopener">Открыть 3D отдельно</a>
-      <a class="model-action" href="../tatlin.html" target="_top" rel="noopener">К странице объекта</a>
-      <a class="model-action" href="../assets/models/tatlin/tatlin.glb?v=20260511-centerfix" target="_blank" rel="noopener">Файл модели</a>
-      <button id="fullscreenToggle" class="model-action fullscreen-toggle" type="button">Во весь экран</button>
-    </div>
-
     <div class="model-ui" aria-hidden="true">
       <span class="model-ui__label">3D-модель / Башня Татлина</span>
       <span id="modelStatus" class="model-ui__status">загрузка модели…</span>
     </div>
+
+    <section class="model-toolbar" aria-label="Управление 3D-моделью">
+      <div class="model-actions">
+        <a class="model-action model-action--standalone" href="tatlin.html" target="_top" rel="noopener">Открыть 3D отдельно</a>
+        <a class="model-action model-action--back" href="../tatlin.html" target="_top" rel="noopener">К странице объекта</a>
+        <button id="fullscreenToggle" class="model-action" type="button">Во весь экран</button>
+        <button id="panModeToggle" class="model-action" type="button" aria-pressed="false">Сдвиг камеры</button>
+      </div>
+      <div class="camera-pan-panel" id="panPanel" hidden>
+        <button class="model-action" type="button" data-pan="left">←</button>
+        <button class="model-action" type="button" data-pan="right">→</button>
+        <button class="model-action" type="button" data-pan="up">↑</button>
+        <button class="model-action" type="button" data-pan="down">↓</button>
+        <button class="model-action" type="button" data-pan="center">Центр</button>
+        <button class="model-action" type="button" data-pan="top">К верхушке</button>
+      </div>
+    </section>
   </main>
 
   <script>
     const page = document.querySelector('.model-frame-page');
-    const viewer = document.getElementById('tatlinViewer');
+    const viewer = document.getElementById('viewer');
     const status = document.getElementById('modelStatus');
     const fullscreenToggle = document.getElementById('fullscreenToggle');
     const panModeToggle = document.getElementById('panModeToggle');
@@ -86,26 +86,20 @@
       try {
         const frame = window.frameElement;
         if (!frame) return;
-
         const isMobile = window.matchMedia('(pointer: coarse), (max-width: 760px)').matches;
         const height = isMobile ? '78svh' : 'min(76vh, 760px)';
         const minHeight = isMobile ? '560px' : '540px';
-
         frame.style.width = '100%';
         frame.style.height = height;
         frame.style.minHeight = minHeight;
         frame.style.display = 'block';
         frame.style.border = '0';
-
         const host = frame.closest('.model-host, .sketchfab-wrap, .page-shell');
         if (host) {
           host.style.minHeight = minHeight;
           host.style.height = height;
           host.style.overflow = 'hidden';
         }
-
-        const shell = frame.closest('.page-shell');
-        if (shell) shell.style.width = '100%';
       } catch (_error) {}
     }
 
@@ -118,22 +112,17 @@
       return { x, y, z };
     }
 
-    function getModelCenter() {
-      try {
-        return normalizeVector(viewer.getBoundingBoxCenter?.());
-      } catch (_error) {
-        return null;
-      }
-    }
-
     function setCameraTarget(x, y, z) {
       cameraState.target = { x, y, z };
-      viewer.cameraTarget = `${x}m ${y}m ${z}m`;
-      viewer.setAttribute('camera-target', `${x}m ${y}m ${z}m`);
+      const value = `${x}m ${y}m ${z}m`;
+      viewer.cameraTarget = value;
+      viewer.setAttribute('camera-target', value);
     }
 
     function resetCameraTargetToModelCenter() {
-      const center = getModelCenter() || { x: 0, y: 0, z: 0 };
+      let center = null;
+      try { center = normalizeVector(viewer.getBoundingBoxCenter?.()); } catch (_error) {}
+      center = center || { x: 0, y: 0, z: 0 };
       cameraState.baseTarget = center;
       setCameraTarget(center.x, center.y, center.z);
       requestAnimationFrame(() => {
@@ -144,14 +133,13 @@
 
     function getStep() {
       const d = cameraState.dimensions;
-      return Math.max(d.x || 1, d.y || 1, d.z || 1) * 0.08;
+      return Math.max(d.x || 1, d.y || 1, d.z || 1) * 0.075;
     }
 
     function applyPan(action) {
       const t = cameraState.target;
       const step = getStep();
       const d = cameraState.dimensions;
-
       if (action === 'left') setCameraTarget(t.x - step, t.y, t.z);
       if (action === 'right') setCameraTarget(t.x + step, t.y, t.z);
       if (action === 'up') setCameraTarget(t.x, t.y + step, t.z);
@@ -172,7 +160,7 @@
       if (enabled) {
         viewer.removeAttribute('camera-controls');
         viewer.removeAttribute('auto-rotate');
-        status.textContent = 'режим сдвига: перетащите модель, затем приблизьте';
+        status.textContent = 'режим сдвига камеры';
       } else {
         viewer.setAttribute('camera-controls', '');
         viewer.setAttribute('auto-rotate', '');
@@ -188,16 +176,14 @@
       const dimensions = normalizeVector(viewer.getDimensions?.());
       if (dimensions) cameraState.dimensions = dimensions;
       resetCameraTargetToModelCenter();
-      status.textContent = 'модель загружена — вращайте или включите сдвиг камеры';
+      status.textContent = 'модель загружена';
     });
 
     viewer.addEventListener('progress', (event) => {
       const progress = event.detail && Number.isFinite(event.detail.totalProgress)
         ? Math.round(event.detail.totalProgress * 100)
         : null;
-      status.textContent = progress === null || progress >= 100
-        ? 'подготовка модели…'
-        : `загрузка модели… ${progress}%`;
+      status.textContent = progress === null || progress >= 100 ? 'подготовка модели…' : `загрузка модели… ${progress}%`;
     });
 
     viewer.addEventListener('error', () => {
@@ -205,11 +191,9 @@
     });
 
     panModeToggle.addEventListener('click', () => setPanMode(!cameraState.panMode));
-
     panPanel.addEventListener('click', (event) => {
       const button = event.target.closest('[data-pan]');
-      if (!button) return;
-      applyPan(button.dataset.pan);
+      if (button) applyPan(button.dataset.pan);
     });
 
     viewer.addEventListener('pointerdown', (event) => {
@@ -238,10 +222,8 @@
       try {
         if (document.fullscreenElement) {
           await document.exitFullscreen();
-        } else if (page.requestFullscreen) {
-          await page.requestFullscreen();
         } else {
-          throw new Error('Fullscreen API is not available');
+          await page.requestFullscreen();
         }
       } catch (_error) {
         page.classList.toggle('is-pseudo-fullscreen');

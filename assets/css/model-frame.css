@@ -1,8 +1,12 @@
 :root {
   --bg: #050607;
+  --bg-soft: #0b0d10;
   --text: #f3efe6;
-  --muted-2: rgba(243, 239, 230, 0.5);
+  --muted: rgba(243, 239, 230, 0.68);
+  --muted-2: rgba(243, 239, 230, 0.48);
   --gold: #c9a45b;
+  --line: rgba(255, 255, 255, 0.12);
+  --glass: rgba(5, 6, 7, 0.62);
 }
 
 * {
@@ -13,156 +17,68 @@ html,
 body {
   width: 100%;
   height: 100%;
+  min-height: 100dvh;
   margin: 0;
   background: var(--bg);
   color: var(--text);
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   overflow: hidden;
-  cursor: none;
+  overscroll-behavior: none;
+}
+
+body {
+  -webkit-tap-highlight-color: transparent;
 }
 
 .model-frame-page,
 .sketchfab-embed-wrapper {
   width: 100%;
   height: 100%;
+  min-height: 100dvh;
 }
 
-.sketchfab-embed-wrapper {
-  display: flex;
-  flex-direction: column;
+.model-frame-page {
+  position: relative;
+  overflow: hidden;
   background:
-    radial-gradient(circle at 50% 18%, rgba(201,164,91,0.08), transparent 34%),
-    linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015));
+    radial-gradient(circle at 50% 18%, rgba(201, 164, 91, 0.12), transparent 34%),
+    radial-gradient(circle at 78% 20%, rgba(142, 184, 255, 0.08), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012));
 }
 
+.model-frame-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: radial-gradient(circle at center, black 42%, transparent 82%);
+  -webkit-mask-image: radial-gradient(circle at center, black 42%, transparent 82%);
+  opacity: 0.55;
+}
+
+.model-viewer,
+.sketchfab-embed-wrapper,
 .sketchfab-embed-wrapper iframe {
-  flex: 1;
-  min-height: 0;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
   width: 100%;
+  height: 100%;
+  min-height: 100dvh;
   border: 0;
-  display: block;
-  cursor: none;
 }
 
-.sketchfab-embed-wrapper p {
-  margin: 8px 4px 10px;
-  padding: 0 8px;
-  text-align: center;
-  color: var(--muted-2);
-  font-size: 12px;
-  line-height: 1.4;
-}
-
-.sketchfab-embed-wrapper a {
-  color: var(--gold);
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.sketchfab-embed-wrapper a:hover {
-  color: var(--text);
-}
-
-.local-viewer-page {
-  position: relative;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 50% 22%, rgba(201,164,91,0.12), transparent 36%),
-    radial-gradient(circle at 78% 20%, rgba(142,184,255,0.08), transparent 30%),
-    linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.012));
-}
-
-.local-viewer-page::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
-  background-size: 34px 34px;
-  mask-image: radial-gradient(circle at center, black 42%, transparent 82%);
-  -webkit-mask-image: radial-gradient(circle at center, black 42%, transparent 82%);
-  opacity: 0.55;
-}
-
-.model-viewer {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.model-viewer canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
-  cursor: none;
-}
-
-.model-ui {
-  position: absolute;
-  left: 16px;
-  right: 16px;
-  bottom: 14px;
-  z-index: 2;
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  align-items: center;
-  color: rgba(243, 239, 230, 0.68);
-  font-size: 11px;
-  line-height: 1.4;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  pointer-events: none;
-}
-
-.model-ui__label,
-.model-ui__status {
-  padding: 7px 10px;
-  border-radius: 999px;
-  background: rgba(5, 6, 7, 0.44);
-  border: 1px solid rgba(255,255,255,0.08);
-  backdrop-filter: blur(12px);
-}
-
-@media (max-width: 640px) {
-  .model-ui {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-}
-/* Local Three.js / GLB model viewer */
-.local-viewer-page {
-  position: relative;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 50% 22%, rgba(201,164,91,0.12), transparent 36%),
-    radial-gradient(circle at 78% 20%, rgba(142,184,255,0.08), transparent 30%),
-    linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.012));
-}
-
-.local-viewer-page::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
-  background-size: 34px 34px;
-  mask-image: radial-gradient(circle at center, black 42%, transparent 82%);
-  -webkit-mask-image: radial-gradient(circle at center, black 42%, transparent 82%);
-  opacity: 0.55;
-}
-
-.model-viewer {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+.model-viewer,
+.model-viewer canvas,
+.sketchfab-embed-wrapper,
+.sketchfab-embed-wrapper iframe {
   touch-action: none;
+  overscroll-behavior: contain;
 }
 
 .model-viewer canvas {
@@ -180,13 +96,13 @@ body {
   position: absolute;
   left: 16px;
   right: 16px;
-  bottom: 14px;
-  z-index: 2;
+  bottom: max(14px, env(safe-area-inset-bottom));
+  z-index: 3;
   display: flex;
   justify-content: space-between;
   gap: 12px;
   align-items: center;
-  color: rgba(243, 239, 230, 0.68);
+  color: var(--muted);
   font-size: 11px;
   line-height: 1.4;
   letter-spacing: 0.12em;
@@ -199,35 +115,38 @@ body {
   padding: 7px 10px;
   border-radius: 999px;
   background: rgba(5, 6, 7, 0.44);
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
-@media (max-width: 640px) {
-  .model-ui {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-}
-
-/* Fullscreen control for local 3D model viewer */
-.fullscreen-toggle {
+.model-actions {
   position: absolute;
-  top: 14px;
-  right: 14px;
+  top: max(10px, env(safe-area-inset-top));
+  right: max(10px, env(safe-area-inset-right));
   z-index: 4;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  max-width: calc(100% - 20px);
+}
+
+.model-action {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   min-height: 36px;
   padding: 9px 12px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 999px;
-  background: rgba(5, 6, 7, 0.58);
-  color: rgba(243, 239, 230, 0.86);
+  background: var(--glass);
+  color: rgba(243, 239, 230, 0.88);
   font: 700 11px/1 Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
+  text-decoration: none;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
@@ -235,47 +154,152 @@ body {
   pointer-events: auto;
   user-select: none;
   -webkit-user-select: none;
-  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, color 180ms ease;
 }
 
-.fullscreen-toggle:hover,
-.fullscreen-toggle:focus-visible {
+.model-action:hover,
+.model-action:focus-visible {
   color: var(--text);
-  background: rgba(18, 19, 20, 0.74);
-  border-color: rgba(201, 164, 91, 0.46);
-  transform: translateY(-1px);
+  background: rgba(18, 19, 20, 0.78);
+  border-color: rgba(201, 164, 91, 0.48);
   outline: none;
 }
 
-.fullscreen-toggle__icon {
+.model-action__icon {
+  color: var(--gold);
   font-size: 15px;
   line-height: 1;
-  color: var(--gold);
 }
 
-.local-viewer-page:fullscreen,
-.local-viewer-page:-webkit-full-screen {
-  width: 100vw;
-  height: 100vh;
+.model-action--standalone {
+  display: none;
+}
+
+body.is-embedded .model-action--standalone,
+body.is-mobile .model-action--standalone {
+  display: inline-flex;
+}
+
+.mobile-help {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  top: max(58px, calc(env(safe-area-inset-top) + 48px));
+  z-index: 3;
+  display: none;
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 10px 12px;
+  border: 1px solid rgba(201, 164, 91, 0.22);
+  border-radius: 16px;
+  background: rgba(5, 6, 7, 0.58);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  pointer-events: none;
+}
+
+body.is-mobile .mobile-help {
+  display: block;
+}
+
+.sketchfab-embed-wrapper {
+  display: block;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(201, 164, 91, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015));
+}
+
+.sketchfab-embed-wrapper iframe {
+  display: block;
   background: var(--bg);
 }
 
-.local-viewer-page.is-fullscreen .fullscreen-toggle {
-  top: 18px;
-  right: 18px;
+.sketchfab-credit {
+  position: absolute;
+  left: 16px;
+  bottom: max(14px, env(safe-area-inset-bottom));
+  z-index: 3;
+  margin: 0;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(5, 6, 7, 0.44);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--muted-2);
+  font-size: 11px;
+  line-height: 1.4;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
-.local-viewer-page.is-fullscreen .model-ui {
-  bottom: 18px;
+.sketchfab-credit a {
+  color: var(--gold);
+  font-weight: 600;
+  text-decoration: none;
 }
 
-@media (max-width: 640px) {
-  .fullscreen-toggle {
-    top: 10px;
+.local-viewer-page:fullscreen,
+.local-viewer-page:-webkit-full-screen,
+.local-viewer-page.is-fullscreen,
+body.pseudo-fullscreen .local-viewer-page {
+  width: 100vw;
+  height: 100dvh;
+  min-height: 100dvh;
+  background: var(--bg);
+}
+
+body.pseudo-fullscreen .local-viewer-page {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+}
+
+@media (pointer: coarse), (max-width: 760px) {
+  html,
+  body {
+    cursor: auto;
+  }
+
+  .model-frame-page,
+  .model-viewer,
+  .model-viewer canvas,
+  .sketchfab-embed-wrapper,
+  .sketchfab-embed-wrapper iframe {
+    min-height: 100dvh;
+  }
+
+  .model-actions {
+    left: 10px;
     right: 10px;
-    min-height: 34px;
-    padding: 8px 10px;
+    justify-content: center;
+  }
+
+  .model-action {
+    min-height: 38px;
+    padding: 9px 11px;
+    font-size: 10px;
+    letter-spacing: 0.075em;
+  }
+
+  .model-ui {
+    left: 10px;
+    right: 10px;
+    bottom: max(10px, env(safe-area-inset-bottom));
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 7px;
     font-size: 10px;
     letter-spacing: 0.08em;
+  }
+
+  .sketchfab-credit {
+    left: 10px;
+    right: 10px;
+    bottom: max(10px, env(safe-area-inset-bottom));
+    width: fit-content;
+    max-width: calc(100% - 20px);
+    margin: 0 auto;
   }
 }

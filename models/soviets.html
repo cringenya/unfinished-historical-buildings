@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Дворец Советов — 3D-реконструкция</title>
   <link rel="stylesheet" href="../assets/css/model-frame.css" />
 </head>
@@ -11,9 +11,9 @@
     <div class="sketchfab-embed-wrapper">
       <iframe
         title="Дворец Советов — 3D-реконструкция"
-        src="https://sketchfab.com/models/4cee0970fe60444ead77d41fbb052a33/embed"
-        loading="lazy"
-        allow="autoplay; fullscreen; xr-spatial-tracking"
+        src="https://sketchfab.com/models/4cee0970fe60444ead77d41fbb052a33/embed?autostart=1&preload=1&ui_infos=0&ui_controls=1&ui_watermark=0"
+        loading="eager"
+        allow="autoplay; fullscreen; xr-spatial-tracking; web-share"
         allowfullscreen
         mozallowfullscreen="true"
         webkitallowfullscreen="true"
@@ -22,12 +22,43 @@
         execution-while-not-rendered
         web-share>
       </iframe>
-      <p>
-        <a href="https://sketchfab.com/3d-models/htc-vive-4cee0970fe60444ead77d41fbb052a33?utm_medium=embed&utm_campaign=share-popup&utm_content=4cee0970fe60444ead77d41fbb052a33" target="_blank" rel="nofollow noopener">3D-модель</a>
-        от <a href="https://sketchfab.com/EternalRealm?utm_medium=embed&utm_campaign=share-popup&utm_content=4cee0970fe60444ead77d41fbb052a33" target="_blank" rel="nofollow noopener">Eternal Realm</a>
-        на <a href="https://sketchfab.com" target="_blank" rel="nofollow noopener">Sketchfab</a>
-      </p>
     </div>
+
+    <div class="model-actions" aria-label="Управление 3D-моделью">
+      <a class="model-action model-action--standalone" href="soviets.html?standalone=1" target="_top" rel="noopener" aria-label="Открыть 3D-модель отдельной страницей">
+        <span class="model-action__icon" aria-hidden="true">↗</span>
+        <span>Открыть 3D</span>
+      </a>
+      <a class="model-action" href="../soviets.html" target="_top" rel="noopener" aria-label="Вернуться к странице объекта">
+        <span class="model-action__icon" aria-hidden="true">←</span>
+        <span>К странице</span>
+      </a>
+      <a class="model-action" href="https://sketchfab.com/3d-models/htc-vive-4cee0970fe60444ead77d41fbb052a33" target="_blank" rel="nofollow noopener" aria-label="Открыть модель на Sketchfab">
+        <span class="model-action__icon" aria-hidden="true">⛶</span>
+        <span>Sketchfab</span>
+      </a>
+    </div>
+
+    <p class="mobile-help">Если встроенный просмотр на телефоне не реагирует на жесты, нажмите «Открыть 3D» — модель откроется отдельной страницей без вложенного iframe сайта.</p>
+
+    <p class="sketchfab-credit">
+      <a href="https://sketchfab.com/3d-models/htc-vive-4cee0970fe60444ead77d41fbb052a33" target="_blank" rel="nofollow noopener">3D-модель</a>
+      на <a href="https://sketchfab.com" target="_blank" rel="nofollow noopener">Sketchfab</a>
+    </p>
   </main>
+
+  <script>
+    const isMobile = matchMedia('(pointer: coarse)').matches || window.innerWidth <= 760;
+    const isEmbedded = (() => {
+      try {
+        return window.self !== window.top;
+      } catch (_error) {
+        return true;
+      }
+    })();
+
+    document.body.classList.toggle('is-mobile', isMobile);
+    document.body.classList.toggle('is-embedded', isEmbedded);
+  </script>
 </body>
 </html>

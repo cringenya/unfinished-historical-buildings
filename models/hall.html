@@ -4,50 +4,43 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>3D-модель / Зал Народов</title>
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
   <style>
     :root {
       color-scheme: dark;
-      --bg: #060908;
-      --line: rgba(255,255,255,.16);
-      --text: rgba(255,255,255,.88);
-      --muted: rgba(255,255,255,.58);
-      --glass: rgba(5,8,8,.72);
+      --bg: #050706;
+      --panel: rgba(5, 7, 6, 0.72);
+      --line: rgba(255, 255, 255, 0.14);
+      --text: #f2eee8;
+      --muted: rgba(242, 238, 232, 0.72);
+      --accent: #d6b15d;
     }
 
     * { box-sizing: border-box; }
 
-    html,
-    body {
+    html, body {
       width: 100%;
       height: 100%;
-      min-height: 100%;
       margin: 0;
-      background: radial-gradient(circle at 50% 35%, rgba(179, 125, 77, .18), transparent 38%), var(--bg);
+      background: radial-gradient(circle at 50% 25%, rgba(214, 177, 93, 0.16), transparent 34%), var(--bg);
       color: var(--text);
-      overflow: hidden;
       font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow: hidden;
+    }
+
+    body {
+      min-height: 100svh;
     }
 
     .viewer-shell {
-      position: fixed;
-      inset: 0;
-      display: grid;
-      grid-template-rows: minmax(0, 1fr) auto;
-      padding: clamp(10px, 2vw, 18px);
-      gap: 10px;
+      position: relative;
+      width: 100%;
+      height: 100svh;
+      min-height: 420px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.01));
       touch-action: none;
       overscroll-behavior: contain;
-    }
-
-    .viewer-card {
-      position: relative;
-      min-height: 0;
-      overflow: hidden;
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      background: rgba(0,0,0,.28);
-      box-shadow: 0 24px 90px rgba(0,0,0,.32);
     }
 
     model-viewer {
@@ -56,174 +49,226 @@
       height: 100%;
       min-height: 420px;
       --poster-color: transparent;
-      background-color: transparent;
+      background: transparent;
       touch-action: none;
     }
 
-    .label {
+    .viewer-top {
       position: absolute;
-      left: 14px;
-      bottom: 14px;
-      max-width: calc(100% - 28px);
-      padding: 10px 14px;
-      border: 1px solid rgba(255,255,255,.14);
-      border-radius: 999px;
-      background: var(--glass);
-      backdrop-filter: blur(10px);
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1;
-      letter-spacing: .16em;
-      text-transform: uppercase;
+      z-index: 5;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
       pointer-events: none;
     }
 
-    .controls {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .control-link,
-    .control-button {
-      appearance: none;
-      border: 1px solid rgba(255,255,255,.18);
-      border-radius: 999px;
-      background: rgba(0,0,0,.54);
-      color: var(--text);
+    .label {
+      pointer-events: none;
+      max-width: min(560px, 70vw);
       padding: 10px 14px;
-      font: inherit;
-      font-size: 14px;
-      line-height: 1;
-      text-decoration: none;
-      cursor: pointer;
-      backdrop-filter: blur(10px);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.25;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .control-link:hover,
-    .control-button:hover {
-      border-color: rgba(255,255,255,.34);
+    .actions {
+      pointer-events: auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
     }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 8px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.62);
+      color: var(--text);
+      text-decoration: none;
+      font: inherit;
+      font-size: 13px;
+      line-height: 1;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+    }
+
+    .btn:hover { border-color: rgba(214, 177, 93, 0.65); }
 
     .progress {
       position: absolute;
+      z-index: 6;
       left: 16px;
-      right: 16px;
-      bottom: 58px;
-      height: 5px;
-      overflow: hidden;
+      bottom: 16px;
+      max-width: calc(100% - 32px);
+      padding: 10px 14px;
+      border: 1px solid var(--line);
       border-radius: 999px;
-      background: rgba(255,255,255,.12);
+      background: var(--panel);
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      backdrop-filter: blur(12px);
       opacity: 0;
-      transition: opacity .18s ease;
+      transform: translateY(8px);
+      transition: opacity .2s ease, transform .2s ease;
     }
 
-    .progress.visible { opacity: 1; }
-
-    .bar {
-      width: 0%;
-      height: 100%;
-      border-radius: inherit;
-      background: rgba(255,255,255,.68);
+    .progress.is-visible {
+      opacity: 1;
+      transform: translateY(0);
     }
+
+    .error {
+      position: absolute;
+      z-index: 7;
+      inset: 50% auto auto 50%;
+      width: min(520px, calc(100% - 32px));
+      transform: translate(-50%, -50%);
+      padding: 18px;
+      border: 1px solid rgba(255, 120, 120, 0.38);
+      border-radius: 22px;
+      background: rgba(0, 0, 0, 0.74);
+      color: var(--text);
+      text-align: center;
+      display: none;
+      backdrop-filter: blur(16px);
+    }
+
+    .error.is-visible { display: block; }
+    .error strong { display: block; margin-bottom: 8px; }
+    .error span { color: var(--muted); }
 
     @media (max-width: 720px) {
-      html,
-      body { overflow: hidden; }
-
-      .viewer-shell {
-        padding: 8px;
-        gap: 8px;
-      }
-
-      .viewer-card {
-        border-radius: 18px;
-      }
-
+      .viewer-shell,
       model-viewer {
-        min-height: 72svh;
+        min-height: 78svh;
+      }
+
+      .viewer-top {
+        top: auto;
+        bottom: 14px;
+        left: 12px;
+        right: 12px;
+        align-items: flex-end;
       }
 
       .label {
-        left: 10px;
-        bottom: 10px;
+        max-width: 48vw;
         padding: 8px 10px;
-        font-size: 11px;
+        font-size: 10px;
         letter-spacing: .12em;
       }
 
-      .controls {
-        justify-content: stretch;
+      .actions {
+        gap: 6px;
       }
 
-      .control-link,
-      .control-button {
-        flex: 1 1 auto;
-        min-width: 0;
-        padding: 11px 12px;
-        font-size: 13px;
-        text-align: center;
+      .btn {
+        min-height: 34px;
+        padding: 7px 10px;
+        font-size: 12px;
+      }
+
+      .btn.secondary {
+        display: none;
+      }
+
+      .progress {
+        left: 12px;
+        bottom: 62px;
+        font-size: 11px;
+        padding: 8px 10px;
       }
     }
   </style>
 </head>
 <body>
-  <main class="viewer-shell" aria-label="Просмотр 3D-модели Зала Народов">
-    <section class="viewer-card">
-      <model-viewer
-        id="viewer"
-        src="../assets/models/hall/hall.glb?v=20260511-hall-local-optimized"
-        alt="3D-модель Зала Народов"
-        camera-controls
-        auto-rotate
-        rotation-per-second="18deg"
-        interaction-prompt="none"
-        shadow-intensity="0.7"
-        exposure="1"
-        camera-orbit="45deg 68deg auto"
-        min-camera-orbit="auto auto 8m"
-        max-camera-orbit="auto auto 240m"
-        field-of-view="35deg">
-      </model-viewer>
-      <div class="label">3D-модель / Зал Народов</div>
-      <div class="progress" id="progress"><div class="bar" id="bar"></div></div>
-    </section>
+  <main class="viewer-shell" id="viewerShell">
+    <model-viewer
+      id="viewer"
+      src="../assets/models/hall/hall.glb?v=20260511-full-compressed"
+      alt="3D-модель Зала Народов"
+      camera-controls
+      auto-rotate
+      rotation-per-second="12deg"
+      interaction-prompt="none"
+      shadow-intensity="0.65"
+      exposure="1"
+      environment-image="neutral"
+      camera-orbit="35deg 68deg auto"
+      min-camera-orbit="auto auto 5m"
+      max-camera-orbit="auto auto 900m"
+      field-of-view="35deg"
+      ar>
+    </model-viewer>
 
-    <nav class="controls" aria-label="Действия с моделью">
-      <a class="control-link" href="hall.html" target="_blank" rel="noopener">Открыть 3D отдельно</a>
-      <button class="control-button" id="fullscreen" type="button">Во весь экран</button>
-      <a class="control-link" href="../hall.html" target="_top">К странице объекта</a>
-    </nav>
+    <div class="viewer-top">
+      <div class="label">3D-модель / Зал Народов</div>
+      <nav class="actions" aria-label="Действия с моделью">
+        <a class="btn secondary" href="../hall.html" target="_top">К странице объекта</a>
+        <a class="btn" href="./hall.html" target="_blank" rel="noopener">Открыть отдельно</a>
+        <button class="btn" type="button" id="fullscreenBtn">Во весь экран</button>
+      </nav>
+    </div>
+
+    <div class="progress is-visible" id="progress">Подготовка модели…</div>
+    <div class="error" id="errorBox">
+      <strong>Модель не загрузилась</strong>
+      <span>Проверьте, что файл assets/models/hall/hall.glb загружен в репозиторий и не блокируется браузером.</span>
+    </div>
   </main>
 
   <script>
     const viewer = document.getElementById('viewer');
+    const shell = document.getElementById('viewerShell');
     const progress = document.getElementById('progress');
-    const bar = document.getElementById('bar');
-    const fullscreen = document.getElementById('fullscreen');
+    const errorBox = document.getElementById('errorBox');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
 
     viewer.addEventListener('progress', (event) => {
       const value = Math.round((event.detail.totalProgress || 0) * 100);
-      bar.style.width = `${value}%`;
-      progress.classList.toggle('visible', value > 0 && value < 100);
+      progress.textContent = value < 100 ? `Загрузка модели… ${value}%` : 'Модель готова';
+      progress.classList.add('is-visible');
     });
 
     viewer.addEventListener('load', () => {
-      progress.classList.remove('visible');
+      progress.textContent = 'Модель готова';
+      window.setTimeout(() => progress.classList.remove('is-visible'), 1000);
     });
 
-    fullscreen.addEventListener('click', async () => {
-      const target = document.documentElement;
+    viewer.addEventListener('error', () => {
+      progress.classList.remove('is-visible');
+      errorBox.classList.add('is-visible');
+    });
+
+    fullscreenBtn.addEventListener('click', async () => {
       try {
-        if (!document.fullscreenElement && target.requestFullscreen) {
-          await target.requestFullscreen();
-        } else if (document.exitFullscreen) {
+        if (!document.fullscreenElement && shell.requestFullscreen) {
+          await shell.requestFullscreen();
+        } else if (document.fullscreenElement && document.exitFullscreen) {
           await document.exitFullscreen();
         }
       } catch (error) {
-        window.open(window.location.href, '_blank', 'noopener');
+        window.open('./hall.html', '_blank', 'noopener');
       }
     });
   </script>

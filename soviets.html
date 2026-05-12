@@ -424,6 +424,108 @@
       letter-spacing: .02em !important;
     }
 
+  
+
+    /* Round 8: keep the long text width and 3D frame height, but undo the overlarge label/button scale. */
+    body {
+      font-size: clamp(18px, 1.02vw, 20px) !important;
+    }
+
+    .page-shell.glass,
+    .page-shell {
+      min-height: clamp(560px, 64vh, 760px) !important;
+      height: clamp(560px, 64vh, 760px) !important;
+      max-height: 780px !important;
+      overflow: hidden !important;
+    }
+
+    .model-viewer-wrap,
+    .model-host,
+    .model-viewer-wrap iframe,
+    .local-model-frame {
+      width: 100% !important;
+      height: 100% !important;
+      min-height: 100% !important;
+    }
+
+    @media (max-width: 900px) {
+      .page-shell.glass,
+      .page-shell {
+        min-height: 520px !important;
+        height: 520px !important;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .page-shell.glass,
+      .page-shell {
+        min-height: 420px !important;
+        height: 420px !important;
+      }
+    }
+
+    .wide-story.historical-article,
+    .historical-article,
+    .history-section,
+    .history-section > *,
+    .history-note,
+    .history-section h2,
+    .history-section h3,
+    .history-section p,
+    .history-section li,
+    .history-quote,
+    .source-list,
+    .source-list li,
+    .project-signature {
+      max-width: none !important;
+      width: 100% !important;
+    }
+
+    .history-note,
+    .history-section p,
+    .history-section li,
+    .source-list li,
+    .source-list a {
+      font-size: clamp(1.13rem, 1.28vw, 1.28rem) !important;
+      line-height: 1.82 !important;
+    }
+
+    .page-lead {
+      font-size: clamp(1.2rem, 1.55vw, 1.48rem) !important;
+      line-height: 1.68 !important;
+    }
+
+    .fact-card span {
+      font-size: clamp(.9rem, .98vw, 1rem) !important;
+      line-height: 1.34 !important;
+    }
+
+    .fact-card strong {
+      font-size: clamp(1.02rem, 1.12vw, 1.16rem) !important;
+      line-height: 1.5 !important;
+    }
+
+    .history-toc a,
+    .history-toc li {
+      font-size: clamp(1rem, 1.08vw, 1.12rem) !important;
+      line-height: 1.45 !important;
+    }
+
+    .eyebrow,
+    .meta-chip,
+    .nav a,
+    .btn,
+    .footer p,
+    .project-signature {
+      font-size: clamp(.92rem, 1vw, 1.06rem) !important;
+      line-height: 1.42 !important;
+    }
+
+    .history-fact-list strong {
+      text-transform: uppercase !important;
+      letter-spacing: .08em !important;
+    }
+
   </style>
 </head>
 <body class="page-object page-soviets">
@@ -467,7 +569,7 @@
 
           <div class="page-shell glass" data-reveal="">
             <div class="model-viewer-wrap model-host">
-              <iframe allow="autoplay; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen class="local-model-frame" loading="lazy" src="models/soviets.html?v=10" title="Дворец Советов — 3D-реконструкция"></iframe>
+              <iframe allow="autoplay; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen class="local-model-frame" loading="lazy" src="models/soviets.html?v=11" title="Дворец Советов — 3D-реконструкция"></iframe>
             </div>
           </div>
         </div>

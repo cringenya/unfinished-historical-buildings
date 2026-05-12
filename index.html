@@ -219,6 +219,265 @@
       }
     }
 
+
+
+    /* Round 6: remove hero underlay, prevent overflow, and keep card labels away from object drawings. */
+    html,
+    body {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden !important;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    .container {
+      width: min(calc(100vw - clamp(28px, 5vw, 76px)), 1260px) !important;
+      max-width: 1260px !important;
+      min-width: 0 !important;
+      margin-inline: auto !important;
+    }
+
+    .hero,
+    .section,
+    .objects-grid,
+    .hero-grid,
+    .hero-grid > *,
+    .hero-card-wrap,
+    .hero-card,
+    .hero-card__preview {
+      min-width: 0 !important;
+      max-width: 100% !important;
+    }
+
+    .hero-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(420px, 560px) !important;
+      align-items: center !important;
+      gap: clamp(42px, 5vw, 76px) !important;
+    }
+
+    .hero-card-wrap {
+      width: min(100%, 600px) !important;
+      margin-inline: auto !important;
+      justify-self: center !important;
+      overflow: visible !important;
+      transform: none !important;
+    }
+
+    .orbit-shell,
+    .hero-card-wrap::before,
+    .hero-card-wrap::after {
+      display: none !important;
+      content: none !important;
+    }
+
+    .hero-card {
+      width: 100% !important;
+      margin-inline: auto !important;
+      transform: none !important;
+      rotate: 0deg !important;
+    }
+
+    .hero-card::before,
+    .hero-card::after {
+      max-width: 100% !important;
+      transform: none !important;
+    }
+
+    .hero-card__preview.archive-preview {
+      min-height: clamp(360px, 38vw, 500px) !important;
+      overflow: hidden !important;
+      isolation: isolate;
+    }
+
+    .archive-core {
+      inset: 10% 2% 12% !important;
+      overflow: hidden !important;
+      z-index: 2 !important;
+    }
+
+    .archive-core::before,
+    .archive-core::after,
+    .archive-preview::before,
+    .archive-preview::after {
+      display: none !important;
+      content: none !important;
+    }
+
+    .monument-graphic--triptych {
+      width: min(100%, 640px) !important;
+      max-width: 640px !important;
+      max-height: 100% !important;
+      transform: translateY(-1%) !important;
+    }
+
+    .archive-label {
+      z-index: 3 !important;
+      white-space: normal !important;
+      overflow-wrap: anywhere !important;
+    }
+
+    .archive-label--top {
+      left: clamp(20px, 4vw, 48px) !important;
+      right: clamp(20px, 4vw, 48px) !important;
+      top: clamp(20px, 4vw, 42px) !important;
+      max-width: none !important;
+    }
+
+    .archive-label--left {
+      left: clamp(16px, 3vw, 34px) !important;
+      max-width: 32% !important;
+    }
+
+    .archive-label--bottom {
+      left: 50% !important;
+      right: auto !important;
+      bottom: clamp(16px, 3vw, 30px) !important;
+      width: min(88%, 460px) !important;
+      max-width: 88% !important;
+      text-align: center !important;
+      transform: translateX(-50%) !important;
+    }
+
+    @media (max-width: 1320px) {
+      .hero-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+        justify-items: center !important;
+      }
+
+      .hero-grid > div:first-child {
+        width: min(100%, 820px) !important;
+        justify-self: center !important;
+      }
+
+      .hero-card-wrap {
+        width: min(100%, 660px) !important;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .container {
+        width: min(calc(100vw - 28px), 100%) !important;
+      }
+
+      .hero-card__preview.archive-preview {
+        min-height: 390px !important;
+      }
+
+      .archive-core {
+        inset: 14% 1% 18% !important;
+      }
+
+      .archive-label--left {
+        display: none !important;
+      }
+
+      .monument-graphic--triptych {
+        width: min(112%, 480px) !important;
+      }
+    }
+
+    .object-card {
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) clamp(104px, 8.5vw, 132px) !important;
+      grid-template-areas:
+        "top wire"
+        "meta wire"
+        "title title"
+        "body body"
+        "button button" !important;
+      column-gap: clamp(16px, 2.2vw, 28px) !important;
+      row-gap: clamp(12px, 1.5vw, 18px) !important;
+      align-items: start !important;
+      overflow: hidden !important;
+    }
+
+    .object-card .card-wire {
+      grid-area: wire !important;
+      position: static !important;
+      width: 100% !important;
+      height: auto !important;
+      aspect-ratio: 1 / 1 !important;
+      justify-self: end !important;
+      align-self: start !important;
+      transform: none !important;
+      opacity: .42 !important;
+      z-index: 1 !important;
+      pointer-events: none !important;
+    }
+
+    .object-card .card-top {
+      grid-area: top !important;
+      max-width: 100% !important;
+      position: relative !important;
+      z-index: 2 !important;
+    }
+
+    .object-card .card-meta {
+      grid-area: meta !important;
+      display: flex !important;
+      flex-wrap: wrap !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      position: relative !important;
+      z-index: 2 !important;
+    }
+
+    .object-card h3 {
+      grid-area: title !important;
+      position: relative !important;
+      z-index: 2 !important;
+      margin-top: clamp(2px, .6vw, 8px) !important;
+    }
+
+    .object-card p {
+      grid-area: body !important;
+      position: relative !important;
+      z-index: 2 !important;
+    }
+
+    .object-card > .btn {
+      grid-area: button !important;
+      position: relative !important;
+      z-index: 2 !important;
+      align-self: end !important;
+      width: 100% !important;
+      margin-top: clamp(12px, 1.6vw, 22px) !important;
+    }
+
+    .object-card .meta-chip {
+      white-space: nowrap !important;
+      max-width: 100% !important;
+    }
+
+    @media (max-width: 980px) {
+      .object-card {
+        grid-template-columns: minmax(0, 1fr) clamp(96px, 18vw, 128px) !important;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .object-card {
+        grid-template-columns: minmax(0, 1fr) !important;
+        grid-template-areas:
+          "wire"
+          "top"
+          "meta"
+          "title"
+          "body"
+          "button" !important;
+      }
+
+      .object-card .card-wire {
+        width: min(48%, 145px) !important;
+        justify-self: end !important;
+      }
+    }
+
   </style>
 </head>
 <body class="page-index">

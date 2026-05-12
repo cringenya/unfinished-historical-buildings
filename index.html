@@ -17,6 +17,28 @@
       text-underline-offset: 4px;
     }
 
+
+    /* Unified typography across the public site pages. */
+    :root {
+      --archive-font: "Cormorant Garamond", Georgia, serif;
+    }
+
+    body,
+    body *:not(svg):not(path):not(rect):not(circle):not(line):not(polyline):not(polygon):not(ellipse):not(text) {
+      font-family: var(--archive-font) !important;
+    }
+
+    .btn,
+    .nav a,
+    .brand-title,
+    .tag,
+    .meta-chip,
+    .eyebrow,
+    .stamp,
+    .archive-label {
+      letter-spacing: .015em;
+    }
+
     main a:not(.btn):not(.brand-pill):hover {
       color: rgba(255, 234, 174, 1);
       text-decoration-color: rgba(255, 234, 174, .95);
@@ -193,10 +215,13 @@
           <div class="objects-grid">
             <article class="object-card glass tatlin" data-reveal="">
               <div class="card-wire">
-                <svg fill="none" viewBox="0 0 100 100">
-                  <path d="M18 84C46 66 34 36 74 16" opacity=".7" stroke="currentColor" stroke-width="1.3"></path>
-                  <path d="M34 90C62 70 46 44 84 24" opacity=".5" stroke="currentColor" stroke-width="1.1"></path>
-                  <circle cx="72" cy="20" opacity=".6" r="8" stroke="currentColor" stroke-width="1.1"></circle>
+                <svg fill="none" viewBox="0 0 100 100" aria-hidden="true">
+                  <path d="M18 88C34 74 43 57 48 39C52 25 59 15 78 8" opacity=".74" stroke="currentColor" stroke-linecap="round" stroke-width="1.35"></path>
+                  <path d="M31 90C47 73 57 56 62 38C66 25 72 18 86 14" opacity=".52" stroke="currentColor" stroke-linecap="round" stroke-width="1.15"></path>
+                  <path d="M23 82L82 12" opacity=".25" stroke="currentColor" stroke-linecap="round" stroke-width="1"></path>
+                  <path d="M23 82H53M41 82V65H58V82M49 65V49L65 57V73M60 42H73V56H60Z" opacity=".55" stroke="currentColor" stroke-linejoin="round" stroke-width="1.05"></path>
+                  <path d="M22 82C30 90 45 92 55 83" opacity=".35" stroke="currentColor" stroke-linecap="round" stroke-width="1"></path>
+                  <circle cx="82" cy="14" opacity=".42" r="7" stroke="currentColor" stroke-width="1.05"></circle>
                 </svg>
               </div>
               <div class="card-top">
@@ -217,10 +242,13 @@
 
             <article class="object-card glass hall" data-reveal="">
               <div class="card-wire">
-                <svg fill="none" viewBox="0 0 100 100">
-                  <rect height="42" opacity=".6" stroke="currentColor" stroke-width="1.2" width="60" x="18" y="24"></rect>
-                  <path d="M12 72H86" opacity=".55" stroke="currentColor" stroke-width="1.2"></path>
-                  <path d="M28 24V72M48 24V72M68 24V72" opacity=".45" stroke="currentColor" stroke-width="1"></path>
+                <svg fill="none" viewBox="0 0 100 100" aria-hidden="true">
+                  <path d="M16 70H86" opacity=".55" stroke="currentColor" stroke-linecap="round" stroke-width="1.15"></path>
+                  <path d="M24 70V50C24 32 38 18 55 18C72 18 84 32 84 50V70" opacity=".7" stroke="currentColor" stroke-linejoin="round" stroke-width="1.25"></path>
+                  <path d="M35 70V51C35 39 43 30 55 30C67 30 74 39 74 51V70" opacity=".38" stroke="currentColor" stroke-width="1"></path>
+                  <path d="M52 17V8H60V18" opacity=".46" stroke="currentColor" stroke-linejoin="round" stroke-width="1"></path>
+                  <path d="M20 76H90M30 70V76M42 70V76M54 70V76M66 70V76M78 70V76" opacity=".45" stroke="currentColor" stroke-linecap="round" stroke-width="1"></path>
+                  <circle cx="56" cy="47" opacity=".32" r="8" stroke="currentColor" stroke-width="1"></circle>
                 </svg>
               </div>
               <div class="card-top">
@@ -241,11 +269,13 @@
 
             <article class="object-card glass soviets" data-reveal="">
               <div class="card-wire">
-                <svg fill="none" viewBox="0 0 100 100">
-                  <path d="M24 82H76" opacity=".55" stroke="currentColor" stroke-width="1.2"></path>
-                  <path d="M32 82V48H68V82" opacity=".55" stroke="currentColor" stroke-width="1.2"></path>
-                  <path d="M40 48V30H60V48" opacity=".55" stroke="currentColor" stroke-width="1.2"></path>
-                  <path d="M48 30V16H52V30" opacity=".55" stroke="currentColor" stroke-width="1.2"></path>
+                <svg fill="none" viewBox="0 0 100 100" aria-hidden="true">
+                  <path d="M17 86H84" opacity=".52" stroke="currentColor" stroke-linecap="round" stroke-width="1.1"></path>
+                  <path d="M25 86V65H76V86M31 65V49H70V65M38 49V36H63V49M45 36V25H56V36" opacity=".62" stroke="currentColor" stroke-linejoin="round" stroke-width="1.15"></path>
+                  <path d="M50 25V12" opacity=".6" stroke="currentColor" stroke-linecap="round" stroke-width="1.1"></path>
+                  <path d="M50 12C53 14 56 13 59 10" opacity=".48" stroke="currentColor" stroke-linecap="round" stroke-width="1"></path>
+                  <path d="M47 20H54M34 72H67M40 56H61" opacity=".33" stroke="currentColor" stroke-linecap="round" stroke-width="1"></path>
+                  <path d="M27 86C31 78 72 78 76 86" opacity=".3" stroke="currentColor" stroke-linecap="round" stroke-width="1"></path>
                 </svg>
               </div>
               <div class="card-top">

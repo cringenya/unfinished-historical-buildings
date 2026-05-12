@@ -4,11 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Дворец Советов — 3D-реконструкция</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/model-frame.css" />
   <style>
     .model-action--back { display: none; }
     body.is-standalone .model-action--standalone { display: none; }
     body.is-standalone .model-action--back { display: inline-flex; }
+
+
+    /* Keep model viewer controls compact, but unify non-control labels with the site font. */
+    .model-ui,
+    .model-loader,
+    .model-error {
+      font-family: "Cormorant Garamond", Georgia, serif;
+    }
+
   </style>
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
@@ -22,7 +34,7 @@
     <model-viewer
       id="modelViewer"
       class="model-viewer"
-      src="../assets/models/soviets/palace-of-soviets.glb?v=20260512-final-links"
+      src="../assets/models/soviets/palace-of-soviets.glb?v=20260512-round2"
       alt="Интерактивная 3D-модель Дворца Советов"
       data-default-orbit="0deg 65deg 165%"
       data-default-fov="28deg"
@@ -145,7 +157,7 @@
           frame.style.minHeight = '0';
           frame.style.border = '0';
           frame.style.overflow = 'hidden';
-          const host = frame.closest('.model-host, .sketchfab-wrap, .page-shell');
+          const host = frame.closest('.model-host, .model-viewer-wrap, .page-shell');
           if (host) {
             host.style.overflow = 'hidden';
             host.style.minWidth = '0';

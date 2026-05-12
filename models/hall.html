@@ -4,16 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Зал Народов — 3D-реконструкция</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/model-frame.css" />
   <style>
     .model-action--back { display: none; }
     body.is-standalone .model-action--standalone { display: none; }
     body.is-standalone .model-action--back { display: inline-flex; }
+
+
+    /* Keep model viewer controls compact, but unify non-control labels with the site font. */
+    .model-ui,
+    .model-loader,
+    .model-error {
+      font-family: "Cormorant Garamond", Georgia, serif;
+    }
+
   </style>
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
 <body>
-  <main class="model-frame-page model-shell" id="viewerShell" aria-label="Объект 02 / Зал Народов">
+  <main class="model-frame-page model-shell" id="viewerShell" aria-label="Объект 02 / Зал Народа">
     <div class="model-loader" id="modelLoader">загрузка модели…</div>
     <div class="model-error model-error-overlay" id="modelError" hidden>
       Не удалось загрузить 3D-модель. Откройте файл модели напрямую или обновите страницу.
@@ -22,7 +34,7 @@
     <model-viewer
       id="modelViewer"
       class="model-viewer"
-      src="../assets/models/hall/hall.glb?v=20260512-final-links"
+      src="../assets/models/hall/hall.glb?v=20260512-round2"
       alt="Интерактивная 3D-модель Зала Народов"
       data-default-orbit="45deg 68deg 560m"
       data-default-fov="30deg"
@@ -145,7 +157,7 @@
           frame.style.minHeight = '0';
           frame.style.border = '0';
           frame.style.overflow = 'hidden';
-          const host = frame.closest('.model-host, .sketchfab-wrap, .page-shell');
+          const host = frame.closest('.model-host, .model-viewer-wrap, .page-shell');
           if (host) {
             host.style.overflow = 'hidden';
             host.style.minWidth = '0';

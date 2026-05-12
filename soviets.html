@@ -211,6 +211,50 @@
       letter-spacing: -.01em;
     }
 
+
+    /* Unified typography and local 3D model frame styles. */
+    :root {
+      --archive-font: "Cormorant Garamond", Georgia, serif;
+    }
+
+    body,
+    body *:not(svg):not(path):not(rect):not(circle):not(line):not(polyline):not(polygon):not(ellipse):not(text) {
+      font-family: var(--archive-font) !important;
+    }
+
+    .btn,
+    .nav a,
+    .brand-title,
+    .tag,
+    .meta-chip,
+    .eyebrow,
+    .stamp,
+    .archive-label,
+    .fact-card span,
+    .fact-card strong {
+      letter-spacing: .015em;
+    }
+
+    .model-viewer-wrap {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: inherit;
+      overflow: hidden;
+      border-radius: inherit;
+    }
+
+    .model-viewer-wrap iframe,
+    .local-model-frame {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+      border: 0;
+      overflow: hidden;
+    }
+
     @media (max-width: 720px) {
       .historical-article { padding: 20px; }
       .history-fact-list { grid-template-columns: 1fr; }
@@ -258,8 +302,8 @@
           </div>
 
           <div class="page-shell glass" data-reveal="">
-            <div class="sketchfab-wrap model-host">
-              <iframe allow="autoplay; fullscreen; xr-spatial-tracking" allowfullscreen webkitallowfullscreen mozallowfullscreen class="local-model-frame" loading="lazy" src="models/soviets.html?v=6" title="Дворец Советов — 3D-реконструкция"></iframe>
+            <div class="model-viewer-wrap model-host">
+              <iframe allow="autoplay; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen class="local-model-frame" loading="lazy" src="models/soviets.html?v=7" title="Дворец Советов — 3D-реконструкция"></iframe>
             </div>
           </div>
         </div>
@@ -296,7 +340,7 @@
 
           <article class="wide-story glass historical-article" data-reveal="">
             <p class="eyebrow accent">Полный исторический материал</p>
-            <p class="history-note">ДВОРЕЦ СОВЕТОВ<br>Palace of the Soviets<br>Башня-пьедестал, ставшая символом советской мечты<br>Главный архитектор: Борис Михайлович Иофан (совместно с В. А. Щуко и В. Г. Гельфрейхом)<br>Планируемое место: Москва, СССР (набережная Москвы-реки, Волхонка)<br>Период: 1922–1956 гг. (идея — строительство — замораживание)</p>
+            <p class="history-note">ДВОРЕЦ СОВЕТОВ<br>Башня-пьедестал советской эпохи<br>Символ советской мечты о новом центре мира<br>Главный архитектор: Борис Михайлович Иофан (совместно с В. А. Щуко и В. Г. Гельфрейхом)<br>Планируемое место: Москва, СССР (набережная Москвы-реки, Волхонка)<br>Период: 1922–1956 гг. (идея — строительство — замораживание)</p>
             <nav class="history-toc" aria-label="Оглавление страницы">
               <h2>Оглавление</h2>
               <ul>
@@ -317,7 +361,7 @@
       <section class="history-section" id="section-1-kratkaya-spravka">
         <h2>КРАТКАЯ СПРАВКА</h2>
         <ul class="history-fact-list">
-          <li><strong>Официальное название:</strong><span>Дворец Советов СССР (Palace of the Soviets)</span></li>
+          <li><strong>Официальное название:</strong><span>Дворец Советов СССР</span></li>
           <li><strong>Тип сооружения:</strong><span>Многофункциональный общественный комплекс — съездовый зал, театр, библиотека, административные помещения</span></li>
           <li><strong>Главный архитектор (победитель конкурса):</strong><span>Борис Михайлович Иофан; соавторы окончательного проекта — Владимир Алексеевич Щуко и Владимир Георгиевич Гельфрейх</span></li>
           <li><strong>Планируемая высота:</strong><span>415 метров (здание) + 100 метров (статуя Ленина) = 415–430 м общей высоты</span></li>
@@ -466,7 +510,6 @@
         <h3>Интернет-ресурсы</h3>
         <ul class="source-list">
           <li>Wikipedia (RU): «Дворец Советов» — <a href="https://ru.wikipedia.org/wiki/Дворец_Советов" target="_blank" rel="noopener">https://ru.wikipedia.org/wiki/Дворец_Советов</a></li>
-          <li>Wikipedia (EN): «Palace of the Soviets» — <a href="https://en.wikipedia.org/wiki/Palace_of_the_Soviets" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Palace_of_the_Soviets</a></li>
           <li>Diletant.media: «Архитектурная утопия Сталина» — <a href="https://diletant.media/articles/28758116/" target="_blank" rel="noopener">https://diletant.media/articles/28758116/</a></li>
           <li>Statehistory.ru: «Дворец Советов. Часть II» (фундамент и каркас) — <a href="https://statehistory.ru/1624/" target="_blank" rel="noopener">https://statehistory.ru/1624/</a></li>
           <li>Corbusier.totalarch.com: Конкурсный проект Ле Корбюзье — <a href="https://corbusier.totalarch.com/palace_soviets" target="_blank" rel="noopener">https://corbusier.totalarch.com/palace_soviets</a></li>

@@ -211,6 +211,50 @@
       letter-spacing: -.01em;
     }
 
+
+    /* Unified typography and local 3D model frame styles. */
+    :root {
+      --archive-font: "Cormorant Garamond", Georgia, serif;
+    }
+
+    body,
+    body *:not(svg):not(path):not(rect):not(circle):not(line):not(polyline):not(polygon):not(ellipse):not(text) {
+      font-family: var(--archive-font) !important;
+    }
+
+    .btn,
+    .nav a,
+    .brand-title,
+    .tag,
+    .meta-chip,
+    .eyebrow,
+    .stamp,
+    .archive-label,
+    .fact-card span,
+    .fact-card strong {
+      letter-spacing: .015em;
+    }
+
+    .model-viewer-wrap {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: inherit;
+      overflow: hidden;
+      border-radius: inherit;
+    }
+
+    .model-viewer-wrap iframe,
+    .local-model-frame {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+      border: 0;
+      overflow: hidden;
+    }
+
     @media (max-width: 720px) {
       .historical-article { padding: 20px; }
       .history-fact-list { grid-template-columns: 1fr; }
@@ -258,8 +302,8 @@
           </div>
 
           <div class="page-shell glass" data-reveal="">
-            <div class="sketchfab-wrap model-host">
-              <iframe allow="autoplay; fullscreen; xr-spatial-tracking" allowfullscreen webkitallowfullscreen mozallowfullscreen class="local-model-frame" loading="lazy" src="models/tatlin.html?v=6" title="Башня Татлина — 3D-реконструкция"></iframe>
+            <div class="model-viewer-wrap model-host">
+              <iframe allow="autoplay; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen class="local-model-frame" loading="lazy" src="models/tatlin.html?v=7" title="Башня Татлина — 3D-реконструкция"></iframe>
             </div>
           </div>
         </div>

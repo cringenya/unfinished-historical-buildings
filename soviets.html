@@ -1016,6 +1016,55 @@
       color: rgba(var(--object-accent-soft-rgb), 1) !important;
       text-decoration-color: rgba(var(--object-accent-soft-rgb), .95) !important;
     }
+
+
+    /* Round 17: increase only main reading text and fact labels on object pages. */
+    .page-lead {
+      font-size: clamp(1.24rem, 1.48vw, 1.5rem) !important;
+      line-height: 1.72 !important;
+    }
+
+    .history-note,
+    .history-section p,
+    .history-section li:not(.history-toc li):not(.source-list li) {
+      font-size: clamp(1.18rem, 1.28vw, 1.36rem) !important;
+      line-height: 1.84 !important;
+    }
+
+    .fact-card span,
+    .history-fact-list strong {
+      font-size: clamp(1.08rem, 1.18vw, 1.22rem) !important;
+      line-height: 1.34 !important;
+      color: rgba(var(--object-accent-rgb), .98) !important;
+    }
+
+    .fact-card strong {
+      font-size: clamp(1.12rem, 1.22vw, 1.3rem) !important;
+      line-height: 1.64 !important;
+    }
+
+    @media (max-width: 760px) {
+      .page-lead {
+        font-size: 1.18rem !important;
+      }
+
+      .history-note,
+      .history-section p,
+      .history-section li:not(.history-toc li):not(.source-list li) {
+        font-size: 1.13rem !important;
+        line-height: 1.78 !important;
+      }
+
+      .fact-card span,
+      .history-fact-list strong {
+        font-size: 1.04rem !important;
+      }
+
+      .fact-card strong {
+        font-size: 1.08rem !important;
+      }
+    }
+
 </style>
 </head>
 <body class="page-object page-soviets">
@@ -1270,8 +1319,6 @@
           <li>Statehistory.ru: «Дворец Советов. Часть II» (фундамент и каркас) — <a href="https://statehistory.ru/1624/" target="_blank" rel="noopener">https://statehistory.ru/1624/</a></li>
           <li>Corbusier.totalarch.com: Конкурсный проект Ле Корбюзье — <a href="https://corbusier.totalarch.com/palace_soviets" target="_blank" rel="noopener">https://corbusier.totalarch.com/palace_soviets</a></li>
           <li>Некрасовка.ру: «Электронное голосование, скоростные лифты...» — <a href="https://nekrasovka.ru/articles/review/palaceofthesoviets" target="_blank" rel="noopener">https://nekrasovka.ru/articles/review/palaceofthesoviets</a></li>
-          <li>АиФ: «Забытый символ коммунизма» — <a href="https://aif.ru/realty/city/zabytyy_simvol_kommunizma..." target="_blank" rel="noopener">https://aif.ru/realty/city/zabytyy_simvol_kommunizma...</a></li>
-          <li>Виртуальный музей архитектуры (МУАР): vma.muar.ru — конкурс на Дворец Советов</li>
           <li>Администрация Некрасовки: PDF-сборник 1933 г. — <a href="https://admin.nekrasovka.ru/storage/C9800006085.pdf" target="_blank" rel="noopener">https://admin.nekrasovka.ru/storage/C9800006085.pdf</a></li>
         </ul>
         <p class="project-signature">Проект «Нереализованная архитектура XX века»</p>

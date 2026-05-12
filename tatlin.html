@@ -1016,6 +1016,55 @@
       color: rgba(var(--object-accent-soft-rgb), 1) !important;
       text-decoration-color: rgba(var(--object-accent-soft-rgb), .95) !important;
     }
+
+
+    /* Round 17: increase only main reading text and fact labels on object pages. */
+    .page-lead {
+      font-size: clamp(1.24rem, 1.48vw, 1.5rem) !important;
+      line-height: 1.72 !important;
+    }
+
+    .history-note,
+    .history-section p,
+    .history-section li:not(.history-toc li):not(.source-list li) {
+      font-size: clamp(1.18rem, 1.28vw, 1.36rem) !important;
+      line-height: 1.84 !important;
+    }
+
+    .fact-card span,
+    .history-fact-list strong {
+      font-size: clamp(1.08rem, 1.18vw, 1.22rem) !important;
+      line-height: 1.34 !important;
+      color: rgba(var(--object-accent-rgb), .98) !important;
+    }
+
+    .fact-card strong {
+      font-size: clamp(1.12rem, 1.22vw, 1.3rem) !important;
+      line-height: 1.64 !important;
+    }
+
+    @media (max-width: 760px) {
+      .page-lead {
+        font-size: 1.18rem !important;
+      }
+
+      .history-note,
+      .history-section p,
+      .history-section li:not(.history-toc li):not(.source-list li) {
+        font-size: 1.13rem !important;
+        line-height: 1.78 !important;
+      }
+
+      .fact-card span,
+      .history-fact-list strong {
+        font-size: 1.04rem !important;
+      }
+
+      .fact-card strong {
+        font-size: 1.08rem !important;
+      }
+    }
+
 </style>
 </head>
 <body class="page-object page-tatlin">
@@ -1264,13 +1313,12 @@
         <h3>Интернет-ресурсы</h3>
         <ul class="source-list">
           <li>Wikipedia (RU): «Башня Татлина»: <a href="https://ru.wikipedia.org/wiki/Башня_Татлина" target="_blank" rel="noopener">https://ru.wikipedia.org/wiki/Башня_Татлина</a></li>
-          <li>Wikipedia (EN): «Tatlin&#x27;s Tower»: <a href="https://en.wikipedia.org/wiki/Tatlin%27s_Tower" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Tatlin%27s_Tower</a></li>
           <li>Русский авангард: «Памятник III Интернационалу»: <a href="https://rusavangard.ru/online/history/pamyatnik-iii-internatsionalu/" target="_blank" rel="noopener">https://rusavangard.ru/online/history/pamyatnik-iii-internatsionalu/</a></li>
           <li>Tatlin.ru: «Башня Татлина»: <a href="https://tatlin.ru/articles/bashnya_tatlina" target="_blank" rel="noopener">https://tatlin.ru/articles/bashnya_tatlina</a></li>
           <li>Tatlin.ru: «Реконструкции Памятника III Интернационалу»: <a href="https://tatlin.ru/articles/rekonstrukcii_pamyatnika_iii_internacionalu" target="_blank" rel="noopener">https://tatlin.ru/articles/rekonstrukcii_pamyatnika_iii_internacionalu</a></li>
           <li>Smarthistory: «Tatlin&#x27;s Tower»: <a href="https://smarthistory.org/tatlin-tower/" target="_blank" rel="noopener">https://smarthistory.org/tatlin-tower/</a></li>
           <li>Khan Academy: «Tatlin&#x27;s Tower»: <a href="https://www.khanacademy.org/humanities/art-1010/cubism-early-abstraction/russian-avant-garde/a/tatlins-tower" target="_blank" rel="noopener">https://www.khanacademy.org/humanities/art-1010/cubism-early-abstraction/russian-avant-garde/a/tatlins-tower</a></li>
-          <li>Tate Papers: «Model of Vladimir Tatlin&#x27;s Monument to the Third International»: <a href="https://www.tate.org.uk/research/tate-papers/08/model-of-vladimir-tatlins-monument-to-the-third-international" target="_blank" rel="noopener">https://www.tate.org.uk/research/tate-papers/08/model-of-vladimir-tatlins-monument-to-the-third-international</a></li>
+          <li>Tate Papers: «Model of Vladimir Tatlin&#x27;s Monument to the Third International: Reconstruction as Instrument of Research and States of Knowledge»: <a href="https://www.tate.org.uk/research/tate-papers/08/model-of-vladimir-tatlins-monument-to-the-third-international-reconstruction-as-instrument-of-research-and-states-of-knowledge" target="_blank" rel="noopener">https://www.tate.org.uk/research/tate-papers/08/model-of-vladimir-tatlins-monument-to-the-third-international-reconstruction-as-instrument-of-research-and-states-of-knowledge</a></li>
           <li>Vokrugsveta.ru: «Невзятая высота»: <a href="https://www.vokrugsveta.ru/vs/article/7287/" target="_blank" rel="noopener">https://www.vokrugsveta.ru/vs/article/7287/</a></li>
           <li>Rodina-history.ru: «Владимир Татлин — биография»: <a href="https://rodina-history.ru/2025/12/28/140-let-nazad-rodilsia-hudozhnik-buntar-vladimir-tatlin.html" target="_blank" rel="noopener">https://rodina-history.ru/2025/12/28/140-let-nazad-rodilsia-hudozhnik-buntar-vladimir-tatlin.html</a></li>
         </ul>

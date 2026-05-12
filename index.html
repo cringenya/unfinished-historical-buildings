@@ -1374,6 +1374,29 @@
         inset 0 1px 0 rgba(255,255,255,.14),
         0 18px 52px rgba(var(--card-accent-rgb, 245, 205, 118), .16) !important;
     }
+
+
+    /* Round 17: increase only primary reading text and keep service UI unchanged. */
+    .page-index .hero .lead,
+    .page-index .section-copy,
+    .page-index .project-overview .panel p,
+    .page-index .project-steps .timeline-item p,
+    .page-index .object-card p {
+      font-size: clamp(1.16rem, 1.26vw, 1.32rem) !important;
+      line-height: 1.78 !important;
+    }
+
+    @media (max-width: 720px) {
+      .page-index .hero .lead,
+      .page-index .section-copy,
+      .page-index .project-overview .panel p,
+      .page-index .project-steps .timeline-item p,
+      .page-index .object-card p {
+        font-size: 1.13rem !important;
+        line-height: 1.72 !important;
+      }
+    }
+
 </style>
 </link></head>
 <body class="page-index">

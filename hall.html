@@ -1016,6 +1016,55 @@
       color: rgba(var(--object-accent-soft-rgb), 1) !important;
       text-decoration-color: rgba(var(--object-accent-soft-rgb), .95) !important;
     }
+
+
+    /* Round 17: increase only main reading text and fact labels on object pages. */
+    .page-lead {
+      font-size: clamp(1.24rem, 1.48vw, 1.5rem) !important;
+      line-height: 1.72 !important;
+    }
+
+    .history-note,
+    .history-section p,
+    .history-section li:not(.history-toc li):not(.source-list li) {
+      font-size: clamp(1.18rem, 1.28vw, 1.36rem) !important;
+      line-height: 1.84 !important;
+    }
+
+    .fact-card span,
+    .history-fact-list strong {
+      font-size: clamp(1.08rem, 1.18vw, 1.22rem) !important;
+      line-height: 1.34 !important;
+      color: rgba(var(--object-accent-rgb), .98) !important;
+    }
+
+    .fact-card strong {
+      font-size: clamp(1.12rem, 1.22vw, 1.3rem) !important;
+      line-height: 1.64 !important;
+    }
+
+    @media (max-width: 760px) {
+      .page-lead {
+        font-size: 1.18rem !important;
+      }
+
+      .history-note,
+      .history-section p,
+      .history-section li:not(.history-toc li):not(.source-list li) {
+        font-size: 1.13rem !important;
+        line-height: 1.78 !important;
+      }
+
+      .fact-card span,
+      .history-fact-list strong {
+        font-size: 1.04rem !important;
+      }
+
+      .fact-card strong {
+        font-size: 1.08rem !important;
+      }
+    }
+
 </style>
 </head>
 <body class="page-object page-hall">
@@ -1257,13 +1306,11 @@
         </ul>
         <h3>Электронные и медийные ресурсы</h3>
         <ul class="source-list">
-          <li>Wikipedia (EN): «Volkshalle» — <a href="https://en.wikipedia.org/wiki/Volkshalle" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Volkshalle</a></li>
           <li>Wikipedia (RU): «Зал Народа» — <a href="https://ru.wikipedia.org/wiki/Зал_Народа" target="_blank" rel="noopener">https://ru.wikipedia.org/wiki/Зал_Народа</a></li>
           <li>Wikipedia (EN): «Schwerbelastungskörper» — <a href="https://en.wikipedia.org/wiki/Schwerbelastungskörper" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Schwerbelastungskörper</a></li>
           <li>Wikipedia (RU): «Столица мира Германия» — <a href="https://ru.wikipedia.org/wiki/Столица_мира_Германия" target="_blank" rel="noopener">https://ru.wikipedia.org/wiki/Столица_мира_Германия</a></li>
           <li>ArchDaily / Jonathan Glancey: «The Unbuilt Nazi Pantheon: Unpacking Albert Speer&#x27;s Volkshalle» — <a href="https://www.archdaily.com/806680" target="_blank" rel="noopener">https://www.archdaily.com/806680</a></li>
-          <li>Nuremberg.media: «Шпеер рисует рейх» — <a href="https://nuremberg.media/figuranty/20210514/166740" target="_blank" rel="noopener">https://nuremberg.media/figuranty/20210514/166740</a></li>
-          <li>Study.com: «Volkshalle: History, Inspiration &amp; Nazi Capitol Building»</li>
+          <li>Study.com: «Volkshalle: History, Inspiration &amp; Nazi Capitol Building»: <a href="https://study.com/academy/lesson/volkshalle-history-inspiration-nazi-capitol-building.html" target="_blank" rel="noopener">https://study.com/academy/lesson/volkshalle-history-inspiration-nazi-capitol-building.html</a></li>
           <li>99% Invisible: «The Nazi Block» (подкаст и статья) — <a href="https://99percentinvisible.org/episode/616-the-nazi-block" target="_blank" rel="noopener">https://99percentinvisible.org/episode/616-the-nazi-block</a></li>
           <li>Atlas Obscura: «Schwerbelastungskörper» — <a href="https://www.atlasobscura.com/places/schwerbelastungskorper" target="_blank" rel="noopener">https://www.atlasobscura.com/places/schwerbelastungskorper</a></li>
         </ul>

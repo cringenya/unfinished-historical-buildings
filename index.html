@@ -105,6 +105,120 @@
       .monument-graphic--triptych { width: min(88%, 300px) !important; }
     }
 
+
+    /* Round 5: readable text, corrected hero composition, and robust responsive layout. */
+    body {
+      font-size: clamp(18px, 1.04vw, 20px);
+    }
+
+    .lead,
+    .section-copy,
+    .project-overview .panel p,
+    .project-steps .timeline-item p,
+    .object-card p,
+    .hero-card__meta .meta span {
+      font-size: clamp(1.14rem, 1.34vw, 1.32rem) !important;
+      line-height: 1.72 !important;
+    }
+
+    .object-card .tag,
+    .object-card .meta-chip,
+    .hero-card__top span,
+    .stamp,
+    .timeline-item span {
+      font-size: clamp(.92rem, 1.05vw, 1.08rem) !important;
+    }
+
+    .object-card h3,
+    .project-overview h3,
+    .timeline-item h4 {
+      line-height: 1.02;
+    }
+
+    .hero-card__preview.archive-preview {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      overflow: hidden !important;
+    }
+
+    .archive-core {
+      inset: 7% 0 13% !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      overflow: visible !important;
+      background: transparent !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      outline: 0 !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    .archive-grid,
+    .archive-rings {
+      display: none !important;
+    }
+
+    .monument-graphic--triptych {
+      width: min(98%, 540px) !important;
+      max-width: 540px !important;
+      max-height: 90% !important;
+      margin: auto !important;
+    }
+
+    .hero-monument--tatlin { opacity: .82; }
+    .hero-monument--hall { opacity: .74; }
+    .hero-monument--soviets { opacity: .78; }
+
+    .card-wire svg {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    @media (max-width: 1180px) {
+      .hero-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+        justify-items: center !important;
+        gap: clamp(32px, 6vw, 64px) !important;
+      }
+
+      .hero-grid > div:first-child {
+        width: min(100%, 760px) !important;
+        justify-self: center !important;
+      }
+
+      .hero-card-wrap {
+        width: min(100%, 650px) !important;
+        justify-self: center !important;
+        margin-inline: auto !important;
+      }
+
+      .hero-card {
+        margin-inline: auto !important;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .lead,
+      .section-copy,
+      .project-overview .panel p,
+      .project-steps .timeline-item p,
+      .object-card p,
+      .hero-card__meta .meta span {
+        font-size: 1.12rem !important;
+      }
+
+      .archive-core {
+        inset: 11% -2% 17% !important;
+      }
+
+      .monument-graphic--triptych {
+        width: min(105%, 420px) !important;
+      }
+    }
+
   </style>
 </head>
 <body class="page-index">
@@ -160,38 +274,42 @@
                   <span></span>
                 </div>
                 <div class="archive-core">
-                  <svg aria-hidden="true" class="monument-graphic monument-graphic--triptych" fill="none" viewBox="0 0 360 260" xmlns="http://www.w3.org/2000/svg">
+                  <svg aria-hidden="true" class="monument-graphic monument-graphic--triptych" fill="none" viewBox="0 0 520 300" xmlns="http://www.w3.org/2000/svg">
                     <defs>
-                      <linearGradient id="heroStroke" x1="30" x2="330" y1="40" y2="230" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="rgba(255,255,255,0.92)"></stop>
-                        <stop offset="1" stop-color="rgba(255,255,255,0.28)"></stop>
+                      <linearGradient id="heroStroke" x1="40" x2="480" y1="30" y2="265" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="rgba(255,255,255,0.94)"></stop>
+                        <stop offset="1" stop-color="rgba(255,255,255,0.30)"></stop>
                       </linearGradient>
-                      <linearGradient id="heroFill" x1="60" x2="300" y1="70" y2="230" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="rgba(255,255,255,0.74)"></stop>
-                        <stop offset="1" stop-color="rgba(255,255,255,0.08)"></stop>
+                      <linearGradient id="heroSoft" x1="80" x2="440" y1="52" y2="245" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="rgba(255,255,255,0.58)"></stop>
+                        <stop offset="1" stop-color="rgba(255,255,255,0.12)"></stop>
                       </linearGradient>
                     </defs>
-                    <path class="hero-ground" d="M34 224H326" stroke="rgba(255,255,255,0.28)" stroke-linecap="round"></path>
+                    <path class="hero-ground" d="M36 254H484" stroke="rgba(255,255,255,0.22)" stroke-linecap="round" stroke-width="2"></path>
 
-                    <g class="hero-monument hero-monument--tatlin" transform="translate(38 28)">
-                      <path d="M16 184C44 158 60 126 70 88C79 54 96 28 132 12" stroke="url(#heroStroke)" stroke-linecap="round" stroke-width="5"></path>
-                      <path d="M50 190C82 154 100 118 110 82C119 50 132 34 158 26" stroke="rgba(255,255,255,0.42)" stroke-linecap="round" stroke-width="4"></path>
-                      <path d="M27 181L146 20" stroke="rgba(255,255,255,0.22)" stroke-linecap="round" stroke-width="3"></path>
-                      <path d="M30 184H92M54 184V146H94V184M74 146V112L113 132V166M106 92H142V128H106Z" stroke="rgba(255,255,255,0.48)" stroke-linejoin="round" stroke-width="3"></path>
+                    <g class="hero-monument hero-monument--tatlin" transform="translate(40 22)">
+                      <path d="M38 230C69 197 91 154 101 104C108 69 124 39 160 18" stroke="url(#heroStroke)" stroke-linecap="round" stroke-width="4.2"></path>
+                      <path d="M78 236C113 199 135 156 143 106C149 69 162 46 190 34" stroke="rgba(255,255,255,0.40)" stroke-linecap="round" stroke-width="3.4"></path>
+                      <path d="M46 226C83 214 112 194 121 169C131 141 95 137 92 112C89 84 126 73 149 84C168 93 186 75 188 46" stroke="rgba(255,255,255,0.50)" stroke-linecap="round" stroke-width="2.8"></path>
+                      <path d="M60 220L172 25" stroke="rgba(255,255,255,0.18)" stroke-linecap="round" stroke-width="2"></path>
+                      <path d="M52 220H92M66 220V177H101V220M84 177V137L123 157V198M119 113H153V148H119Z" stroke="rgba(255,255,255,0.34)" stroke-linejoin="round" stroke-width="2.2"></path>
                     </g>
 
-                    <g class="hero-monument hero-monument--hall" transform="translate(130 62)">
-                      <path d="M0 158H122" stroke="rgba(255,255,255,0.24)" stroke-linecap="round" stroke-width="3"></path>
-                      <path d="M16 158V102C16 48 52 10 84 10C118 10 144 48 144 102V158" stroke="url(#heroStroke)" stroke-linejoin="round" stroke-width="5" opacity="0.82"></path>
-                      <path d="M42 158V104C42 70 60 48 84 48C109 48 122 70 122 104V158" stroke="rgba(255,255,255,0.28)" stroke-width="3"></path>
-                      <path d="M10 174H150M36 158V174M60 158V174M84 158V174M108 158V174M132 158V174" stroke="rgba(255,255,255,0.34)" stroke-linecap="round" stroke-width="3"></path>
+                    <g class="hero-monument hero-monument--hall" transform="translate(190 60)">
+                      <path d="M4 220H154" stroke="rgba(255,255,255,0.24)" stroke-linecap="round" stroke-width="2.4"></path>
+                      <path d="M22 188V150C22 84 60 35 92 35C125 35 160 84 160 150V188" stroke="url(#heroStroke)" stroke-linejoin="round" stroke-width="4.2"></path>
+                      <path d="M42 188V154C42 111 63 82 92 82C121 82 140 111 140 154V188" stroke="rgba(255,255,255,0.28)" stroke-width="2.4"></path>
+                      <path d="M0 188H182V220H0Z" stroke="rgba(255,255,255,0.44)" stroke-linejoin="round" stroke-width="3"></path>
+                      <path d="M28 188V220M58 188V220M91 188V220M124 188V220M154 188V220" stroke="rgba(255,255,255,0.30)" stroke-linecap="round" stroke-width="2.2"></path>
+                      <path d="M86 35V15H100V36" stroke="rgba(255,255,255,0.36)" stroke-linejoin="round" stroke-width="2.2"></path>
                     </g>
 
-                    <g class="hero-monument hero-monument--soviets" transform="translate(242 40)">
-                      <path d="M2 184H92" stroke="rgba(255,255,255,0.26)" stroke-linecap="round" stroke-width="3"></path>
-                      <path d="M14 184V140H82V184M24 140V106H72V140M34 106V78H62V106M43 78V54H53V78" fill="url(#heroFill)" stroke="rgba(255,255,255,0.44)" stroke-linejoin="round" stroke-width="3"></path>
-                      <path d="M48 54V18" stroke="rgba(255,255,255,0.52)" stroke-linecap="round" stroke-width="3"></path>
-                      <path d="M48 18C54 22 60 19 65 14" stroke="rgba(255,255,255,0.42)" stroke-linecap="round" stroke-width="3"></path>
+                    <g class="hero-monument hero-monument--soviets" transform="translate(385 36)">
+                      <path d="M0 238H108" stroke="rgba(255,255,255,0.24)" stroke-linecap="round" stroke-width="2.4"></path>
+                      <path d="M14 238V190H96V238M24 190V148H86V190M34 148V112H76V148M43 112V82H67V112M50 82V56H60V82" stroke="rgba(255,255,255,0.48)" stroke-linejoin="round" stroke-width="3"></path>
+                      <path d="M55 56V20" stroke="url(#heroStroke)" stroke-linecap="round" stroke-width="3"></path>
+                      <path d="M55 20C62 24 69 21 75 15" stroke="rgba(255,255,255,0.42)" stroke-linecap="round" stroke-width="2.6"></path>
+                      <path d="M18 210H92M28 169H82M38 130H72M46 96H64" stroke="rgba(255,255,255,0.26)" stroke-linecap="round" stroke-width="2"></path>
                     </g>
                   </svg>
                 </div>
@@ -298,16 +416,16 @@
             <article class="object-card glass tatlin" data-reveal="">
               <div class="card-wire">
                 <svg fill="none" viewBox="0 0 100 100" aria-hidden="true">
-                  <path d="M18 88C34 74 43 57 48 39C52 25 59 15 78 8" opacity=".74" stroke="currentColor" stroke-linecap="round" stroke-width="1.35"></path>
-                  <path d="M31 90C47 73 57 56 62 38C66 25 72 18 86 14" opacity=".52" stroke="currentColor" stroke-linecap="round" stroke-width="1.15"></path>
-                  <path d="M23 82L82 12" opacity=".25" stroke="currentColor" stroke-linecap="round" stroke-width="1"></path>
-                  <path d="M23 82H53M41 82V65H58V82M49 65V49L65 57V73M60 42H73V56H60Z" opacity=".55" stroke="currentColor" stroke-linejoin="round" stroke-width="1.05"></path>
-                  <path d="M22 82C30 90 45 92 55 83" opacity=".35" stroke="currentColor" stroke-linecap="round" stroke-width="1"></path>
-                  <circle cx="82" cy="14" opacity=".42" r="7" stroke="currentColor" stroke-width="1.05"></circle>
+                  <path d="M22 88C43 74 58 53 63 29C66 16 76 9 88 7" opacity=".76" stroke="currentColor" stroke-linecap="round" stroke-width="1.35"></path>
+                  <path d="M37 90C59 76 73 55 77 31C80 18 86 14 93 12" opacity=".48" stroke="currentColor" stroke-linecap="round" stroke-width="1.1"></path>
+                  <path d="M24 86C42 81 59 70 63 58C68 43 47 42 45 31C43 20 58 15 70 20C79 24 89 19 92 11" opacity=".62" stroke="currentColor" stroke-linecap="round" stroke-width="1.15"></path>
+                  <path d="M30 85L86 10" opacity=".24" stroke="currentColor" stroke-linecap="round" stroke-width=".95"></path>
+                  <path d="M26 86H51M36 86V70H54V86M45 70V54L61 62V78M57 43H72V57H57Z" opacity=".46" stroke="currentColor" stroke-linejoin="round" stroke-width="1.05"></path>
+                  <circle cx="91" cy="11" opacity=".36" r="5.5" stroke="currentColor" stroke-width="1"></circle>
                 </svg>
               </div>
               <div class="card-top">
-                <span class="tag">Авангард / 1919–1920</span>
+                <span class="tag">Петроград / 1919–1920</span>
               </div>
               <div class="card-meta">
                 <span class="meta-chip">400 метров</span>
@@ -325,12 +443,12 @@
             <article class="object-card glass hall" data-reveal="">
               <div class="card-wire">
                 <svg fill="none" viewBox="0 0 100 100" aria-hidden="true">
-                  <path d="M16 70H86" opacity=".55" stroke="currentColor" stroke-linecap="round" stroke-width="1.15"></path>
-                  <path d="M24 70V50C24 32 38 18 55 18C72 18 84 32 84 50V70" opacity=".7" stroke="currentColor" stroke-linejoin="round" stroke-width="1.25"></path>
-                  <path d="M35 70V51C35 39 43 30 55 30C67 30 74 39 74 51V70" opacity=".38" stroke="currentColor" stroke-width="1"></path>
-                  <path d="M52 17V8H60V18" opacity=".46" stroke="currentColor" stroke-linejoin="round" stroke-width="1"></path>
-                  <path d="M20 76H90M30 70V76M42 70V76M54 70V76M66 70V76M78 70V76" opacity=".45" stroke="currentColor" stroke-linecap="round" stroke-width="1"></path>
-                  <circle cx="56" cy="47" opacity=".32" r="8" stroke="currentColor" stroke-width="1"></circle>
+                  <path d="M10 79H93" opacity=".56" stroke="currentColor" stroke-linecap="round" stroke-width="1.15"></path>
+                  <path d="M24 69V52C24 31 39 18 56 18C74 18 87 31 87 52V69" opacity=".78" stroke="currentColor" stroke-linejoin="round" stroke-width="1.35"></path>
+                  <path d="M35 69V54C35 41 43 33 56 33C69 33 76 41 76 54V69" opacity=".34" stroke="currentColor" stroke-width="1"></path>
+                  <path d="M14 69H94V83H14Z" opacity=".58" stroke="currentColor" stroke-linejoin="round" stroke-width="1.15"></path>
+                  <path d="M26 69V83M40 69V83M54 69V83M68 69V83M82 69V83" opacity=".42" stroke="currentColor" stroke-linecap="round" stroke-width=".95"></path>
+                  <path d="M52 18V8H62V19" opacity=".42" stroke="currentColor" stroke-linejoin="round" stroke-width="1"></path>
                 </svg>
               </div>
               <div class="card-top">
@@ -352,12 +470,12 @@
             <article class="object-card glass soviets" data-reveal="">
               <div class="card-wire">
                 <svg fill="none" viewBox="0 0 100 100" aria-hidden="true">
-                  <path d="M17 86H84" opacity=".52" stroke="currentColor" stroke-linecap="round" stroke-width="1.1"></path>
-                  <path d="M25 86V65H76V86M31 65V49H70V65M38 49V36H63V49M45 36V25H56V36" opacity=".62" stroke="currentColor" stroke-linejoin="round" stroke-width="1.15"></path>
-                  <path d="M50 25V12" opacity=".6" stroke="currentColor" stroke-linecap="round" stroke-width="1.1"></path>
-                  <path d="M50 12C53 14 56 13 59 10" opacity=".48" stroke="currentColor" stroke-linecap="round" stroke-width="1"></path>
-                  <path d="M47 20H54M34 72H67M40 56H61" opacity=".33" stroke="currentColor" stroke-linecap="round" stroke-width="1"></path>
-                  <path d="M27 86C31 78 72 78 76 86" opacity=".3" stroke="currentColor" stroke-linecap="round" stroke-width="1"></path>
+                  <path d="M15 87H86" opacity=".52" stroke="currentColor" stroke-linecap="round" stroke-width="1.1"></path>
+                  <path d="M23 87V72H78V87M28 72V58H73V72M34 58V46H67V58M40 46V35H61V46M46 35V25H55V35" opacity=".72" stroke="currentColor" stroke-linejoin="round" stroke-width="1.2"></path>
+                  <path d="M50.5 25V10" opacity=".66" stroke="currentColor" stroke-linecap="round" stroke-width="1.1"></path>
+                  <path d="M50.5 10C54 12 58 11 61 8" opacity=".48" stroke="currentColor" stroke-linecap="round" stroke-width="1"></path>
+                  <path d="M27 79H74M31 65H70M37 52H64M43 40H58" opacity=".32" stroke="currentColor" stroke-linecap="round" stroke-width=".95"></path>
+                  <path d="M22 87C26 81 75 81 79 87" opacity=".26" stroke="currentColor" stroke-linecap="round" stroke-width=".95"></path>
                 </svg>
               </div>
               <div class="card-top">

@@ -21,6 +21,14 @@
       font-family: "Cormorant Garamond", Georgia, serif;
     }
 
+
+    .model-ui__label,
+    .model-ui__status,
+    .model-loader,
+    .model-error {
+      font-size: clamp(1rem, 1.1vw, 1.16rem);
+    }
+
   </style>
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
@@ -34,7 +42,7 @@
     <model-viewer
       id="modelViewer"
       class="model-viewer"
-      src="../assets/models/hall/hall.glb?v=20260512-round3"
+      src="../assets/models/hall/hall.glb?v=20260512-round5"
       alt="Интерактивная 3D-модель Зала Народов"
       data-default-orbit="45deg 68deg 560m"
       data-default-fov="30deg"

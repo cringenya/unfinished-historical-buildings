@@ -1108,6 +1108,62 @@
       }
     }
 
+  
+
+    /* Round 13: fixed global header and full-width intro text after removing the hero illustration. */
+    html {
+      scroll-padding-top: calc(var(--topbar-height, 86px) + 24px) !important;
+    }
+
+    body {
+      padding-top: var(--topbar-height, 86px) !important;
+    }
+
+    .topbar {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      z-index: 10000 !important;
+      width: 100% !important;
+      transform: none !important;
+    }
+
+    .topbar-inner {
+      width: min(calc(100vw - clamp(24px, 5vw, 76px)), 1260px) !important;
+      max-width: 1260px !important;
+      margin-inline: auto !important;
+    }
+
+    .page-index .hero-grid,
+    .page-index .hero-grid > div:first-child {
+      width: 100% !important;
+      max-width: 100% !important;
+      justify-self: stretch !important;
+    }
+
+    .page-index .hero-grid > div:first-child,
+    .page-index .hero .eyebrow,
+    .page-index .hero h1,
+    .page-index .hero .lead,
+    .page-index .hero-actions {
+      max-width: none !important;
+    }
+
+    .page-index .hero .lead {
+      width: min(100%, 1180px) !important;
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding-top: var(--topbar-height, 78px) !important;
+      }
+
+      .topbar-inner {
+        width: min(calc(100vw - 20px), 100%) !important;
+      }
+    }
+
   </style>
 </link></head>
 <body class="page-index">

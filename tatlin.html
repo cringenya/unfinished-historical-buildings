@@ -739,6 +739,43 @@
       }
     }
 
+  
+
+    /* Round 13: keep the main navigation visible while scrolling object pages. */
+    html {
+      scroll-padding-top: calc(var(--topbar-height, 86px) + 24px) !important;
+    }
+
+    body {
+      padding-top: var(--topbar-height, 86px) !important;
+    }
+
+    .topbar {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      z-index: 10000 !important;
+      width: 100% !important;
+      transform: none !important;
+    }
+
+    .topbar-inner {
+      width: min(calc(100vw - clamp(24px, 5vw, 76px)), 1260px) !important;
+      max-width: 1260px !important;
+      margin-inline: auto !important;
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding-top: var(--topbar-height, 78px) !important;
+      }
+
+      .topbar-inner {
+        width: min(calc(100vw - 20px), 100%) !important;
+      }
+    }
+
   </style>
 </head>
 <body class="page-object page-tatlin">
@@ -782,7 +819,7 @@
 
           <div class="page-shell glass" data-reveal="">
             <div class="model-viewer-wrap model-host">
-              <iframe allow="autoplay; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen class="local-model-frame" loading="lazy" src="models/tatlin.html?v=13" title="Башня Татлина — 3D-реконструкция"></iframe>
+              <iframe allow="autoplay; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen class="local-model-frame" loading="lazy" src="models/tatlin.html?v=14" title="Башня Татлина — 3D-реконструкция"></iframe>
             </div>
           </div>
         </div>

@@ -51,6 +51,42 @@
       padding: 10px 18px !important;
     }
 
+
+    /* Round 10: compact controls inside the 3D viewer window. */
+    html,
+    body {
+      font-size: 15px !important;
+    }
+
+    .model-ui__label,
+    .model-ui__status,
+    .model-loader,
+    .model-error {
+      font-size: clamp(14px, .9vw, 16px) !important;
+      line-height: 1.22 !important;
+    }
+
+    .model-action {
+      font-size: clamp(12px, .78vw, 14px) !important;
+      line-height: 1.15 !important;
+      min-height: 32px !important;
+      padding: 6px 12px !important;
+      border-radius: 999px !important;
+    }
+
+    .model-actions,
+    .camera-pan-panel {
+      gap: 7px !important;
+    }
+
+    @media (max-width: 640px) {
+      .model-action {
+        font-size: 12px !important;
+        min-height: 30px !important;
+        padding: 5px 10px !important;
+      }
+    }
+
   </style>
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
@@ -68,9 +104,11 @@
       alt="Интерактивная 3D-модель Башни Татлина"
       data-default-orbit="35deg 70deg auto"
       data-default-fov="32deg"
-      data-target-x="0"
-      data-target-y="0"
-      data-target-z="0"
+      data-target-x=""
+      data-target-y=""
+      data-target-z=""
+      data-center-y-factor="0.12"
+      data-top-factor="0.55"
       data-top-y=""
       camera-controls
       touch-action="pan-y"
@@ -160,6 +198,8 @@
           z: numericDataset('targetZ', 0),
         },
         topY: numericDataset('topY', NaN),
+        topFactor: numericDataset('topFactor', 0.44),
+        centerYFactor: numericDataset('centerYFactor', 0),
         ready: false,
       };
 
@@ -211,7 +251,7 @@
         const height = Math.max(state.dimensions.y, 1);
         state.target = {
           x: state.center.x,
-          y: Number.isFinite(state.topY) ? state.topY : state.center.y + height * 0.32,
+          y: Number.isFinite(state.topY) ? state.topY : state.center.y + height * state.topFactor,
           z: state.center.z,
         };
         applyTarget();
@@ -290,12 +330,17 @@
         error.hidden = true;
         setStatus('вращение · масштаб · обзор');
         const detectedCenter = getVector(viewer.getBoundingBoxCenter?.(), state.center);
+        const detectedDimensions = getVector(viewer.getDimensions?.(), state.dimensions);
+        const adjustedCenter = {
+          ...detectedCenter,
+          y: detectedCenter.y + Math.max(detectedDimensions.y, 1) * state.centerYFactor,
+        };
         const hasExplicitTarget = ['targetX', 'targetY', 'targetZ'].some((name) => viewer.dataset[name] !== undefined && viewer.dataset[name] !== '');
         if (!hasExplicitTarget) {
-          state.center = detectedCenter;
-          state.target = { ...detectedCenter };
+          state.center = adjustedCenter;
+          state.target = { ...adjustedCenter };
         }
-        state.dimensions = getVector(viewer.getDimensions?.(), state.dimensions);
+        state.dimensions = detectedDimensions;
         state.ready = true;
         applyTarget();
         syncParentFrame();

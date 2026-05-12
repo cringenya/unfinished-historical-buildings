@@ -570,6 +570,37 @@
       line-height: 1.38 !important;
     }
 
+
+    /* Round 10: slightly larger long-form body text only. */
+    .page-lead {
+      font-size: clamp(1.14rem, 1.3vw, 1.36rem) !important;
+      line-height: 1.68 !important;
+    }
+
+    .history-note,
+    .history-section p,
+    .history-section li,
+    .source-list li,
+    .source-list a {
+      font-size: clamp(1.08rem, 1.16vw, 1.22rem) !important;
+      line-height: 1.8 !important;
+    }
+
+    @media (max-width: 760px) {
+      .page-lead {
+        font-size: 1.16rem !important;
+      }
+
+      .history-note,
+      .history-section p,
+      .history-section li,
+      .source-list li,
+      .source-list a {
+        font-size: 1.1rem !important;
+        line-height: 1.76 !important;
+      }
+    }
+
   </style>
 </head>
 <body class="page-object page-hall">
@@ -613,7 +644,7 @@
 
           <div class="page-shell glass" data-reveal="">
             <div class="model-viewer-wrap model-host">
-              <iframe allow="autoplay; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen class="local-model-frame" loading="lazy" src="models/hall.html?v=11" title="Зал Народа — 3D-реконструкция"></iframe>
+              <iframe allow="autoplay; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen class="local-model-frame" loading="lazy" src="models/hall.html?v=12" title="Зал Народа — 3D-реконструкция"></iframe>
             </div>
           </div>
         </div>

@@ -1397,6 +1397,28 @@
       }
     }
 
+
+    /* Round 18: increase only the three fixed-header controls. */
+    .brand-title {
+      font-size: clamp(1.1rem, 1.18vw, 1.24rem) !important;
+      line-height: 1.08 !important;
+    }
+
+    .nav a {
+      font-size: clamp(1rem, 1.05vw, 1.12rem) !important;
+      line-height: 1.12 !important;
+    }
+
+    @media (max-width: 680px) {
+      .brand-title {
+        font-size: clamp(1.06rem, 4vw, 1.18rem) !important;
+      }
+
+      .nav a {
+        font-size: 1rem !important;
+      }
+    }
+
 </style>
 </link></head>
 <body class="page-index">

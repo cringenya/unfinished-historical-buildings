@@ -1065,6 +1065,49 @@
       }
     }
 
+
+    /* Round 18: make long article section headings calmer and enlarge fixed-header controls. */
+    .brand-title {
+      font-size: clamp(1.1rem, 1.18vw, 1.24rem) !important;
+      line-height: 1.08 !important;
+    }
+
+    .nav a {
+      font-size: clamp(1rem, 1.05vw, 1.12rem) !important;
+      line-height: 1.12 !important;
+    }
+
+    .history-toc h2 {
+      font-size: clamp(1.18rem, 1.35vw, 1.48rem) !important;
+      line-height: 1.16 !important;
+    }
+
+    .history-section h2 {
+      font-size: clamp(1.45rem, 2.05vw, 2.28rem) !important;
+      line-height: 1.12 !important;
+      letter-spacing: -.01em !important;
+      max-width: 1060px !important;
+    }
+
+    @media (max-width: 760px) {
+      .brand-title {
+        font-size: clamp(1.06rem, 4vw, 1.18rem) !important;
+      }
+
+      .nav a {
+        font-size: 1rem !important;
+      }
+
+      .history-toc h2 {
+        font-size: 1.18rem !important;
+      }
+
+      .history-section h2 {
+        font-size: 1.42rem !important;
+        line-height: 1.16 !important;
+      }
+    }
+
 </style>
 </head>
 <body class="page-object page-soviets">

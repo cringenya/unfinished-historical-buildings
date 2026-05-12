@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Архив нереализованной архитектуры</title>
+  <title>Нереализованная архитектура XX века</title>
   <meta name="theme-color" content="#070809" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,6 +43,68 @@
       color: rgba(255, 234, 174, 1);
       text-decoration-color: rgba(255, 234, 174, .95);
     }
+  
+
+    /* Round 3: project title and corrected main-page preview. */
+    .brand-title {
+      max-width: min(46vw, 440px);
+      line-height: 1.02;
+      white-space: normal;
+    }
+
+    .archive-preview {
+      position: relative;
+      overflow: hidden !important;
+      min-height: clamp(340px, 43vw, 520px);
+    }
+
+    .archive-core {
+      inset: 13% 5% 20% !important;
+      display: grid !important;
+      place-items: center !important;
+      overflow: visible !important;
+    }
+
+    .monument-graphic--triptych {
+      display: block !important;
+      height: auto !important;
+      width: min(86%, 360px) !important;
+      max-width: 360px;
+      max-height: 78%;
+      overflow: visible;
+      opacity: .9;
+      filter: drop-shadow(0 22px 40px rgba(0,0,0,.35));
+    }
+
+    .hero-monument {
+      transform-box: fill-box;
+      transform-origin: center bottom;
+    }
+
+    .hero-monument--tatlin { opacity: .78; }
+    .hero-monument--hall { opacity: .66; }
+    .hero-monument--soviets { opacity: .72; }
+
+    .archive-label {
+      max-width: 80%;
+      font-size: clamp(.66rem, 1vw, .82rem) !important;
+      line-height: 1.2;
+      opacity: .72;
+    }
+
+    .project-overview .panel p,
+    .project-steps .timeline-item p {
+      font-size: clamp(1rem, 1.15vw, 1.12rem);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 760px) {
+      .brand-title { max-width: 42vw; font-size: .95rem; }
+      .archive-preview { min-height: 380px; }
+      .archive-core { inset: 17% 3% 24% !important; }
+      .monument-graphic--triptych { width: min(88%, 300px) !important; }
+    }
+
   </style>
 </head>
 <body class="page-index">
@@ -54,11 +116,11 @@
       <a class="brand-pill" href="#home" aria-label="Вернуться в начало главной страницы">
         <span class="brand-orb"></span>
         <span class="brand-text">
-          <p class="brand-title">Архив Утопий</p>
+          <p class="brand-title">Нереализованная архитектура XX века</p>
         </span>
       </a>
       <nav class="nav" aria-label="Навигация по главной странице">
-        <a href="#archive">Манифест</a>
+        <a href="#archive">О проекте</a>
         <a href="#objects">Экспонаты</a>
       </nav>
     </div>
@@ -70,16 +132,16 @@
         <div class="hero-bg"></div>
         <div class="container hero-grid">
           <div data-reveal="">
-            <p class="eyebrow">Цифровой архив / поиск утраченной архитектуры</p>
-            <h1>Незавершённые здания, в которых осталась энергия целой эпохи</h1>
+            <p class="eyebrow">Цифровая реконструкция / исторический контекст / 3D</p>
+            <h1>Нереализованная архитектура XX века</h1>
             <p class="lead">
-              Это тёмный музейный архив нереализованных архитектурных утопий. Здесь пользователь не просто листает карточки,
-              а исследует замыслы, идеологии и судьбы проектов, которые так и не были доведены до конца.
-              Каждый объект получает свою атмосферу, свою пластику, свой исторический ритм и отдельную 3D-сцену.
+              Образовательный веб-проект о зданиях и монументах, которые планировались к строительству, но остались в чертежах,
+              макетах, описаниях и исторической памяти. Мы собираем архивные и научные материалы, переводим их в исторические справки
+              и показываем объекты через интерактивные 3D-реконструкции.
             </p>
             <div class="hero-actions">
               <a class="btn primary" href="#objects">Открыть архив</a>
-              <a class="btn" href="#archive">Изучить концепцию</a>
+              <a class="btn" href="#archive">О проекте</a>
             </div>
           </div>
 
@@ -87,8 +149,8 @@
             <div class="orbit-shell"></div>
             <div class="hero-card glass" id="heroCard">
               <div class="hero-card__top">
-                <span class="tag">Центральный архив</span>
-                <span style="color:var(--muted); font-size:.9rem;">3 объекта · 3D-реконструкция · исторический контекст</span>
+                <span class="tag">Исследовательский архив</span>
+                <span style="color:var(--muted); font-size:.9rem;">3 объекта · источники · 3D-реконструкция</span>
               </div>
               <div class="hero-card__preview archive-preview">
                 <div class="archive-grid"></div>
@@ -98,19 +160,39 @@
                   <span></span>
                 </div>
                 <div class="archive-core">
-                  <svg aria-hidden="true" class="monument-graphic" fill="none" viewBox="0 0 240 320" xmlns="http://www.w3.org/2000/svg">
-                    <rect fill="rgba(255,255,255,0.82)" height="210" rx="12" width="28" x="106" y="30"></rect>
-                    <rect fill="rgba(255,255,255,0.55)" height="18" rx="9" width="92" x="74" y="76"></rect>
-                    <rect fill="rgba(255,255,255,0.45)" height="16" rx="8" width="136" x="52" y="116"></rect>
-                    <rect fill="rgba(255,255,255,0.36)" height="14" rx="7" width="168" x="36" y="156"></rect>
-                    <path d="M120 4L176 38H64L120 4Z" fill="rgba(255,255,255,0.94)"></path>
-                    <path d="M120 44L204 290H36L120 44Z" fill="url(#g1)" opacity="0.95"></path>
+                  <svg aria-hidden="true" class="monument-graphic monument-graphic--triptych" fill="none" viewBox="0 0 360 260" xmlns="http://www.w3.org/2000/svg">
                     <defs>
-                      <linearGradient gradientUnits="userSpaceOnUse" id="g1" x1="36" x2="204" y1="44" y2="290">
-                        <stop stop-color="rgba(255,255,255,0.88)"></stop>
-                        <stop offset="1" stop-color="rgba(255,255,255,0.12)"></stop>
+                      <linearGradient id="heroStroke" x1="30" x2="330" y1="40" y2="230" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="rgba(255,255,255,0.92)"></stop>
+                        <stop offset="1" stop-color="rgba(255,255,255,0.28)"></stop>
+                      </linearGradient>
+                      <linearGradient id="heroFill" x1="60" x2="300" y1="70" y2="230" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="rgba(255,255,255,0.74)"></stop>
+                        <stop offset="1" stop-color="rgba(255,255,255,0.08)"></stop>
                       </linearGradient>
                     </defs>
+                    <path class="hero-ground" d="M34 224H326" stroke="rgba(255,255,255,0.28)" stroke-linecap="round"></path>
+
+                    <g class="hero-monument hero-monument--tatlin" transform="translate(38 28)">
+                      <path d="M16 184C44 158 60 126 70 88C79 54 96 28 132 12" stroke="url(#heroStroke)" stroke-linecap="round" stroke-width="5"></path>
+                      <path d="M50 190C82 154 100 118 110 82C119 50 132 34 158 26" stroke="rgba(255,255,255,0.42)" stroke-linecap="round" stroke-width="4"></path>
+                      <path d="M27 181L146 20" stroke="rgba(255,255,255,0.22)" stroke-linecap="round" stroke-width="3"></path>
+                      <path d="M30 184H92M54 184V146H94V184M74 146V112L113 132V166M106 92H142V128H106Z" stroke="rgba(255,255,255,0.48)" stroke-linejoin="round" stroke-width="3"></path>
+                    </g>
+
+                    <g class="hero-monument hero-monument--hall" transform="translate(130 62)">
+                      <path d="M0 158H122" stroke="rgba(255,255,255,0.24)" stroke-linecap="round" stroke-width="3"></path>
+                      <path d="M16 158V102C16 48 52 10 84 10C118 10 144 48 144 102V158" stroke="url(#heroStroke)" stroke-linejoin="round" stroke-width="5" opacity="0.82"></path>
+                      <path d="M42 158V104C42 70 60 48 84 48C109 48 122 70 122 104V158" stroke="rgba(255,255,255,0.28)" stroke-width="3"></path>
+                      <path d="M10 174H150M36 158V174M60 158V174M84 158V174M108 158V174M132 158V174" stroke="rgba(255,255,255,0.34)" stroke-linecap="round" stroke-width="3"></path>
+                    </g>
+
+                    <g class="hero-monument hero-monument--soviets" transform="translate(242 40)">
+                      <path d="M2 184H92" stroke="rgba(255,255,255,0.26)" stroke-linecap="round" stroke-width="3"></path>
+                      <path d="M14 184V140H82V184M24 140V106H72V140M34 106V78H62V106M43 78V54H53V78" fill="url(#heroFill)" stroke="rgba(255,255,255,0.44)" stroke-linejoin="round" stroke-width="3"></path>
+                      <path d="M48 54V18" stroke="rgba(255,255,255,0.52)" stroke-linecap="round" stroke-width="3"></path>
+                      <path d="M48 18C54 22 60 19 65 14" stroke="rgba(255,255,255,0.42)" stroke-linecap="round" stroke-width="3"></path>
+                    </g>
                   </svg>
                 </div>
                 <div class="archive-points">
@@ -118,22 +200,22 @@
                   <span class="point p2"></span>
                   <span class="point p3"></span>
                 </div>
-                <div class="archive-label archive-label--top">архивная модель / объект 01</div>
-                <div class="archive-label archive-label--left">вращение · масштаб · свет</div>
-                <div class="archive-label archive-label--bottom">цифровая реконструкция недостроенной утопии</div>
+                <div class="archive-label archive-label--top">3D-архив / реконструкция</div>
+                <div class="archive-label archive-label--left">источник · масштаб · контекст</div>
+                <div class="archive-label archive-label--bottom">нереализованные проекты XX века</div>
               </div>
               <div class="hero-card__meta">
                 <div class="meta">
-                  <strong>Архив</strong>
-                  <span>утраченные проекты, идеи, контекст эпохи</span>
+                  <strong>Источники</strong>
+                  <span>архивные материалы, научные тексты, проектные описания</span>
                 </div>
                 <div class="meta">
-                  <strong>Экспозиция</strong>
-                  <span>каждый объект — отдельная сцена с собственной атмосферой</span>
+                  <strong>Реконструкция</strong>
+                  <span>3D-модели, созданные по историческим данным и визуальным аналогам</span>
                 </div>
                 <div class="meta">
-                  <strong>Режим просмотра</strong>
-                  <span>история + 3D-модель + исследование формы на сайте</span>
+                  <strong>Просмотр</strong>
+                  <span>интерактивная сцена и историческая справка для каждого объекта</span>
                 </div>
               </div>
             </div>
@@ -145,55 +227,55 @@
         <div class="container">
           <div class="section-heading" data-reveal="">
             <div>
-              <p class="eyebrow">Концепция</p>
-              <h2>Архивный минимализм, благородная темнота и ощущение поиска</h2>
+              <p class="eyebrow">О проекте</p>
+              <h2>Цифровая реконструкция того, что не стало архитектурной реальностью</h2>
             </div>
             <p class="section-copy">
-              Визуальная система строится на тёмной монохромной среде, музейных золотистых акцентах,
-              glass-слоях, мягком свечении и деликатной анимации. Интерфейс должен ощущаться не как обычный сайт,
-              а как пространство исследования — спокойное, глубокое и запоминающееся.
+              Проект посвящён нереализованным историческим архитектурным объектам XX века. Его задача — собрать источники,
+              объяснить контекст появления замыслов и дать зрителю возможность рассмотреть их не только как тексты и чертежи,
+              но и как объёмные интерактивные модели.
             </p>
           </div>
 
-          <div class="archive-intro">
+          <div class="archive-intro project-overview">
             <article class="panel glass" data-reveal="">
-              <div class="stamp">Архивная логика</div>
-              <h3>Не просто каталог, а сценография утраченных проектов</h3>
+              <div class="stamp">Задача</div>
+              <h3>Сделать несостоявшиеся проекты видимыми</h3>
               <p>
-                Главная страница работает как вход в экспозицию, а не как обычный список объектов. Пользователь получает настроение,
-                визуальный тон и чувство поисковой работы. Каждая внутренняя страница становится отдельным "залом" со своим цветом,
-                ритмом, светом и архитектурным языком.
+                Многие архитектурные замыслы остались в архивных документах, конкурсных материалах, эскизах и описаниях.
+                Сайт переводит эти материалы в понятный образовательный формат: краткое введение, историческая справка,
+                структурированная статья и отдельное окно 3D-просмотра.
               </p>
             </article>
 
             <article class="panel glass" data-reveal="">
-              <div class="stamp">UX / UI</div>
-              <h3>Фонарь как инструмент исследования</h3>
+              <div class="stamp">Ценность</div>
+              <h3>Исследовать идею, форму и эпоху одновременно</h3>
               <p>
-                Курсор здесь ведёт себя как лампа исследователя: он подсвечивает поверхность архива, создаёт мягкое свечение
-                и добавляет ощущение присутствия. Микроанимации, плавные reveal-эффекты, hover-состояния и живой hero-блок
-                делают интерфейс залипательным, но не шумным.
+                Нереализованная архитектура показывает не только то, что могли построить, но и то, как разные режимы,
+                художественные школы и инженеры представляли будущее. В одном объекте соединяются политика, технология,
+                художественный стиль и масштаб исторической мечты.
               </p>
             </article>
           </div>
 
-          <div class="timeline">
+          <div class="timeline project-steps">
             <article class="timeline-item glass" data-reveal="">
-              <span>01 / подача</span>
-              <h4>История как интерфейс</h4>
-              <p>Контент подаётся как архивная запись: объект, контекст, эпоха, идея, судьба и цифровая реконструкция.</p>
+              <span>01 / источники</span>
+              <h4>Сбор и анализ материалов</h4>
+              <p>Для каждого объекта используются исторические описания, архивные сведения, научные публикации, эскизы и сохранившиеся реконструкции.</p>
             </article>
 
             <article class="timeline-item glass" data-reveal="">
-              <span>02 / эстетика</span>
-              <h4>Liquid glass и музейная тьма</h4>
-              <p>Тонкие рамки, стеклянные слои, мягкий blur и редкие тёплые акценты создают благородную современную оболочку.</p>
+              <span>02 / модель</span>
+              <h4>3D-реконструкция</h4>
+              <p>Форма объекта переводится в оптимизированную веб-модель, которую можно вращать, приближать и рассматривать отдельно от страницы.</p>
             </article>
 
             <article class="timeline-item glass" data-reveal="">
-              <span>03 / динамика</span>
-              <h4>Залипание через ритм</h4>
-              <p>Не перегруз, а точечная кинетика: свет, всплытие, плавная навигация, реакция на курсор и глубина композиции.</p>
+              <span>03 / контекст</span>
+              <h4>Историческая экспозиция</h4>
+              <p>3D-просмотр дополняется справкой: кто проектировал объект, зачем он был нужен, почему не был построен и чем остался важен.</p>
             </article>
           </div>
         </div>
@@ -204,7 +286,7 @@
           <div class="section-heading" data-reveal="">
             <div>
               <p class="eyebrow">Коллекция</p>
-              <h2>Три архитектурные утопии</h2>
+              <h2>Три нереализованных проекта</h2>
             </div>
             <p class="section-copy">
               Здесь собраны три проекта, которые так и не стали зданиями, но остались историческими документами своей эпохи:
@@ -301,8 +383,8 @@
 
   <footer class="footer">
     <div class="footer-inner">
-      <p>Архив нереализованной архитектуры</p>
-      <p>© 2026 · Исследование исторических 3D-реконструкций</p>
+      <p>Нереализованная архитектура XX века</p>
+      <p>2026 · Исследование исторических 3D-реконструкций</p>
     </div>
   </footer>
   <script src="assets/js/main.js" defer></script>

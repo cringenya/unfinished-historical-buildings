@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Башня Татлина — Архив Утопий</title>
+  <title>Башня Татлина — Нереализованная архитектура XX века</title>
   <meta name="theme-color" content="#070809" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -260,6 +260,18 @@
       .history-fact-list { grid-template-columns: 1fr; }
       .history-toc ul { grid-template-columns: 1fr; }
     }
+  
+
+    .brand-title {
+      max-width: min(46vw, 440px);
+      line-height: 1.02;
+      white-space: normal;
+    }
+
+    @media (max-width: 760px) {
+      .brand-title { max-width: 42vw; font-size: .95rem; }
+    }
+
   </style>
 </head>
 <body class="page-object page-tatlin">
@@ -271,11 +283,11 @@
       <a class="brand-pill" href="index.html#home" aria-label="Вернуться в начало главной страницы">
         <span class="brand-orb"></span>
         <span class="brand-text">
-          <p class="brand-title">Архив Утопий</p>
+          <p class="brand-title">Нереализованная архитектура XX века</p>
         </span>
       </a>
       <nav class="nav" aria-label="Навигация по главной странице">
-        <a href="index.html#archive">Манифест</a>
+        <a href="index.html#archive">О проекте</a>
         <a href="index.html#objects">Экспонаты</a>
       </nav>
     </div>
@@ -303,7 +315,7 @@
 
           <div class="page-shell glass" data-reveal="">
             <div class="model-viewer-wrap model-host">
-              <iframe allow="autoplay; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen class="local-model-frame" loading="lazy" src="models/tatlin.html?v=7" title="Башня Татлина — 3D-реконструкция"></iframe>
+              <iframe allow="autoplay; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen class="local-model-frame" loading="lazy" src="models/tatlin.html?v=8" title="Башня Татлина — 3D-реконструкция"></iframe>
             </div>
           </div>
         </div>
@@ -518,7 +530,7 @@
           <li>Vokrugsveta.ru: «Невзятая высота»: <a href="https://www.vokrugsveta.ru/vs/article/7287/" target="_blank" rel="noopener">https://www.vokrugsveta.ru/vs/article/7287/</a></li>
           <li>Rodina-history.ru: «Владимир Татлин — биография»: <a href="https://rodina-history.ru/2025/12/28/140-let-nazad-rodilsia-hudozhnik-buntar-vladimir-tatlin.html" target="_blank" rel="noopener">https://rodina-history.ru/2025/12/28/140-let-nazad-rodilsia-hudozhnik-buntar-vladimir-tatlin.html</a></li>
         </ul>
-        <p class="project-signature">Проект «Нереализованные архитектурные проекты в 3D»</p>
+        <p class="project-signature">Проект «Нереализованная архитектура XX века»</p>
       </section>
           </article>
         </div>
@@ -528,8 +540,8 @@
 
   <footer class="footer">
     <div class="footer-inner">
-      <p>Архив нереализованной архитектуры</p>
-      <p>© 2026 · Исследование исторических 3D-реконструкций</p>
+      <p>Нереализованная архитектура XX века</p>
+      <p>2026 · Исследование исторических 3D-реконструкций</p>
     </div>
   </footer>
   <script src="assets/js/main.js" defer></script>

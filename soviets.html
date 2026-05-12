@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Дворец Советов — Архив Утопий</title>
+  <title>Дворец Советов — Нереализованная архитектура XX века</title>
   <meta name="theme-color" content="#070809" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -260,6 +260,18 @@
       .history-fact-list { grid-template-columns: 1fr; }
       .history-toc ul { grid-template-columns: 1fr; }
     }
+  
+
+    .brand-title {
+      max-width: min(46vw, 440px);
+      line-height: 1.02;
+      white-space: normal;
+    }
+
+    @media (max-width: 760px) {
+      .brand-title { max-width: 42vw; font-size: .95rem; }
+    }
+
   </style>
 </head>
 <body class="page-object page-soviets">
@@ -271,11 +283,11 @@
       <a class="brand-pill" href="index.html#home" aria-label="Вернуться в начало главной страницы">
         <span class="brand-orb"></span>
         <span class="brand-text">
-          <p class="brand-title">Архив Утопий</p>
+          <p class="brand-title">Нереализованная архитектура XX века</p>
         </span>
       </a>
       <nav class="nav" aria-label="Навигация по главной странице">
-        <a href="index.html#archive">Манифест</a>
+        <a href="index.html#archive">О проекте</a>
         <a href="index.html#objects">Экспонаты</a>
       </nav>
     </div>
@@ -303,7 +315,7 @@
 
           <div class="page-shell glass" data-reveal="">
             <div class="model-viewer-wrap model-host">
-              <iframe allow="autoplay; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen class="local-model-frame" loading="lazy" src="models/soviets.html?v=7" title="Дворец Советов — 3D-реконструкция"></iframe>
+              <iframe allow="autoplay; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen class="local-model-frame" loading="lazy" src="models/soviets.html?v=8" title="Дворец Советов — 3D-реконструкция"></iframe>
             </div>
           </div>
         </div>
@@ -518,7 +530,7 @@
           <li>Виртуальный музей архитектуры (МУАР): vma.muar.ru — конкурс на Дворец Советов</li>
           <li>Администрация Некрасовки: PDF-сборник 1933 г. — <a href="https://admin.nekrasovka.ru/storage/C9800006085.pdf" target="_blank" rel="noopener">https://admin.nekrasovka.ru/storage/C9800006085.pdf</a></li>
         </ul>
-        <p class="project-signature">Проект «Нереализованные архитектурные проекты в 3D»</p>
+        <p class="project-signature">Проект «Нереализованная архитектура XX века»</p>
       </section>
           </article>
         </div>
@@ -528,8 +540,8 @@
 
   <footer class="footer">
     <div class="footer-inner">
-      <p>Архив нереализованной архитектуры</p>
-      <p>© 2026 · Исследование исторических 3D-реконструкций</p>
+      <p>Нереализованная архитектура XX века</p>
+      <p>2026 · Исследование исторических 3D-реконструкций</p>
     </div>
   </footer>
   <script src="assets/js/main.js" defer></script>

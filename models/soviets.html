@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Дворец Советов — 3D-реконструкция</title>
   <link rel="stylesheet" href="../assets/css/model-frame.css" />
+  <style>
+    .model-action--back { display: none; }
+    body.is-standalone .model-action--standalone { display: none; }
+    body.is-standalone .model-action--back { display: inline-flex; }
+  </style>
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
 <body>
@@ -16,8 +21,8 @@
 
     <model-viewer
       id="modelViewer"
-      class="model-viewer "
-      src="../assets/models/soviets/palace-of-soviets.glb?v=20260511-statues"
+      class="model-viewer"
+      src="../assets/models/soviets/palace-of-soviets.glb?v=20260512-navigation"
       alt="Интерактивная 3D-модель Дворца Советов"
       data-default-orbit="0deg 65deg 165%"
       data-default-fov="28deg"
@@ -60,6 +65,7 @@
         <button class="model-action" type="button" id="fullscreenButton">Во весь экран</button>
         <button class="model-action" type="button" id="panButton" aria-expanded="false" aria-controls="cameraPanPanel">Сдвиг камеры</button>
       </div>
+
       <div class="camera-pan-panel" id="cameraPanPanel" hidden>
         <button class="model-action" type="button" data-pan="left">←</button>
         <button class="model-action" type="button" data-pan="right">→</button>
@@ -83,6 +89,15 @@
       const panPanel = document.getElementById('cameraPanPanel');
       const params = new URLSearchParams(window.location.search);
 
+      const isTopLevel = (() => {
+        try { return window.self === window.top; }
+        catch (_error) { return false; }
+      })();
+
+      if (params.has('standalone') || isTopLevel) {
+        document.body.classList.add('is-standalone');
+      }
+
       const numericDataset = (name, fallback) => {
         const raw = viewer.dataset[name];
         if (raw === undefined || String(raw).trim() === '') return fallback;
@@ -94,21 +109,17 @@
         center: {
           x: numericDataset('targetX', 0),
           y: numericDataset('targetY', 0),
-          z: numericDataset('targetZ', 0)
+          z: numericDataset('targetZ', 0),
         },
         dimensions: { x: 1, y: 1, z: 1 },
         target: {
           x: numericDataset('targetX', 0),
           y: numericDataset('targetY', 0),
-          z: numericDataset('targetZ', 0)
+          z: numericDataset('targetZ', 0),
         },
         topY: numericDataset('topY', NaN),
-        ready: false
+        ready: false,
       };
-
-      if (params.has('standalone')) {
-        document.body.classList.add('is-standalone');
-      }
 
       const setStatus = (text) => {
         if (status) status.textContent = text;
@@ -119,7 +130,7 @@
         return {
           x: Number(value.x ?? fallback.x),
           y: Number(value.y ?? fallback.y),
-          z: Number(value.z ?? fallback.z)
+          z: Number(value.z ?? fallback.z),
         };
       };
 
@@ -134,7 +145,6 @@
           frame.style.minHeight = '0';
           frame.style.border = '0';
           frame.style.overflow = 'hidden';
-
           const host = frame.closest('.model-host, .sketchfab-wrap, .page-shell');
           if (host) {
             host.style.overflow = 'hidden';
@@ -160,7 +170,7 @@
         state.target = {
           x: state.center.x,
           y: Number.isFinite(state.topY) ? state.topY : state.center.y + height * 0.32,
-          z: state.center.z
+          z: state.center.z,
         };
         applyTarget();
         setStatus('камера к верхушке');
@@ -170,14 +180,12 @@
         if (!state.ready) return;
         const stepX = Math.max(state.dimensions.x, state.dimensions.z, 1) * 0.08;
         const stepY = Math.max(state.dimensions.y, 1) * 0.08;
-
         if (direction === 'left') state.target.x -= stepX;
         if (direction === 'right') state.target.x += stepX;
         if (direction === 'up') state.target.y += stepY;
         if (direction === 'down') state.target.y -= stepY;
         if (direction === 'center') return resetCamera();
         if (direction === 'top') return focusTop();
-
         applyTarget();
         setStatus('сдвиг камеры');
       };
@@ -239,14 +247,12 @@
         loader.hidden = true;
         error.hidden = true;
         setStatus('вращение · масштаб · обзор');
-
         const detectedCenter = getVector(viewer.getBoundingBoxCenter?.(), state.center);
         const hasExplicitTarget = ['targetX', 'targetY', 'targetZ'].some((name) => viewer.dataset[name] !== undefined && viewer.dataset[name] !== '');
         if (!hasExplicitTarget) {
           state.center = detectedCenter;
           state.target = { ...detectedCenter };
         }
-
         state.dimensions = getVector(viewer.getDimensions?.(), state.dimensions);
         state.ready = true;
         applyTarget();

@@ -158,6 +158,30 @@
       text-underline-offset: 4px;
     }
 
+
+
+    /* The global page styles use a large showcase gap here.
+       These historical pages need the article to start directly after the fact cards. */
+    .page-content > .container {
+      display: grid;
+      gap: clamp(24px, 4vw, 44px) !important;
+    }
+
+    .archive-facts {
+      margin-bottom: 0 !important;
+    }
+
+    .wide-story.historical-article {
+      margin-top: 0 !important;
+    }
+
+    .wide-story.historical-article[data-reveal] {
+      opacity: 1 !important;
+      transform: none !important;
+      visibility: visible !important;
+      transition-delay: 0s !important;
+    }
+
     @media (max-width: 720px) {
       .historical-article { padding: 20px; }
       .history-fact-list { grid-template-columns: 1fr; }
@@ -206,7 +230,7 @@
 
           <div class="page-shell glass" data-reveal="">
             <div class="sketchfab-wrap model-host">
-              <iframe allow="autoplay; fullscreen; xr-spatial-tracking" allowfullscreen webkitallowfullscreen mozallowfullscreen class="local-model-frame" loading="lazy" src="models/soviets.html?v=4" title="Дворец Советов — 3D-реконструкция"></iframe>
+              <iframe allow="autoplay; fullscreen; xr-spatial-tracking" allowfullscreen webkitallowfullscreen mozallowfullscreen class="local-model-frame" loading="lazy" src="models/soviets.html?v=5" title="Дворец Советов — 3D-реконструкция"></iframe>
             </div>
           </div>
         </div>

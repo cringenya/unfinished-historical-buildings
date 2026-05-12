@@ -182,6 +182,35 @@
       transition-delay: 0s !important;
     }
 
+
+    /* Make inline links visibly clickable in long historical text. */
+    .history-note a,
+    .history-toc a,
+    .history-section a,
+    .source-list a {
+      color: rgba(245, 205, 118, .98) !important;
+      text-decoration: underline;
+      text-decoration-color: rgba(245, 205, 118, .65);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 4px;
+    }
+
+    .history-note a:hover,
+    .history-toc a:hover,
+    .history-section a:hover,
+    .source-list a:hover {
+      color: rgba(255, 234, 174, 1) !important;
+      text-decoration-color: rgba(255, 234, 174, .95);
+    }
+
+    .project-signature {
+      max-width: 980px;
+      margin: 10px 0 0;
+      color: rgba(255,255,255,.76);
+      font-weight: 700;
+      letter-spacing: -.01em;
+    }
+
     @media (max-width: 720px) {
       .historical-article { padding: 20px; }
       .history-fact-list { grid-template-columns: 1fr; }
@@ -221,7 +250,7 @@
           <span class="meta-chip">авангард</span>
           <span class="meta-chip">кинетическая архитектура</span>
             </div>
-            <p class="page-lead">Самый известный несуществующий памятник в истории мирового искусства Башня Татлина никогда не была построена. Она существует только в виде нескольких десятков фотографий деревянного макета пятиметровой высоты, нескольких эскизов и — в виде реконструкций, созданных уже после смерти автора. Ни одного чертежа в строгом смысле слова не сохранилось: Татлин не оставил проектной документации. Тем не менее Башня Татлина — один из самых узнаваемых архитектурных образов XX века, икона мирового авангарда, «Джоконда…</p>
+            <p class="page-lead">Башня Татлина никогда не была построена: она существует только в фотографиях деревянного макета, нескольких эскизах и позднейших реконструкциях. При этом проект стал одним из самых узнаваемых архитектурных образов XX века, иконой мирового авангарда и манифестом новой кинетической архитектуры.</p>
             <div class="back-row">
               <a class="btn primary" href="index.html#home">Назад в архив</a>
               <a class="btn" href="index.html#objects">К другим объектам</a>
@@ -230,7 +259,7 @@
 
           <div class="page-shell glass" data-reveal="">
             <div class="sketchfab-wrap model-host">
-              <iframe allow="autoplay; fullscreen; xr-spatial-tracking" allowfullscreen webkitallowfullscreen mozallowfullscreen class="local-model-frame" loading="lazy" src="models/tatlin.html?v=5" title="Башня Татлина — 3D-реконструкция"></iframe>
+              <iframe allow="autoplay; fullscreen; xr-spatial-tracking" allowfullscreen webkitallowfullscreen mozallowfullscreen class="local-model-frame" loading="lazy" src="models/tatlin.html?v=6" title="Башня Татлина — 3D-реконструкция"></iframe>
             </div>
           </div>
         </div>
@@ -266,8 +295,8 @@
           </div>
 
           <article class="wide-story glass historical-article" data-reveal="">
-            <p class="eyebrow accent">Полный исторический материал из файла</p>
-            <p class="history-note">НЕРЕАЛИЗОВАННЫЕ АРХИТЕКТУРНЫЕ ПРОЕКТЫ<br>Историческая реконструкция<br>БАШНЯ ТАТЛИНА<br>Памятник III Интернационалу<br>Самый известный несуществующий памятник в истории мирового искусства<br>Автор: Владимир Евграфович Татлин (1885–1953)<br>Страница автора на Wikipedia: <a href="https://ru.wikipedia.org/wiki/Татлин" target="_blank" rel="noopener">ru.wikipedia.org/wiki/Татлин</a><br>Планируемое место: Петроград (Ленинград), СССР — берега Невы<br>Год создания проекта: 1919–1920 гг.</p>
+            <p class="eyebrow accent">Полный исторический материал</p>
+            <p class="history-note">БАШНЯ ТАТЛИНА<br>Памятник III Интернационалу<br>Самый известный несуществующий памятник в истории мирового искусства<br>Автор: Владимир Евграфович Татлин (1885–1953)<br>Страница автора на Wikipedia: <a href="https://ru.wikipedia.org/wiki/Татлин" target="_blank" rel="noopener">ru.wikipedia.org/wiki/Татлин</a><br>Планируемое место: Петроград (Ленинград), СССР — берега Невы<br>Год создания проекта: 1919–1920 гг.</p>
             <nav class="history-toc" aria-label="Оглавление страницы">
               <h2>Оглавление</h2>
               <ul>
@@ -445,9 +474,7 @@
           <li>Vokrugsveta.ru: «Невзятая высота»: <a href="https://www.vokrugsveta.ru/vs/article/7287/" target="_blank" rel="noopener">https://www.vokrugsveta.ru/vs/article/7287/</a></li>
           <li>Rodina-history.ru: «Владимир Татлин — биография»: <a href="https://rodina-history.ru/2025/12/28/140-let-nazad-rodilsia-hudozhnik-buntar-vladimir-tatlin.html" target="_blank" rel="noopener">https://rodina-history.ru/2025/12/28/140-let-nazad-rodilsia-hudozhnik-buntar-vladimir-tatlin.html</a></li>
         </ul>
-        <h3>© Проект «Нереализованные архитектурные проекты в 3D»</h3>
-        <ul class="source-list">
-        </ul>
+        <p class="project-signature">Проект «Нереализованные архитектурные проекты в 3D»</p>
       </section>
           </article>
         </div>
@@ -457,7 +484,7 @@
 
   <footer class="footer">
     <div class="footer-inner">
-      <p>Архив нереализованной архитектуры · проект под GitHub Pages</p>
+      <p>Архив нереализованной архитектуры</p>
       <p>© 2026 · Исследование исторических 3D-реконструкций</p>
     </div>
   </footer>

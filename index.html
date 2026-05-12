@@ -5,248 +5,276 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Архив нереализованной архитектуры</title>
   <meta name="theme-color" content="#070809" />
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css" />
+  <style>
+    main a:not(.btn):not(.brand-pill) {
+      color: rgba(245, 205, 118, .98);
+      text-decoration: underline;
+      text-decoration-color: rgba(245, 205, 118, .65);
+      text-underline-offset: 4px;
+    }
+
+    main a:not(.btn):not(.brand-pill):hover {
+      color: rgba(255, 234, 174, 1);
+      text-decoration-color: rgba(255, 234, 174, .95);
+    }
+  </style>
 </head>
 <body class="page-index">
   <div class="noise"></div>
   <div class="lamp" id="lamp"></div>
 
   <header class="topbar">
-<div class="topbar-inner">
-<a class="brand-pill" href="#home" aria-label="Вернуться в начало главной страницы">
-<span class="brand-orb"></span>
-<span class="brand-text">
-<p class="brand-title">Архив Утопий</p>
-</span>
-</a>
-<nav class="nav" aria-label="Навигация по главной странице">
-<a href="#archive">Манифест</a>
-<a href="#objects">Экспонаты</a>
-</nav>
-</div>
-</header>
+    <div class="topbar-inner">
+      <a class="brand-pill" href="#home" aria-label="Вернуться в начало главной страницы">
+        <span class="brand-orb"></span>
+        <span class="brand-text">
+          <p class="brand-title">Архив Утопий</p>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Навигация по главной странице">
+        <a href="#archive">Манифест</a>
+        <a href="#objects">Экспонаты</a>
+      </nav>
+    </div>
+  </header>
 
   <main>
-<section class="route" id="home">
-<section class="hero">
-<div class="hero-bg"></div>
-<div class="container hero-grid">
-<div data-reveal="">
-<p class="eyebrow">Цифровой архив / поиск утраченной архитектуры</p>
-<h1>Незавершённые здания, в которых осталась энергия целой эпохи</h1>
-<p class="lead">
+    <section class="route" id="home">
+      <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="container hero-grid">
+          <div data-reveal="">
+            <p class="eyebrow">Цифровой архив / поиск утраченной архитектуры</p>
+            <h1>Незавершённые здания, в которых осталась энергия целой эпохи</h1>
+            <p class="lead">
               Это тёмный музейный архив нереализованных архитектурных утопий. Здесь пользователь не просто листает карточки,
               а исследует замыслы, идеологии и судьбы проектов, которые так и не были доведены до конца.
               Каждый объект получает свою атмосферу, свою пластику, свой исторический ритм и отдельную 3D-сцену.
             </p>
-<div class="hero-actions">
-<a class="btn primary" href="#objects">Открыть архив</a>
-<a class="btn" href="#archive">Изучить концепцию</a>
-</div>
-</div>
-<div class="hero-card-wrap" data-reveal="">
-<div class="orbit-shell"></div>
-<div class="hero-card glass" id="heroCard">
-<div class="hero-card__top">
-<span class="tag">Центральный архив</span>
-<span style="color:var(--muted); font-size:.9rem;">3 объекта · 3D-реконструкция · исторический контекст</span>
-</div>
-<div class="hero-card__preview archive-preview">
-<div class="archive-grid"></div>
-<div class="archive-rings">
-<span></span>
-<span></span>
-<span></span>
-</div>
-<div class="archive-core">
-<svg aria-hidden="true" class="monument-graphic" fill="none" viewbox="0 0 240 320" xmlns="http://www.w3.org/2000/svg">
-<rect fill="rgba(255,255,255,0.82)" height="210" rx="12" width="28" x="106" y="30"></rect>
-<rect fill="rgba(255,255,255,0.55)" height="18" rx="9" width="92" x="74" y="76"></rect>
-<rect fill="rgba(255,255,255,0.45)" height="16" rx="8" width="136" x="52" y="116"></rect>
-<rect fill="rgba(255,255,255,0.36)" height="14" rx="7" width="168" x="36" y="156"></rect>
-<path d="M120 4L176 38H64L120 4Z" fill="rgba(255,255,255,0.94)"></path>
-<path d="M120 44L204 290H36L120 44Z" fill="url(#g1)" opacity="0.95"></path>
-<defs>
-<lineargradient gradientunits="userSpaceOnUse" id="g1" x1="36" x2="204" y1="44" y2="290">
-<stop stop-color="rgba(255,255,255,0.88)"></stop>
-<stop offset="1" stop-color="rgba(255,255,255,0.12)"></stop>
-</lineargradient>
-</defs>
-</svg>
-</div>
-<div class="archive-points">
-<span class="point p1"></span>
-<span class="point p2"></span>
-<span class="point p3"></span>
-</div>
-<div class="archive-label archive-label--top">архивная модель / объект 01</div>
-<div class="archive-label archive-label--left">вращение · масштаб · свет</div>
-<div class="archive-label archive-label--bottom">цифровая реконструкция недостроенной утопии</div>
-</div>
-<div class="hero-card__meta">
-<div class="meta">
-<strong>Архив</strong>
-<span>утраченные проекты, идеи, контекст эпохи</span>
-</div>
-<div class="meta">
-<strong>Экспозиция</strong>
-<span>каждый объект — отдельная сцена с собственной атмосферой</span>
-</div>
-<div class="meta">
-<strong>Режим просмотра</strong>
-<span>история + 3D-модель + исследование формы на сайте</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section class="section" id="archive">
-<div class="container">
-<div class="section-heading" data-reveal="">
-<div>
-<p class="eyebrow">Концепция</p>
-<h2>Архивный минимализм, благородная темнота и ощущение поиска</h2>
-</div>
-<p class="section-copy">
+            <div class="hero-actions">
+              <a class="btn primary" href="#objects">Открыть архив</a>
+              <a class="btn" href="#archive">Изучить концепцию</a>
+            </div>
+          </div>
+
+          <div class="hero-card-wrap" data-reveal="">
+            <div class="orbit-shell"></div>
+            <div class="hero-card glass" id="heroCard">
+              <div class="hero-card__top">
+                <span class="tag">Центральный архив</span>
+                <span style="color:var(--muted); font-size:.9rem;">3 объекта · 3D-реконструкция · исторический контекст</span>
+              </div>
+              <div class="hero-card__preview archive-preview">
+                <div class="archive-grid"></div>
+                <div class="archive-rings">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+                <div class="archive-core">
+                  <svg aria-hidden="true" class="monument-graphic" fill="none" viewBox="0 0 240 320" xmlns="http://www.w3.org/2000/svg">
+                    <rect fill="rgba(255,255,255,0.82)" height="210" rx="12" width="28" x="106" y="30"></rect>
+                    <rect fill="rgba(255,255,255,0.55)" height="18" rx="9" width="92" x="74" y="76"></rect>
+                    <rect fill="rgba(255,255,255,0.45)" height="16" rx="8" width="136" x="52" y="116"></rect>
+                    <rect fill="rgba(255,255,255,0.36)" height="14" rx="7" width="168" x="36" y="156"></rect>
+                    <path d="M120 4L176 38H64L120 4Z" fill="rgba(255,255,255,0.94)"></path>
+                    <path d="M120 44L204 290H36L120 44Z" fill="url(#g1)" opacity="0.95"></path>
+                    <defs>
+                      <linearGradient gradientUnits="userSpaceOnUse" id="g1" x1="36" x2="204" y1="44" y2="290">
+                        <stop stop-color="rgba(255,255,255,0.88)"></stop>
+                        <stop offset="1" stop-color="rgba(255,255,255,0.12)"></stop>
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </div>
+                <div class="archive-points">
+                  <span class="point p1"></span>
+                  <span class="point p2"></span>
+                  <span class="point p3"></span>
+                </div>
+                <div class="archive-label archive-label--top">архивная модель / объект 01</div>
+                <div class="archive-label archive-label--left">вращение · масштаб · свет</div>
+                <div class="archive-label archive-label--bottom">цифровая реконструкция недостроенной утопии</div>
+              </div>
+              <div class="hero-card__meta">
+                <div class="meta">
+                  <strong>Архив</strong>
+                  <span>утраченные проекты, идеи, контекст эпохи</span>
+                </div>
+                <div class="meta">
+                  <strong>Экспозиция</strong>
+                  <span>каждый объект — отдельная сцена с собственной атмосферой</span>
+                </div>
+                <div class="meta">
+                  <strong>Режим просмотра</strong>
+                  <span>история + 3D-модель + исследование формы на сайте</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="archive">
+        <div class="container">
+          <div class="section-heading" data-reveal="">
+            <div>
+              <p class="eyebrow">Концепция</p>
+              <h2>Архивный минимализм, благородная темнота и ощущение поиска</h2>
+            </div>
+            <p class="section-copy">
               Визуальная система строится на тёмной монохромной среде, музейных золотистых акцентах,
               glass-слоях, мягком свечении и деликатной анимации. Интерфейс должен ощущаться не как обычный сайт,
               а как пространство исследования — спокойное, глубокое и запоминающееся.
             </p>
-</div>
-<div class="archive-intro">
-<article class="panel glass" data-reveal="">
-<div class="stamp">Архивная логика</div>
-<h3>Не просто каталог, а сценография утраченных проектов</h3>
-<p>
+          </div>
+
+          <div class="archive-intro">
+            <article class="panel glass" data-reveal="">
+              <div class="stamp">Архивная логика</div>
+              <h3>Не просто каталог, а сценография утраченных проектов</h3>
+              <p>
                 Главная страница работает как вход в экспозицию, а не как обычный список объектов. Пользователь получает настроение,
                 визуальный тон и чувство поисковой работы. Каждая внутренняя страница становится отдельным "залом" со своим цветом,
                 ритмом, светом и архитектурным языком.
               </p>
-</article>
-<article class="panel glass" data-reveal="">
-<div class="stamp">UX / UI</div>
-<h3>Фонарь как инструмент исследования</h3>
-<p>
+            </article>
+
+            <article class="panel glass" data-reveal="">
+              <div class="stamp">UX / UI</div>
+              <h3>Фонарь как инструмент исследования</h3>
+              <p>
                 Курсор здесь ведёт себя как лампа исследователя: он подсвечивает поверхность архива, создаёт мягкое свечение
                 и добавляет ощущение присутствия. Микроанимации, плавные reveal-эффекты, hover-состояния и живой hero-блок
                 делают интерфейс залипательным, но не шумным.
               </p>
-</article>
-</div>
-<div class="timeline">
-<article class="timeline-item glass" data-reveal="">
-<span>01 / подача</span>
-<h4>История как интерфейс</h4>
-<p>Контент подаётся как архивная запись: объект, контекст, эпоха, идея, судьба и цифровая реконструкция.</p>
-</article>
-<article class="timeline-item glass" data-reveal="">
-<span>02 / эстетика</span>
-<h4>Liquid glass и музейная тьма</h4>
-<p>Тонкие рамки, стеклянные слои, мягкий blur и редкие тёплые акценты создают благородную современную оболочку.</p>
-</article>
-<article class="timeline-item glass" data-reveal="">
-<span>03 / динамика</span>
-<h4>Залипание через ритм</h4>
-<p>Не перегруз, а точечная кинетика: свет, всплытие, плавная навигация, реакция на курсор и глубина композиции.</p>
-</article>
-</div>
-</div>
-</section>
-<section class="section" id="objects">
-<div class="container">
-<div class="section-heading" data-reveal="">
-<div>
-<p class="eyebrow">Коллекция</p>
-<h2>Три архитектурные утопии</h2>
-</div>
-<p class="section-copy">
-              Каждая страница объекта имеет собственный характер. Это не шаблонные внутренние экраны, а разные состояния одного архива:
-              революционный авангард, пространство представительства и монументальная государственная утопия.
+            </article>
+          </div>
+
+          <div class="timeline">
+            <article class="timeline-item glass" data-reveal="">
+              <span>01 / подача</span>
+              <h4>История как интерфейс</h4>
+              <p>Контент подаётся как архивная запись: объект, контекст, эпоха, идея, судьба и цифровая реконструкция.</p>
+            </article>
+
+            <article class="timeline-item glass" data-reveal="">
+              <span>02 / эстетика</span>
+              <h4>Liquid glass и музейная тьма</h4>
+              <p>Тонкие рамки, стеклянные слои, мягкий blur и редкие тёплые акценты создают благородную современную оболочку.</p>
+            </article>
+
+            <article class="timeline-item glass" data-reveal="">
+              <span>03 / динамика</span>
+              <h4>Залипание через ритм</h4>
+              <p>Не перегруз, а точечная кинетика: свет, всплытие, плавная навигация, реакция на курсор и глубина композиции.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="objects">
+        <div class="container">
+          <div class="section-heading" data-reveal="">
+            <div>
+              <p class="eyebrow">Коллекция</p>
+              <h2>Три архитектурные утопии</h2>
+            </div>
+            <p class="section-copy">
+              Здесь собраны три проекта, которые так и не стали зданиями, но остались историческими документами своей эпохи:
+              революционный авангард, нацистская архитектура подавления и советская монументальная мечта о новом центре мира.
             </p>
-</div>
-<div class="objects-grid">
-<article class="object-card glass tatlin" data-reveal="">
-<div class="card-wire">
-<svg fill="none" viewbox="0 0 100 100">
-<path d="M18 84C46 66 34 36 74 16" opacity=".7" stroke="currentColor" stroke-width="1.3"></path>
-<path d="M34 90C62 70 46 44 84 24" opacity=".5" stroke="currentColor" stroke-width="1.1"></path>
-<circle cx="72" cy="20" opacity=".6" r="8" stroke="currentColor" stroke-width="1.1"></circle>
-</svg>
-</div>
-<div class="card-top">
-<span class="tag">Авангард / 1919–1920</span>
-</div>
-<div class="card-meta">
-<span class="meta-chip">конструктивизм</span>
-<span class="meta-chip">революционная утопия</span>
-</div>
-<h3>Башня Татлина</h3>
-<p>
-                Спиральный символ нового мира, машина идеологии и один из самых узнаваемых нереализованных образов XX века.
+          </div>
+
+          <div class="objects-grid">
+            <article class="object-card glass tatlin" data-reveal="">
+              <div class="card-wire">
+                <svg fill="none" viewBox="0 0 100 100">
+                  <path d="M18 84C46 66 34 36 74 16" opacity=".7" stroke="currentColor" stroke-width="1.3"></path>
+                  <path d="M34 90C62 70 46 44 84 24" opacity=".5" stroke="currentColor" stroke-width="1.1"></path>
+                  <circle cx="72" cy="20" opacity=".6" r="8" stroke="currentColor" stroke-width="1.1"></circle>
+                </svg>
+              </div>
+              <div class="card-top">
+                <span class="tag">Авангард / 1919–1920</span>
+              </div>
+              <div class="card-meta">
+                <span class="meta-chip">400 метров</span>
+                <span class="meta-chip">спираль</span>
+                <span class="meta-chip">Коминтерн</span>
+              </div>
+              <h3>Башня Татлина</h3>
+              <p>
+                Памятник III Интернационалу задумывался как 400-метровая стальная спираль над Невой и штаб-квартира Коминтерна.
+                Внутри должны были вращаться стеклянные объёмы: куб — раз в год, пирамида — раз в месяц, цилиндр — раз в сутки.
               </p>
-<a class="btn" href="tatlin.html">Исследовать объект</a>
-</article>
-<article class="object-card glass hall" data-reveal="">
-<div class="card-wire">
-<svg fill="none" viewbox="0 0 100 100">
-<rect height="42" opacity=".6" stroke="currentColor" stroke-width="1.2" width="60" x="18" y="24"></rect>
-<path d="M12 72H86" opacity=".55" stroke="currentColor" stroke-width="1.2"></path>
-<path d="M28 24V72M48 24V72M68 24V72" opacity=".45" stroke="currentColor" stroke-width="1"></path>
-</svg>
-</div>
-<div class="card-top">
-<span class="tag">Представительская архитектура</span>
-</div>
-<div class="card-meta">
-<span class="meta-chip">зал собраний</span>
-<span class="meta-chip">общественное пространство</span>
-</div>
-<h3>Зал Народов</h3>
-<p>
-                Образ пространства коллективного присутствия, ритуала, масштаба и архитектурной репрезентации эпохи.
+              <a class="btn" href="tatlin.html">Исследовать объект</a>
+            </article>
+
+            <article class="object-card glass hall" data-reveal="">
+              <div class="card-wire">
+                <svg fill="none" viewBox="0 0 100 100">
+                  <rect height="42" opacity=".6" stroke="currentColor" stroke-width="1.2" width="60" x="18" y="24"></rect>
+                  <path d="M12 72H86" opacity=".55" stroke="currentColor" stroke-width="1.2"></path>
+                  <path d="M28 24V72M48 24V72M68 24V72" opacity=".45" stroke="currentColor" stroke-width="1"></path>
+                </svg>
+              </div>
+              <div class="card-top">
+                <span class="tag">Германиа / 1925–1943</span>
+              </div>
+              <div class="card-meta">
+                <span class="meta-chip">Volkshalle</span>
+                <span class="meta-chip">купол 250 м</span>
+                <span class="meta-chip">до 180 000 человек</span>
+              </div>
+              <h3>Зал Народа</h3>
+              <p>
+                Volkshalle должен был стать центральным сооружением нацистской Германиа: гигантским купольным залом для массовых собраний.
+                Проект Шпеера опирался на образ Пантеона, но доводил античный прототип до масштаба архитектуры устрашения.
               </p>
-<a class="btn" href="hall.html">Исследовать объект</a>
-</article>
-<article class="object-card glass soviets" data-reveal="">
-<div class="card-wire">
-<svg fill="none" viewbox="0 0 100 100">
-<path d="M24 82H76" opacity=".55" stroke="currentColor" stroke-width="1.2"></path>
-<path d="M32 82V48H68V82" opacity=".55" stroke="currentColor" stroke-width="1.2"></path>
-<path d="M40 48V30H60V48" opacity=".55" stroke="currentColor" stroke-width="1.2"></path>
-<path d="M48 30V16H52V30" opacity=".55" stroke="currentColor" stroke-width="1.2"></path>
-</svg>
-</div>
-<div class="card-top">
-<span class="tag">Монументальный проект / 1930-е</span>
-</div>
-<div class="card-meta">
-<span class="meta-chip">власть</span>
-<span class="meta-chip">сверхмасштаб</span>
-</div>
-<h3>Дворец Советов</h3>
-<p>
-                Грандиозный проект политической архитектуры, который должен был стать главным силуэтом новой имперской столицы.
+              <a class="btn" href="hall.html">Исследовать объект</a>
+            </article>
+
+            <article class="object-card glass soviets" data-reveal="">
+              <div class="card-wire">
+                <svg fill="none" viewBox="0 0 100 100">
+                  <path d="M24 82H76" opacity=".55" stroke="currentColor" stroke-width="1.2"></path>
+                  <path d="M32 82V48H68V82" opacity=".55" stroke="currentColor" stroke-width="1.2"></path>
+                  <path d="M40 48V30H60V48" opacity=".55" stroke="currentColor" stroke-width="1.2"></path>
+                  <path d="M48 30V16H52V30" opacity=".55" stroke="currentColor" stroke-width="1.2"></path>
+                </svg>
+              </div>
+              <div class="card-top">
+                <span class="tag">Москва / 1922–1956</span>
+              </div>
+              <div class="card-meta">
+                <span class="meta-chip">415–430 м</span>
+                <span class="meta-chip">22 000 мест</span>
+                <span class="meta-chip">статуя Ленина</span>
+              </div>
+              <h3>Дворец Советов</h3>
+              <p>
+                Дворец Советов проектировался как многофункциональный комплекс на месте Храма Христа Спасителя: съездовый зал,
+                театр, библиотека и башня-пьедестал для 100-метровой статуи Ленина. Строительство дошло до фундамента и части каркаса.
               </p>
-<a class="btn" href="soviets.html">Исследовать объект</a>
-</article>
-</div>
-</div>
-</section>
-</section>
+              <a class="btn" href="soviets.html">Исследовать объект</a>
+            </article>
+          </div>
+        </div>
+      </section>
+    </section>
   </main>
 
   <footer class="footer">
-<div class="footer-inner">
-<p>Архив нереализованной архитектуры · проект под GitHub Pages</p>
-<p>© 2026 · Исследование исторических 3D-реконструкций</p>
-</div>
-</footer>
-
+    <div class="footer-inner">
+      <p>Архив нереализованной архитектуры</p>
+      <p>© 2026 · Исследование исторических 3D-реконструкций</p>
+    </div>
+  </footer>
   <script src="assets/js/main.js" defer></script>
 </body>
 </html>

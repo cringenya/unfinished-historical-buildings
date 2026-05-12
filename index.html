@@ -478,6 +478,247 @@
       }
     }
 
+  
+
+    /* Round 7: compact hero preview, no inner underlay, no overflow, larger minimum text. */
+    body {
+      font-size: 20px !important;
+    }
+
+    .page-index,
+    .page-index * {
+      min-width: 0;
+    }
+
+    .page-index .container {
+      width: min(calc(100vw - clamp(28px, 5vw, 76px)), 1260px) !important;
+      max-width: 1260px !important;
+      margin-inline: auto !important;
+    }
+
+    .hero,
+    .section,
+    .hero-grid,
+    .objects-grid {
+      overflow-x: clip !important;
+    }
+
+    .hero-grid {
+      grid-template-columns: minmax(0, 1fr) !important;
+      justify-items: center !important;
+      align-items: center !important;
+      gap: clamp(30px, 5vw, 58px) !important;
+    }
+
+    .hero-grid > div:first-child {
+      width: min(100%, 860px) !important;
+      justify-self: center !important;
+    }
+
+    @media (min-width: 1500px) {
+      .hero-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(480px, 620px) !important;
+        justify-items: stretch !important;
+        gap: clamp(48px, 5vw, 86px) !important;
+      }
+
+      .hero-grid > div:first-child {
+        width: auto !important;
+        justify-self: start !important;
+      }
+    }
+
+    .hero-card-wrap {
+      width: min(100%, 680px) !important;
+      max-width: calc(100vw - clamp(28px, 5vw, 76px)) !important;
+      margin-inline: auto !important;
+      overflow: visible !important;
+      transform: none !important;
+    }
+
+    .hero-card {
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow: hidden !important;
+      transform: none !important;
+      rotate: 0deg !important;
+    }
+
+    .hero-card__preview.archive-preview {
+      min-height: clamp(250px, 27vw, 350px) !important;
+      height: clamp(250px, 27vw, 350px) !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      background: transparent !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      outline: 0 !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    .archive-preview,
+    .archive-core {
+      background: transparent !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      outline: 0 !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    .archive-preview::before,
+    .archive-preview::after,
+    .archive-core::before,
+    .archive-core::after,
+    .archive-grid,
+    .archive-rings,
+    .orbit-shell,
+    .hero-card-wrap::before,
+    .hero-card-wrap::after {
+      display: none !important;
+      content: none !important;
+    }
+
+    .archive-core {
+      inset: 6% 3% 8% !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      overflow: hidden !important;
+    }
+
+    .monument-graphic--triptych {
+      width: min(96%, 560px) !important;
+      max-width: 560px !important;
+      height: auto !important;
+      max-height: 92% !important;
+      margin: auto !important;
+      transform: none !important;
+    }
+
+    .archive-label {
+      font-size: clamp(1.14rem, 1.25vw, 1.28rem) !important;
+      line-height: 1.28 !important;
+    }
+
+    .archive-label--top {
+      top: clamp(14px, 2.3vw, 26px) !important;
+      left: clamp(16px, 3vw, 34px) !important;
+      right: clamp(16px, 3vw, 34px) !important;
+    }
+
+    .archive-label--left {
+      left: clamp(14px, 2.4vw, 28px) !important;
+      max-width: 34% !important;
+    }
+
+    .archive-label--bottom {
+      bottom: clamp(12px, 2vw, 22px) !important;
+    }
+
+    @media (max-width: 720px) {
+      .hero-card__preview.archive-preview {
+        min-height: 260px !important;
+        height: 260px !important;
+      }
+
+      .archive-label--left {
+        display: none !important;
+      }
+
+      .monument-graphic--triptych {
+        width: min(98%, 460px) !important;
+      }
+    }
+
+    .object-card {
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) !important;
+      grid-template-areas:
+        "top"
+        "meta"
+        "wire"
+        "title"
+        "body"
+        "button" !important;
+      gap: clamp(14px, 1.5vw, 20px) !important;
+      align-items: start !important;
+      overflow: hidden !important;
+    }
+
+    .object-card .card-top,
+    .object-card .card-meta,
+    .object-card h3,
+    .object-card p,
+    .object-card > .btn {
+      width: 100% !important;
+      max-width: 100% !important;
+      position: relative !important;
+      z-index: 2 !important;
+    }
+
+    .object-card .card-wire {
+      grid-area: wire !important;
+      position: static !important;
+      width: clamp(150px, 16vw, 220px) !important;
+      height: auto !important;
+      aspect-ratio: 1 / 1 !important;
+      justify-self: end !important;
+      align-self: start !important;
+      margin-top: -4px !important;
+      margin-bottom: -4px !important;
+      transform: none !important;
+      opacity: .46 !important;
+      pointer-events: none !important;
+    }
+
+    .object-card .card-top { grid-area: top !important; }
+    .object-card .card-meta { grid-area: meta !important; }
+    .object-card h3 { grid-area: title !important; }
+    .object-card p { grid-area: body !important; }
+    .object-card > .btn { grid-area: button !important; }
+
+    .object-card .card-meta {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      gap: 10px !important;
+    }
+
+    .object-card .meta-chip,
+    .object-card .tag {
+      white-space: normal !important;
+      overflow-wrap: anywhere !important;
+    }
+
+    .lead,
+    .section-copy,
+    .project-overview .panel p,
+    .project-steps .timeline-item p,
+    .object-card p,
+    .hero-card__meta .meta span,
+    .object-card .tag,
+    .object-card .meta-chip,
+    .hero-card__top span,
+    .stamp,
+    .timeline-item span,
+    .archive-label,
+    .eyebrow,
+    .nav a,
+    .footer p,
+    .btn {
+      font-size: clamp(1.14rem, 1.24vw, 1.3rem) !important;
+      line-height: 1.58 !important;
+    }
+
+    .object-card p,
+    .lead,
+    .section-copy,
+    .project-overview .panel p,
+    .project-steps .timeline-item p {
+      line-height: 1.72 !important;
+    }
+
   </style>
 </head>
 <body class="page-index">

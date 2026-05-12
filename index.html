@@ -1,15 +1,16 @@
 <!DOCTYPE html>
+
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Нереализованная архитектура XX века</title>
-  <meta name="theme-color" content="#070809" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/styles.css" />
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Нереализованная архитектура XX века</title>
+<meta content="#070809" name="theme-color"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="assets/css/styles.css" rel="stylesheet">
+<style>
     main a:not(.btn):not(.brand-pill) {
       color: rgba(245, 205, 118, .98);
       text-decoration: underline;
@@ -942,277 +943,316 @@
       }
     }
 
+
+    /* Round 11: fixed main header, no hero/card illustrations, aligned object cards. */
+    html,
+    body {
+      max-width: 100% !important;
+      overflow-x: hidden !important;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box !important;
+    }
+
+    .topbar {
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 1000 !important;
+    }
+
+    .brand-title {
+      font-size: clamp(1.02rem, 1.06vw, 1.14rem) !important;
+      line-height: 1.08 !important;
+    }
+
+    .page-index .container {
+      width: min(calc(100vw - clamp(28px, 5vw, 76px)), 1260px) !important;
+      max-width: 1260px !important;
+      min-width: 0 !important;
+      margin-inline: auto !important;
+    }
+
+    .page-index .hero-grid {
+      grid-template-columns: minmax(0, 1fr) !important;
+      justify-items: center !important;
+      align-items: start !important;
+      gap: 0 !important;
+    }
+
+    .page-index .hero-grid > div:first-child {
+      width: min(100%, 980px) !important;
+      max-width: 980px !important;
+      justify-self: center !important;
+    }
+
+    .page-index .hero-card-wrap,
+    .page-index .hero-card,
+    .page-index .hero-card__preview,
+    .page-index .hero-triptych-preview,
+    .page-index .hero-triptych-svg,
+    .page-index .archive-preview,
+    .page-index .archive-core {
+      display: none !important;
+    }
+
+    .objects-grid {
+      align-items: stretch !important;
+    }
+
+    .object-card {
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) !important;
+      grid-template-rows: auto minmax(86px, auto) auto 1fr auto !important;
+      grid-template-areas:
+        "top"
+        "meta"
+        "title"
+        "body"
+        "button" !important;
+      height: 100% !important;
+      gap: clamp(14px, 1.4vw, 20px) !important;
+      overflow: hidden !important;
+    }
+
+    .object-card .card-wire {
+      display: none !important;
+    }
+
+    .object-card .card-top {
+      grid-area: top !important;
+      width: 100% !important;
+      min-height: 44px !important;
+      display: flex !important;
+      align-items: flex-start !important;
+      position: relative !important;
+      z-index: 2 !important;
+    }
+
+    .object-card .card-meta {
+      grid-area: meta !important;
+      width: 100% !important;
+      min-height: 86px !important;
+      display: flex !important;
+      flex-wrap: wrap !important;
+      align-content: flex-start !important;
+      align-items: flex-start !important;
+      gap: 10px !important;
+      position: relative !important;
+      z-index: 2 !important;
+    }
+
+    .object-card h3 {
+      grid-area: title !important;
+      width: 100% !important;
+      margin: 0 !important;
+      position: relative !important;
+      z-index: 2 !important;
+    }
+
+    .object-card p {
+      grid-area: body !important;
+      width: 100% !important;
+      margin: 0 !important;
+      position: relative !important;
+      z-index: 2 !important;
+    }
+
+    .object-card > .btn {
+      grid-area: button !important;
+      width: 100% !important;
+      margin-top: clamp(10px, 1vw, 16px) !important;
+      position: relative !important;
+      z-index: 2 !important;
+    }
+
+    @media (max-width: 720px) {
+      .page-index .container {
+        width: min(calc(100vw - 24px), 100%) !important;
+      }
+
+      .object-card {
+        grid-template-rows: auto auto auto 1fr auto !important;
+      }
+
+      .object-card .card-meta {
+        min-height: 0 !important;
+      }
+
+      .brand-title {
+        font-size: clamp(.92rem, 3.2vw, 1.05rem) !important;
+      }
+    }
+
   </style>
-</head>
+</link></head>
 <body class="page-index">
-  <div class="noise"></div>
-  <div class="lamp" id="lamp"></div>
-
-  <header class="topbar">
-    <div class="topbar-inner">
-      <a class="brand-pill" href="#home" aria-label="Вернуться в начало главной страницы">
-        <span class="brand-orb"></span>
-        <span class="brand-text">
-          <p class="brand-title">Нереализованная архитектура XX века</p>
-        </span>
-      </a>
-      <nav class="nav" aria-label="Навигация по главной странице">
-        <a href="#archive">О проекте</a>
-        <a href="#objects">Экспонаты</a>
-      </nav>
-    </div>
-  </header>
-
-  <main>
-    <section class="route" id="home">
-      <section class="hero">
-        <div class="hero-bg"></div>
-        <div class="container hero-grid">
-          <div data-reveal="">
-            <p class="eyebrow">Цифровая реконструкция / исторический контекст / 3D</p>
-            <h1>Нереализованная архитектура XX века</h1>
-            <p class="lead">
+<div class="noise"></div>
+<div class="lamp" id="lamp"></div>
+<header class="topbar">
+<div class="topbar-inner">
+<a aria-label="Вернуться в начало главной страницы" class="brand-pill" href="#home">
+<span class="brand-orb"></span>
+<span class="brand-text">
+<p class="brand-title">Нереализованная архитектура XX века</p>
+</span>
+</a>
+<nav aria-label="Навигация по главной странице" class="nav">
+<a href="#archive">О проекте</a>
+<a href="#objects">Экспонаты</a>
+</nav>
+</div>
+</header>
+<main>
+<section class="route" id="home">
+<section class="hero">
+<div class="hero-bg"></div>
+<div class="container hero-grid">
+<div data-reveal="">
+<p class="eyebrow">Цифровая реконструкция / исторический контекст / 3D</p>
+<h1>Нереализованная архитектура XX века</h1>
+<p class="lead">
               Образовательный веб-проект о зданиях и монументах, которые планировались к строительству, но остались в чертежах,
               макетах, описаниях и исторической памяти. Мы собираем архивные и научные материалы, переводим их в исторические справки
               и показываем объекты через интерактивные 3D-реконструкции.
             </p>
-            <div class="hero-actions">
-              <a class="btn primary" href="#objects">Открыть архив</a>
-              <a class="btn" href="#archive">О проекте</a>
-            </div>
-          </div>
+<div class="hero-actions">
+<a class="btn primary" href="#objects">Открыть архив</a>
+<a class="btn" href="#archive">О проекте</a>
+</div>
+</div>
 
-          <div class="hero-card-wrap" data-reveal="">
-            <div class="orbit-shell"></div>
-            <div class="hero-card glass" id="heroCard">
-              <div class="hero-card__top">
-                <span class="tag">Исследовательский архив</span>
-                <span style="color:var(--muted); font-size:.9rem;">3 объекта · источники · 3D-реконструкция</span>
-              </div>
-              <div class="hero-card__preview hero-triptych-preview">
-                <svg aria-hidden="true" class="hero-triptych-svg" fill="none" viewBox="0 0 720 270" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="heroStrokeRound9" x1="80" x2="640" y1="40" y2="242" gradientUnits="userSpaceOnUse">
-                      <stop stop-color="rgba(255,255,255,0.92)"></stop>
-                      <stop offset="1" stop-color="rgba(255,255,255,0.30)"></stop>
-                    </linearGradient>
-                    <linearGradient id="heroDimRound9" x1="70" x2="650" y1="50" y2="250" gradientUnits="userSpaceOnUse">
-                      <stop stop-color="rgba(255,255,255,0.52)"></stop>
-                      <stop offset="1" stop-color="rgba(255,255,255,0.16)"></stop>
-                    </linearGradient>
-                  </defs>
-
-                  <path d="M70 238H650" stroke="rgba(255,255,255,.18)" stroke-linecap="round" stroke-width="2"></path>
-
-                  <g class="hero-monument hero-monument--tatlin" transform="translate(78 20)">
-                    <path d="M42 220C72 196 94 166 105 126C116 87 132 54 174 25" stroke="url(#heroStrokeRound9)" stroke-linecap="round" stroke-width="4.2"></path>
-                    <path d="M84 228C118 199 144 164 153 120C161 81 175 55 202 43" stroke="rgba(255,255,255,.40)" stroke-linecap="round" stroke-width="3.2"></path>
-                    <path d="M48 218C84 210 115 191 124 165C133 139 98 136 96 112C94 88 124 72 150 82C171 90 194 72 198 42" stroke="rgba(255,255,255,.55)" stroke-linecap="round" stroke-width="2.8"></path>
-                    <path d="M60 218L188 36" stroke="rgba(255,255,255,.18)" stroke-linecap="round" stroke-width="2"></path>
-                    <path d="M56 219H96M68 219V178H104V219M86 178V137L125 158V198M122 111H156V146H122Z" stroke="rgba(255,255,255,.35)" stroke-linejoin="round" stroke-width="2.3"></path>
-                  </g>
-
-                  <g class="hero-monument hero-monument--hall" transform="translate(282 35)">
-                    <path d="M-2 218H192" stroke="rgba(255,255,255,.20)" stroke-linecap="round" stroke-width="2.3"></path>
-                    <path d="M18 184V147C18 78 62 30 96 30C132 30 174 78 174 147V184" stroke="url(#heroStrokeRound9)" stroke-linejoin="round" stroke-width="4.2"></path>
-                    <path d="M43 184V151C43 111 64 81 96 81C128 81 149 111 149 151V184" stroke="rgba(255,255,255,.27)" stroke-width="2.4"></path>
-                    <path d="M0 184H192V218H0Z" stroke="rgba(255,255,255,.42)" stroke-linejoin="round" stroke-width="3"></path>
-                    <path d="M28 184V218M62 184V218M96 184V218M130 184V218M164 184V218" stroke="rgba(255,255,255,.27)" stroke-linecap="round" stroke-width="2.2"></path>
-                    <path d="M90 30V11H103V31" stroke="rgba(255,255,255,.34)" stroke-linejoin="round" stroke-width="2.2"></path>
-                  </g>
-
-                  <g class="hero-monument hero-monument--soviets" transform="translate(534 32)">
-                    <path d="M-34 224H120" stroke="rgba(255,255,255,.20)" stroke-linecap="round" stroke-width="2.3"></path>
-                    <path d="M-20 224V204H112V224M-12 204V178H104V204M2 178V150H92V178M20 150V124H78V150M36 124V100H66V124M47 100V74H55V100" stroke="rgba(255,255,255,.52)" stroke-linejoin="round" stroke-width="3"></path>
-                    <path d="M51 74V28" stroke="url(#heroStrokeRound9)" stroke-linecap="round" stroke-width="3"></path>
-                    <path d="M51 28C59 32 68 28 75 20" stroke="rgba(255,255,255,.43)" stroke-linecap="round" stroke-width="2.5"></path>
-                    <path d="M-14 214H106M-5 191H99M10 164H87M27 137H72M42 112H61" stroke="rgba(255,255,255,.28)" stroke-linecap="round" stroke-width="2"></path>
-                  </g>
-                </svg>
-              </div>
-              <div class="hero-card__meta">
-                <div class="meta">
-                  <strong>Источники</strong>
-                  <span>архивные материалы, научные тексты, проектные описания</span>
-                </div>
-                <div class="meta">
-                  <strong>Реконструкция</strong>
-                  <span>3D-модели, созданные по историческим данным и визуальным аналогам</span>
-                </div>
-                <div class="meta">
-                  <strong>Просмотр</strong>
-                  <span>интерактивная сцена и историческая справка для каждого объекта</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="archive">
-        <div class="container">
-          <div class="section-heading" data-reveal="">
-            <div>
-              <p class="eyebrow">О проекте</p>
-              <h2>Цифровая реконструкция того, что не стало архитектурной реальностью</h2>
-            </div>
-            <p class="section-copy">
+</div>
+</section>
+<section class="section" id="archive">
+<div class="container">
+<div class="section-heading" data-reveal="">
+<div>
+<p class="eyebrow">О проекте</p>
+<h2>Цифровая реконструкция того, что не стало архитектурной реальностью</h2>
+</div>
+<p class="section-copy">
               Проект посвящён нереализованным историческим архитектурным объектам XX века. Его задача — собрать источники,
               объяснить контекст появления замыслов и дать зрителю возможность рассмотреть их не только как тексты и чертежи,
               но и как объёмные интерактивные модели.
             </p>
-          </div>
-
-          <div class="archive-intro project-overview">
-            <article class="panel glass" data-reveal="">
-              <div class="stamp">Задача</div>
-              <h3>Сделать несостоявшиеся проекты видимыми</h3>
-              <p>
+</div>
+<div class="archive-intro project-overview">
+<article class="panel glass" data-reveal="">
+<div class="stamp">Задача</div>
+<h3>Сделать несостоявшиеся проекты видимыми</h3>
+<p>
                 Многие архитектурные замыслы остались в архивных документах, конкурсных материалах, эскизах и описаниях.
                 Сайт переводит эти материалы в понятный образовательный формат: краткое введение, историческая справка,
                 структурированная статья и отдельное окно 3D-просмотра.
               </p>
-            </article>
-
-            <article class="panel glass" data-reveal="">
-              <div class="stamp">Ценность</div>
-              <h3>Исследовать идею, форму и эпоху одновременно</h3>
-              <p>
+</article>
+<article class="panel glass" data-reveal="">
+<div class="stamp">Ценность</div>
+<h3>Исследовать идею, форму и эпоху одновременно</h3>
+<p>
                 Нереализованная архитектура показывает не только то, что могли построить, но и то, как разные режимы,
                 художественные школы и инженеры представляли будущее. В одном объекте соединяются политика, технология,
                 художественный стиль и масштаб исторической мечты.
               </p>
-            </article>
-          </div>
-
-          <div class="timeline project-steps">
-            <article class="timeline-item glass" data-reveal="">
-              <span>01 / источники</span>
-              <h4>Сбор и анализ материалов</h4>
-              <p>Для каждого объекта используются исторические описания, архивные сведения, научные публикации, эскизы и сохранившиеся реконструкции.</p>
-            </article>
-
-            <article class="timeline-item glass" data-reveal="">
-              <span>02 / модель</span>
-              <h4>3D-реконструкция</h4>
-              <p>Форма объекта переводится в оптимизированную веб-модель, которую можно вращать, приближать и рассматривать отдельно от страницы.</p>
-            </article>
-
-            <article class="timeline-item glass" data-reveal="">
-              <span>03 / контекст</span>
-              <h4>Историческая экспозиция</h4>
-              <p>3D-просмотр дополняется справкой: кто проектировал объект, зачем он был нужен, почему не был построен и чем остался важен.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="objects">
-        <div class="container">
-          <div class="section-heading" data-reveal="">
-            <div>
-              <p class="eyebrow">Коллекция</p>
-              <h2>Три нереализованных проекта</h2>
-            </div>
-            <p class="section-copy">
+</article>
+</div>
+<div class="timeline project-steps">
+<article class="timeline-item glass" data-reveal="">
+<span>01 / источники</span>
+<h4>Сбор и анализ материалов</h4>
+<p>Для каждого объекта используются исторические описания, архивные сведения, научные публикации, эскизы и сохранившиеся реконструкции.</p>
+</article>
+<article class="timeline-item glass" data-reveal="">
+<span>02 / модель</span>
+<h4>3D-реконструкция</h4>
+<p>Форма объекта переводится в оптимизированную веб-модель, которую можно вращать, приближать и рассматривать отдельно от страницы.</p>
+</article>
+<article class="timeline-item glass" data-reveal="">
+<span>03 / контекст</span>
+<h4>Историческая экспозиция</h4>
+<p>3D-просмотр дополняется справкой: кто проектировал объект, зачем он был нужен, почему не был построен и чем остался важен.</p>
+</article>
+</div>
+</div>
+</section>
+<section class="section" id="objects">
+<div class="container">
+<div class="section-heading" data-reveal="">
+<div>
+<p class="eyebrow">Коллекция</p>
+<h2>Три нереализованных проекта</h2>
+</div>
+<p class="section-copy">
               Здесь собраны три проекта, которые так и не стали зданиями, но остались историческими документами своей эпохи:
               революционный авангард, нацистская архитектура подавления и советская монументальная мечта о новом центре мира.
             </p>
-          </div>
+</div>
+<div class="objects-grid">
+<article class="object-card glass tatlin" data-reveal="">
 
-          <div class="objects-grid">
-            <article class="object-card glass tatlin" data-reveal="">
-              <div class="card-wire">
-                <svg fill="none" viewBox="0 0 100 100" aria-hidden="true">
-                  <path d="M22 88C43 74 58 53 63 29C66 16 76 9 88 7" opacity=".76" stroke="currentColor" stroke-linecap="round" stroke-width="1.35"></path>
-                  <path d="M37 90C59 76 73 55 77 31C80 18 86 14 93 12" opacity=".48" stroke="currentColor" stroke-linecap="round" stroke-width="1.1"></path>
-                  <path d="M24 86C42 81 59 70 63 58C68 43 47 42 45 31C43 20 58 15 70 20C79 24 89 19 92 11" opacity=".62" stroke="currentColor" stroke-linecap="round" stroke-width="1.15"></path>
-                  <path d="M30 85L86 10" opacity=".24" stroke="currentColor" stroke-linecap="round" stroke-width=".95"></path>
-                  <path d="M26 86H51M36 86V70H54V86M45 70V54L61 62V78M57 43H72V57H57Z" opacity=".46" stroke="currentColor" stroke-linejoin="round" stroke-width="1.05"></path>
-                  <circle cx="91" cy="11" opacity=".36" r="5.5" stroke="currentColor" stroke-width="1"></circle>
-                </svg>
-              </div>
-              <div class="card-top">
-                <span class="tag">Петроград / 1919–1920</span>
-              </div>
-              <div class="card-meta">
-                <span class="meta-chip">400 метров</span>
-                <span class="meta-chip">спираль</span>
-                <span class="meta-chip">Коминтерн</span>
-              </div>
-              <h3>Башня Татлина</h3>
-              <p>
+<div class="card-top">
+<span class="tag">Петроград / 1919–1920</span>
+</div>
+<div class="card-meta">
+<span class="meta-chip">400 метров</span>
+<span class="meta-chip">спираль</span>
+<span class="meta-chip">Коминтерн</span>
+</div>
+<h3>Башня Татлина</h3>
+<p>
                 Памятник III Интернационалу задумывался как 400-метровая стальная спираль над Невой и штаб-квартира Коминтерна.
                 Внутри должны были вращаться стеклянные объёмы: куб — раз в год, пирамида — раз в месяц, цилиндр — раз в сутки.
               </p>
-              <a class="btn" href="tatlin.html">Исследовать объект</a>
-            </article>
+<a class="btn" href="tatlin.html">Исследовать объект</a>
+</article>
+<article class="object-card glass hall" data-reveal="">
 
-            <article class="object-card glass hall" data-reveal="">
-              <div class="card-wire">
-                <svg fill="none" viewBox="0 0 100 100" aria-hidden="true">
-                  <path d="M10 79H93" opacity=".56" stroke="currentColor" stroke-linecap="round" stroke-width="1.15"></path>
-                  <path d="M24 69V52C24 31 39 18 56 18C74 18 87 31 87 52V69" opacity=".78" stroke="currentColor" stroke-linejoin="round" stroke-width="1.35"></path>
-                  <path d="M35 69V54C35 41 43 33 56 33C69 33 76 41 76 54V69" opacity=".34" stroke="currentColor" stroke-width="1"></path>
-                  <path d="M14 69H94V83H14Z" opacity=".58" stroke="currentColor" stroke-linejoin="round" stroke-width="1.15"></path>
-                  <path d="M26 69V83M40 69V83M54 69V83M68 69V83M82 69V83" opacity=".42" stroke="currentColor" stroke-linecap="round" stroke-width=".95"></path>
-                  <path d="M52 18V8H62V19" opacity=".42" stroke="currentColor" stroke-linejoin="round" stroke-width="1"></path>
-                </svg>
-              </div>
-              <div class="card-top">
-                <span class="tag">Германиа / 1925–1943</span>
-              </div>
-              <div class="card-meta">
-                <span class="meta-chip">Volkshalle</span>
-                <span class="meta-chip">купол 250 м</span>
-                <span class="meta-chip">до 180 000 человек</span>
-              </div>
-              <h3>Зал Народа</h3>
-              <p>
+<div class="card-top">
+<span class="tag">Германиа / 1925–1943</span>
+</div>
+<div class="card-meta">
+<span class="meta-chip">Volkshalle</span>
+<span class="meta-chip">купол 250 м</span>
+<span class="meta-chip">до 180 000 человек</span>
+</div>
+<h3>Зал Народа</h3>
+<p>
                 Volkshalle должен был стать центральным сооружением нацистской Германиа: гигантским купольным залом для массовых собраний.
                 Проект Шпеера опирался на образ Пантеона, но доводил античный прототип до масштаба архитектуры устрашения.
               </p>
-              <a class="btn" href="hall.html">Исследовать объект</a>
-            </article>
+<a class="btn" href="hall.html">Исследовать объект</a>
+</article>
+<article class="object-card glass soviets" data-reveal="">
 
-            <article class="object-card glass soviets" data-reveal="">
-              <div class="card-wire">
-                <svg fill="none" viewBox="0 0 100 100" aria-hidden="true">
-                  <path d="M5 88H95" opacity=".46" stroke="currentColor" stroke-linecap="round" stroke-width="1.1"></path>
-                  <path d="M8 88V80H92V88M13 80V67H87V80M22 67V54H78V67M34 54V42H68V54M45 42V31H58V42M50 31V18H54V31" opacity=".76" stroke="currentColor" stroke-linejoin="round" stroke-width="1.25"></path>
-                  <path d="M52 18V7" opacity=".66" stroke="currentColor" stroke-linecap="round" stroke-width="1.1"></path>
-                  <path d="M52 7C56 10 61 8 65 4" opacity=".48" stroke="currentColor" stroke-linecap="round" stroke-width="1"></path>
-                  <path d="M11 84H89M17 74H83M26 61H74M38 48H64M47 36H56" opacity=".32" stroke="currentColor" stroke-linecap="round" stroke-width=".95"></path>
-                  <path d="M8 88C19 83 81 83 92 88" opacity=".22" stroke="currentColor" stroke-linecap="round" stroke-width=".95"></path>
-                </svg>
-              </div>
-              <div class="card-top">
-                <span class="tag">Москва / 1922–1956</span>
-              </div>
-              <div class="card-meta">
-                <span class="meta-chip">415–430 м</span>
-                <span class="meta-chip">22 000 мест</span>
-                <span class="meta-chip">статуя Ленина</span>
-              </div>
-              <h3>Дворец Советов</h3>
-              <p>
+<div class="card-top">
+<span class="tag">Москва / 1922–1956</span>
+</div>
+<div class="card-meta">
+<span class="meta-chip">415–430 м</span>
+<span class="meta-chip">22 000 мест</span>
+<span class="meta-chip">статуя Ленина</span>
+</div>
+<h3>Дворец Советов</h3>
+<p>
                 Дворец Советов проектировался как многофункциональный комплекс на месте Храма Христа Спасителя: съездовый зал,
                 театр, библиотека и башня-пьедестал для 100-метровой статуи Ленина. Строительство дошло до фундамента и части каркаса.
               </p>
-              <a class="btn" href="soviets.html">Исследовать объект</a>
-            </article>
-          </div>
-        </div>
-      </section>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="footer-inner">
-      <p>Нереализованная архитектура XX века</p>
-      <p>2026 · Исследование исторических 3D-реконструкций</p>
-    </div>
-  </footer>
-  <script src="assets/js/main.js" defer></script>
+<a class="btn" href="soviets.html">Исследовать объект</a>
+</article>
+</div>
+</div>
+</section>
+</section>
+</main>
+<footer class="footer">
+<div class="footer-inner">
+<p>Нереализованная архитектура XX века</p>
+<p>2026 · Исследование исторических 3D-реконструкций</p>
+</div>
+</footer>
+<script defer="" src="assets/js/main.js"></script>
 </body>
 </html>

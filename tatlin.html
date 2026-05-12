@@ -601,6 +601,116 @@
       }
     }
 
+
+    /* Round 11: fixed header consistency and mobile width containment. */
+    html,
+    body {
+      max-width: 100% !important;
+      overflow-x: hidden !important;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box !important;
+    }
+
+    .topbar {
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 1000 !important;
+    }
+
+    .brand-title {
+      font-size: clamp(1.02rem, 1.06vw, 1.14rem) !important;
+      line-height: 1.08 !important;
+    }
+
+    .page-object .container,
+    .page-object .page-grid,
+    .page-object .page-content > .container {
+      width: min(calc(100vw - clamp(28px, 5vw, 76px)), 1260px) !important;
+      max-width: 1260px !important;
+      min-width: 0 !important;
+      margin-inline: auto !important;
+    }
+
+    .page-object .page-grid,
+    .page-object .page-grid > *,
+    .page-object .page-shell,
+    .page-object .page-content,
+    .page-object .archive-facts,
+    .page-object .wide-story,
+    .page-object .historical-article {
+      min-width: 0 !important;
+      max-width: 100% !important;
+    }
+
+    .history-section h2,
+    .history-section h3,
+    .history-section p,
+    .history-section li,
+    .history-note,
+    .page-title,
+    .page-lead,
+    .fact-card strong,
+    .fact-card span {
+      overflow-wrap: anywhere !important;
+    }
+
+    @media (max-width: 760px) {
+      .page-object .container,
+      .page-object .page-grid,
+      .page-object .page-content > .container {
+        width: min(calc(100vw - 24px), 100%) !important;
+        max-width: calc(100vw - 24px) !important;
+      }
+
+      .page-object .page-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+        justify-items: center !important;
+        gap: 24px !important;
+      }
+
+      .page-object .page-grid > *,
+      .page-object .page-shell,
+      .page-object .archive-facts,
+      .page-object .wide-story,
+      .page-object .historical-article {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+
+      .historical-article {
+        padding: 18px !important;
+      }
+
+      .history-toc,
+      .history-fact-list li,
+      .fact-card,
+      .wide-story.glass {
+        max-width: 100% !important;
+      }
+
+      .topbar-inner {
+        width: min(calc(100vw - 20px), 100%) !important;
+        max-width: calc(100vw - 20px) !important;
+      }
+
+      .brand-title {
+        font-size: clamp(.92rem, 3.2vw, 1.05rem) !important;
+        line-height: 1.08 !important;
+      }
+
+      .nav {
+        min-width: 0 !important;
+      }
+
+      .nav a {
+        white-space: nowrap !important;
+      }
+    }
+
   </style>
 </head>
 <body class="page-object page-tatlin">

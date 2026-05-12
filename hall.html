@@ -897,7 +897,80 @@
         text-align: center !important;
       }
     }
-</style>
+
+
+    /* Round 15: per-object accent colors for object pages. Main page stays gold. */
+    body.page-object {
+      --object-accent-rgb: 245, 205, 118;
+      --object-accent-soft-rgb: 255, 234, 174;
+    }
+
+    body.page-tatlin {
+      --object-accent-rgb: 229, 112, 86;
+      --object-accent-soft-rgb: 255, 170, 140;
+    }
+
+    body.page-hall {
+      --object-accent-rgb: 137, 169, 194;
+      --object-accent-soft-rgb: 188, 216, 238;
+    }
+
+    body.page-soviets {
+      --object-accent-rgb: 206, 118, 82;
+      --object-accent-soft-rgb: 255, 177, 126;
+    }
+
+    body.page-object .accent,
+    body.page-object .eyebrow.accent,
+    body.page-object .history-fact-list strong,
+    body.page-object .fact-card strong {
+      color: rgba(var(--object-accent-rgb), .98) !important;
+    }
+
+    body.page-object .hero-actions .btn.primary {
+      color: rgba(255,255,255,.96) !important;
+      border-color: rgba(var(--object-accent-rgb), .5) !important;
+      background:
+        linear-gradient(135deg, rgba(var(--object-accent-rgb), .42), rgba(var(--object-accent-rgb), .14)) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.14),
+        0 18px 46px rgba(var(--object-accent-rgb), .16) !important;
+    }
+
+    body.page-object .hero-actions .btn.primary:hover,
+    body.page-object .hero-actions .btn.primary:focus-visible {
+      border-color: rgba(var(--object-accent-soft-rgb), .78) !important;
+      background:
+        linear-gradient(135deg, rgba(var(--object-accent-soft-rgb), .48), rgba(var(--object-accent-rgb), .2)) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.18),
+        0 20px 54px rgba(var(--object-accent-rgb), .22) !important;
+    }
+
+    body.page-object main a:not(.btn):not(.brand-pill),
+    body.page-object .history-note a,
+    body.page-object .history-toc a,
+    body.page-object .history-section a,
+    body.page-object .source-list a {
+      color: rgba(var(--object-accent-rgb), .98) !important;
+      text-decoration-color: rgba(var(--object-accent-rgb), .68) !important;
+    }
+
+    body.page-object main a:not(.btn):not(.brand-pill):hover,
+    body.page-object .history-note a:hover,
+    body.page-object .history-toc a:hover,
+    body.page-object .history-section a:hover,
+    body.page-object .source-list a:hover,
+    body.page-object main a:not(.btn):not(.brand-pill):focus-visible {
+      color: rgba(var(--object-accent-soft-rgb), 1) !important;
+      text-decoration-color: rgba(var(--object-accent-soft-rgb), .95) !important;
+    }
+
+    body.page-object .history-quote {
+      border-left-color: rgba(var(--object-accent-rgb), .75) !important;
+    }
+
+  </style>
 </head>
 <body class="page-object page-hall">
   <div class="noise"></div>
@@ -940,7 +1013,7 @@
 
           <div class="page-shell glass" data-reveal="">
             <div class="model-viewer-wrap model-host">
-              <iframe allow="autoplay; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen class="local-model-frame" loading="lazy" src="models/hall.html?v=13" title="Зал Народа — 3D-реконструкция"></iframe>
+              <iframe allow="autoplay; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen class="local-model-frame" loading="lazy" src="models/hall.html?v=16" title="Зал Народа — 3D-реконструкция"></iframe>
             </div>
           </div>
         </div>

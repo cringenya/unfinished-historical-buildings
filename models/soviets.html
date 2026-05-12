@@ -87,6 +87,52 @@
       }
     }
 
+  
+
+    /* Round 12: smaller controls inside the 3D viewer; the main site text is not affected. */
+    html,
+    body {
+      font-size: 14px !important;
+    }
+
+    .model-ui {
+      pointer-events: auto !important;
+    }
+
+    .model-ui__label,
+    .model-ui__status,
+    .model-loader,
+    .model-error {
+      font-size: clamp(12px, .78vw, 14px) !important;
+      line-height: 1.18 !important;
+    }
+
+    .model-ui__label {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .model-action {
+      font-size: clamp(10.5px, .68vw, 12.5px) !important;
+      line-height: 1.1 !important;
+      min-height: 27px !important;
+      padding: 4px 9px !important;
+      border-radius: 999px !important;
+    }
+
+    .model-actions,
+    .camera-pan-panel {
+      gap: 5px !important;
+    }
+
+    @media (max-width: 640px) {
+      .model-action {
+        font-size: 10.5px !important;
+        min-height: 26px !important;
+        padding: 4px 8px !important;
+      }
+    }
+
   </style>
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
@@ -102,12 +148,16 @@
       class="model-viewer"
       src="../assets/models/soviets/palace-of-soviets.glb?v=20260512-round5"
       alt="Интерактивная 3D-модель Дворца Советов"
-      data-default-orbit="0deg 65deg 165%"
+      data-default-orbit="0deg 65deg 150%"
       data-default-fov="28deg"
+      data-real-height="430"
+      data-reference-height="430"
+      data-frame-fill="0.66"
       data-target-x=""
       data-target-y=""
       data-target-z=""
-      data-top-factor="0.55"
+      data-center-y-factor="0.08"
+      data-top-factor="0.70"
       data-top-y=""
       camera-controls
       touch-action="pan-y"
@@ -118,13 +168,13 @@
       shadow-softness="0.85"
       exposure="0.95"
       environment-image="neutral"
-      camera-orbit="0deg 65deg 165%"
+      camera-orbit="0deg 65deg 150%"
       camera-target="0m 0m 0m"
-      min-camera-orbit="auto auto 65%"
-      max-camera-orbit="auto auto 430%"
+      min-camera-orbit="auto auto 8%"
+      max-camera-orbit="auto auto 720%"
       field-of-view="28deg"
-      min-field-of-view="12deg"
-      max-field-of-view="55deg"
+      min-field-of-view="7deg"
+      max-field-of-view="28deg"
       interaction-prompt="auto"
       interaction-prompt-style="basic"
       bounds="tight"
@@ -200,6 +250,7 @@
         topFactor: numericDataset('topFactor', 0.44),
         centerYFactor: numericDataset('centerYFactor', 0),
         ready: false,
+        initial: null,
       };
 
       const setStatus = (text) => {
@@ -238,11 +289,74 @@
         viewer.cameraTarget = `${state.target.x}m ${state.target.y}m ${state.target.z}m`;
       };
 
-      const resetCamera = () => {
-        state.target = { ...state.center };
+      const getOrbitAngles = () => {
+        const orbit = viewer.dataset.defaultOrbit || viewer.getAttribute('camera-orbit') || '0deg 65deg auto';
+        const parts = orbit.trim().split(/\s+/);
+        return {
+          theta: parts[0] || '0deg',
+          phi: parts[1] || '65deg',
+        };
+      };
+
+      const getDefaultFovNumber = () => {
+        const raw = String(viewer.dataset.defaultFov || viewer.getAttribute('field-of-view') || '30deg');
+        const value = Number(raw.replace('deg', ''));
+        return Number.isFinite(value) ? value : 30;
+      };
+
+      const clampNumber = (value, min, max) => Math.min(max, Math.max(min, value));
+
+      const calculateDefaultCameraOrbit = () => {
+        const angles = getOrbitAngles();
+        const fov = getDefaultFovNumber();
+        const realHeight = numericDataset('realHeight', 400);
+        const referenceHeight = numericDataset('referenceHeight', 430);
+        const baseFill = numericDataset('frameFill', 0.66);
+        const heightRatio = clampNumber(realHeight / Math.max(referenceHeight, 1), 0.5, 1.05);
+        const visibleFill = clampNumber(baseFill * heightRatio, 0.48, 0.68);
+        const height = Math.max(state.dimensions.y, 1);
+        const width = Math.max(state.dimensions.x, state.dimensions.z, 1);
+        const framingSize = Math.max(height, width * 0.62);
+        const fovRad = (fov * Math.PI) / 180;
+        const distance = framingSize / (2 * Math.tan(fovRad / 2) * visibleFill);
+        const safeDistance = Number.isFinite(distance) ? Math.max(distance, framingSize * 0.9, 1) : 'auto';
+        return `${angles.theta} ${angles.phi} ${typeof safeDistance === 'number' ? safeDistance.toFixed(3) + 'm' : safeDistance}`;
+      };
+
+      const rememberInitialCamera = () => {
+        state.initial = {
+          target: { ...state.center },
+          orbit: calculateDefaultCameraOrbit(),
+          fov: `${getDefaultFovNumber()}deg`,
+        };
+        const numericDistance = Number(String(state.initial.orbit).trim().split(/\s+/)[2]?.replace('m', ''));
+        if (Number.isFinite(numericDistance)) {
+          viewer.minCameraOrbit = `auto auto ${Math.max(numericDistance * 0.08, 0.25).toFixed(3)}m`;
+          viewer.maxCameraOrbit = `auto auto ${(numericDistance * 5).toFixed(3)}m`;
+          viewer.setAttribute('min-camera-orbit', `auto auto ${Math.max(numericDistance * 0.08, 0.25).toFixed(3)}m`);
+          viewer.setAttribute('max-camera-orbit', `auto auto ${(numericDistance * 5).toFixed(3)}m`);
+        }
+        viewer.minFieldOfView = '7deg';
+        viewer.setAttribute('min-field-of-view', '7deg');
+      };
+
+      const applyInitialCamera = () => {
+        if (!state.initial) return false;
+        state.target = { ...state.initial.target };
         applyTarget();
-        viewer.cameraOrbit = viewer.dataset.defaultOrbit || viewer.getAttribute('camera-orbit') || '0deg 65deg auto';
-        viewer.fieldOfView = viewer.dataset.defaultFov || viewer.getAttribute('field-of-view') || '30deg';
+        viewer.cameraOrbit = state.initial.orbit;
+        viewer.fieldOfView = state.initial.fov;
+        return true;
+      };
+
+
+      const resetCamera = () => {
+        if (!applyInitialCamera()) {
+          state.target = { ...state.center };
+          applyTarget();
+          viewer.cameraOrbit = viewer.dataset.defaultOrbit || viewer.getAttribute('camera-orbit') || '0deg 65deg auto';
+          viewer.fieldOfView = viewer.dataset.defaultFov || viewer.getAttribute('field-of-view') || '30deg';
+        }
         setStatus('камера по центру');
       };
 
@@ -315,6 +429,10 @@
         setStatus(isHidden ? 'режим сдвига камеры' : 'вращение · масштаб · обзор');
       });
 
+      document.querySelector('.model-ui__label')?.addEventListener('click', () => {
+        resetCamera();
+      });
+
       panPanel.addEventListener('click', (event) => {
         const button = event.target.closest('[data-pan]');
         if (!button) return;
@@ -341,7 +459,8 @@
         }
         state.dimensions = detectedDimensions;
         state.ready = true;
-        applyTarget();
+        rememberInitialCamera();
+        applyInitialCamera();
         syncParentFrame();
       });
 

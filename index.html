@@ -1086,6 +1086,28 @@
       }
     }
 
+  
+
+    /* Round 12: slightly increase only primary reading text on the main page. */
+    .lead,
+    .section-copy,
+    .project-overview .panel p,
+    .project-steps .timeline-item p,
+    .object-card p {
+      font-size: clamp(1.12rem, 1.18vw, 1.24rem) !important;
+      line-height: 1.7 !important;
+    }
+
+    @media (max-width: 720px) {
+      .lead,
+      .section-copy,
+      .project-overview .panel p,
+      .project-steps .timeline-item p,
+      .object-card p {
+        font-size: 1.12rem !important;
+      }
+    }
+
   </style>
 </link></head>
 <body class="page-index">

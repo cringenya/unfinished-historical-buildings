@@ -711,6 +711,34 @@
       }
     }
 
+  
+
+    /* Round 12: slightly increase only long-form main text; keep nav, facts, tags and buttons unchanged. */
+    .page-lead {
+      font-size: clamp(1.18rem, 1.34vw, 1.4rem) !important;
+      line-height: 1.7 !important;
+    }
+
+    .history-note,
+    .history-section p,
+    .history-section li {
+      font-size: clamp(1.12rem, 1.2vw, 1.26rem) !important;
+      line-height: 1.82 !important;
+    }
+
+    @media (max-width: 760px) {
+      .page-lead {
+        font-size: 1.18rem !important;
+      }
+
+      .history-note,
+      .history-section p,
+      .history-section li {
+        font-size: 1.12rem !important;
+        line-height: 1.78 !important;
+      }
+    }
+
   </style>
 </head>
 <body class="page-object page-tatlin">
@@ -754,7 +782,7 @@
 
           <div class="page-shell glass" data-reveal="">
             <div class="model-viewer-wrap model-host">
-              <iframe allow="autoplay; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen class="local-model-frame" loading="lazy" src="models/tatlin.html?v=12" title="Башня Татлина — 3D-реконструкция"></iframe>
+              <iframe allow="autoplay; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen class="local-model-frame" loading="lazy" src="models/tatlin.html?v=13" title="Башня Татлина — 3D-реконструкция"></iframe>
             </div>
           </div>
         </div>

@@ -322,6 +322,32 @@
       }
     }
 
+
+    /* Round 20: on standalone mobile pages keep "К странице объекта" visible as a fixed return button. */
+    @media (max-width: 720px) {
+      body.is-standalone .model-action--back {
+        display: inline-flex !important;
+        position: fixed !important;
+        top: max(8px, env(safe-area-inset-top)) !important;
+        left: max(8px, env(safe-area-inset-left)) !important;
+        right: auto !important;
+        z-index: 20000 !important;
+        max-width: calc(100vw - 16px - env(safe-area-inset-left) - env(safe-area-inset-right)) !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        min-height: 32px !important;
+        padding: 6px 12px !important;
+        box-shadow: 0 12px 34px rgba(0, 0, 0, .42), inset 0 1px 0 rgba(255, 255, 255, .18) !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
+      }
+
+      body.is-standalone .model-ui {
+        top: calc(max(8px, env(safe-area-inset-top)) + 44px) !important;
+      }
+    }
+
 </style>
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>

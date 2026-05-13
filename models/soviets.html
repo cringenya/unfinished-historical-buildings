@@ -244,6 +244,84 @@
       mask-image: linear-gradient(to top, rgba(0,0,0,.9) 0%, rgba(0,0,0,.58) 42%, transparent 84%) !important;
       -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,.9) 0%, rgba(0,0,0,.58) 42%, transparent 84%) !important;
     }
+
+
+    /* Round 19: keep the fullscreen exit control visible on mobile standalone 3D pages. */
+    html,
+    body,
+    .model-frame-page {
+      width: 100% !important;
+      max-width: 100vw !important;
+      min-height: 100vh !important;
+      min-height: 100dvh !important;
+      overflow: hidden !important;
+      box-sizing: border-box !important;
+    }
+
+    .model-toolbar {
+      box-sizing: border-box !important;
+      max-width: calc(100vw - 20px) !important;
+      z-index: 10000 !important;
+    }
+
+    @media (max-width: 720px) {
+      .model-toolbar {
+        position: fixed !important;
+        left: max(8px, env(safe-area-inset-left)) !important;
+        right: max(8px, env(safe-area-inset-right)) !important;
+        bottom: max(8px, env(safe-area-inset-bottom)) !important;
+        width: auto !important;
+        max-width: none !important;
+        max-height: 42dvh !important;
+        overflow: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0 !important;
+        pointer-events: auto !important;
+      }
+
+      .model-actions,
+      .camera-pan-panel {
+        width: 100% !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
+      #fullscreenButton {
+        order: -3 !important;
+      }
+
+      .model-action--back {
+        order: -2 !important;
+      }
+
+      #panButton {
+        order: -1 !important;
+      }
+
+      .model-action {
+        white-space: nowrap !important;
+      }
+
+      .model-frame-page.is-pseudo-fullscreen .model-toolbar,
+      .model-frame-page:fullscreen .model-toolbar,
+      .model-frame-page:-webkit-full-screen .model-toolbar {
+        top: max(8px, env(safe-area-inset-top)) !important;
+        bottom: auto !important;
+      }
+
+      .model-frame-page.is-pseudo-fullscreen .model-ui,
+      .model-frame-page:fullscreen .model-ui,
+      .model-frame-page:-webkit-full-screen .model-ui {
+        top: calc(max(8px, env(safe-area-inset-top)) + 42px) !important;
+      }
+    }
+
 </style>
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
